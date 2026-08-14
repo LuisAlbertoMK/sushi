@@ -41,6 +41,10 @@ export default function PublicLayout({
             <p className="text-sm">© {new Date().getFullYear()} Sushi Bar — Todos los derechos reservados</p>
             <p className="text-xs mt-1">Pedidos y reservas online · Entrega a domicilio</p>
           </div>
+          {/* Link admin discreto (para el dueño) */}
+          <Link href="/admin/login" className="fixed bottom-4 right-4 bg-gray-100 hover:bg-gray-200 text-gray-500 text-xs px-2 py-1 rounded opacity-30 hover:opacity-100 transition-opacity" aria-label="Admin login">
+            admin
+          </Link>
         </footer>
       </div>
     </CartProvider>
