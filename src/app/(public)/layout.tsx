@@ -2,6 +2,8 @@
 // confidence: high — íconos SVG inline (no dependencias externas)
 import Link from "next/link";
 import { CartProvider } from "@/lib/cart-context";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { localBusinessSchema } from "@/lib/seo";
 
 export default function PublicLayout({
   children,
@@ -10,6 +12,7 @@ export default function PublicLayout({
 }) {
   return (
     <CartProvider>
+      <JsonLd data={localBusinessSchema()} />
       <div className="min-h-screen flex flex-col bg-gradient-to-b from-red-50 to-white font-sans">
         <header className="bg-white shadow-sm border-b-2 border-red-100 sticky top-0 z-10">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">

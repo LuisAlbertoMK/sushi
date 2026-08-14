@@ -2,8 +2,14 @@
 // confidence: high
 import { db } from "@/lib/db";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { productSchema, breadcrumbSchema } from "@/lib/seo";
+
+// ISR: revalidar cada hora
+export const revalidate = 3600;
 
 async function getProducto(id: string) {
   return await db.producto.findUnique({
@@ -42,16 +48,35 @@ export default async function ProductoPage({ params }: { params: { id: string } 
 
   return (
     <div className="max-w-4xl mx-auto">
+      <JsonLd data={productSchema({
+          nombre: producto.nombre,
+          descripcion: producto.descripcion,
+          precio: producto.precio,
+          imagen: producto.imagen,
+          categoria: producto.categoria.nombre,
+          url: `/menu/${params.id}`,
+      })} />
+      <JsonLd data={breadcrumbSchema([
+          { name: "Inicio", url: "/" },
+          { name: "Menú", url: "/menu" },
+          { name: producto.nombre, url: `/menu/${params.id}` },
+      ])} />
       <Link href="/menu" className="text-red-700 hover:underline mb-4 inline-block">
         ← Volver al menú
       </Link>
       <div className="grid md:grid-cols-2 gap-8 bg-white rounded-xl shadow-md p-8">
         <div className="bg-gray-100 rounded-lg aspect-square flex items-center justify-center overflow-hidden">
           {producto.imagen ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={producto.imagen} alt={producto.nombre} className="object-cover w-full h-full rounded-lg" />
+            <Image
+              src={producto.imagen}
+              alt={producto.nombre}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover rounded-lg"
+              priority
+            />
           ) : (
-            <span className="text-6xl">🍣</span>
+            <span className="text-6xl" aria-hidden="true">🍣</span>
           )}
         </div>
         <div>

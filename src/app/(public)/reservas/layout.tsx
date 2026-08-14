@@ -1,6 +1,8 @@
-// src/app/(public)/reservas/layout.tsx — Metadata (server, envuelve cliente)
+// src/app/(public)/reservas/layout.tsx — Metadata + JSON-LD FAQ (server envuelve cliente)
 // confidence: high
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { faqSchemaReservas, breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Reservar Mesa — Sushi Bar | Confirmación Inmediata Online",
@@ -19,5 +21,11 @@ export default function ReservasLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <JsonLd data={faqSchemaReservas()} />
+      <JsonLd data={breadcrumbSchema([{ name: "Inicio", url: "/" }, { name: "Reservas", url: "/reservas" }])} />
+      {children}
+    </>
+  );
 }

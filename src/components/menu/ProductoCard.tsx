@@ -1,6 +1,7 @@
 // src/components/menu/ProductoCard.tsx
 // confidence: high
 import Link from "next/link";
+import Image from "next/image";
 import { formatearPrecio } from "@/lib/utils";
 import { ProductoWithCategoria } from "@/lib/types";
 
@@ -20,14 +21,15 @@ export function ProductoCard({ producto }: Props) {
       <div className="bg-white rounded-xl shadow-md overflow-hidden group-hover:shadow-lg transition-shadow">
         <div className="aspect-square bg-gray-100 flex items-center justify-center overflow-hidden">
           {producto.imagen ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={producto.imagen}
               alt={producto.nombre}
-              className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+              fill
+              sizes="(max-width: 768px) 50vw, 33vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
           ) : (
-            <span className="text-5xl">🍣</span>
+            <span className="text-5xl" aria-hidden="true">🍣</span>
           )}
         </div>
         <div className="p-4">

@@ -3,6 +3,7 @@
 // confidence: high
 import { useCart } from "@/lib/cart-context";
 import { formatearPrecio } from "@/lib/utils";
+import Image from "next/image";
 import Link from "next/link";
 import { CheckoutForm } from "@/components/pedidos/CheckoutForm";
 import { useState } from "react";
@@ -60,10 +61,15 @@ export default function PedidosPage() {
               <tr key={item.productoId} className="border-t">
                 <td className="p-4">
                   <div className="flex items-center gap-3">
-                    {item.imagen ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={item.imagen} alt={item.nombre} className="w-12 h-12 rounded object-cover" />
-                    ) : <span className="text-3xl">🍣</span>}
+                  {item.imagen ? (
+                    <Image
+                      src={item.imagen}
+                      alt={item.nombre}
+                      width={48}
+                      height={48}
+                      className="rounded object-cover"
+                    />
+                  ) : <span className="text-3xl" aria-hidden="true">🍣</span>}
                     <div>
                       <span className="font-medium">{item.nombre}</span>
                       {item.notas && <p className="text-xs text-gray-500">Nota: {item.notas}</p>}

@@ -1,6 +1,8 @@
-// src/app/(public)/promos/layout.tsx — Metadata (server envuelve cliente)
+// src/app/(public)/promos/layout.tsx — Metadata + JSON-LD FAQ (server envuelve cliente)
 // confidence: high
 import type { Metadata } from "next";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { faqSchemaPromos, breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Promociones y Novedades — Descuentos en Sushi | Sushi Bar",
@@ -19,5 +21,11 @@ export default function PromosLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <JsonLd data={faqSchemaPromos()} />
+      <JsonLd data={breadcrumbSchema([{ name: "Inicio", url: "/" }, { name: "Promos", url: "/promos" }])} />
+      {children}
+    </>
+  );
 }
