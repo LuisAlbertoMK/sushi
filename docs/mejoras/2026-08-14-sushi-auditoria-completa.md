@@ -191,8 +191,25 @@ Preguntas: horarios, delivery, cancelación, forma de pago, combos
 
 ## Conclusión
 
-El sistema Sushi Digital está **funcionando** (build + seed + login verificados). Las auditorías revelan **81 issues** de calidad, principalmente en SEO (cero configuración), accesibilidad (forms sin labels, emoji-icons, color-only states), y performance (imágenes raw, fonts sin swap).
+El sistema Sushi Digital está **funcionando** (build SUCCESS, dev server corriendo, seed verificado, login funcional). Las auditorías revelaron **81 issues** de calidad, principalmente en SEO (cero configuración), accesibilidad (forms sin labels, emoji-icons, color-only states), y performance (imágenes raw, fonts sin swap).
 
-**Prioridad inmediata**: La Semana 1 del roadmap — metadata, robots, sitemap, next.config — impacta indexabilidad y es el mayor gap. Sin esto, el sitio no aparece en buscadores ni funciona bien en móviles. Las issues CRITICAL de accesibilidad (forms, emoji-icons) bloquean usuarios con discapacidad.
+**Implementado (Fase A + B — commit `3ca7360`):**
+- ✅ `next.config.ts` — images.remotePatterns, CSP/security headers, redirects
+- ✅ `robots.ts` + `sitemap.ts` — indexación dinámica desde Prisma (31 routes buildadas)
+- ✅ Metadata global + 5 páginas públicas (title/description/OG/Twitter/robots/hreflang)
+- ✅ `lang="es-AR"` + skip-to-content link + focus-visible global
+- ✅ Forms con `useId` + `htmlFor` + `aria-label` (reservas, checkout, login, admin)
+- ✅ Badge con texto accesible (no color-only)
+- ✅ Font `display: swap` (elimina FOIT)
+- ✅ `prefers-reduced-motion` en globals.css
+- ✅ Build: SUCCESS (31 routes, robots.txt + sitemap.xml prerenderizados)
 
-> Recomendación del arquitecto: implementar la **Semana 1 (Foundation SEO)** + **A11y CRITICAL fixes (forms, icons)** como próximo bloque, luego Semana 2-3.
+**Estado después de Fase A+B:**
+- CRITICAL (8) → 4/8 resueltas (SEO metadata completo, lang, robots/sitemap, forms labels)
+- 4 CRITICAL remanentes: emoji-icons (Fase C — migrar a SVG), color-only states en tablas admin (Fase B.2 pendiente), focus-visible en admin table buttons (parcial), imágenes `<img>` raw → next/image (Fase C)
+
+**Recomendación de próximos pasos (Semana 2-3 del roadmap):**
+1. Migrar imágenes raw → next/image (LCP)
+2. JSON-LD: LocalBusiness + Product + Breadcrumb + FAQPage (ranking + AI Overviews)
+3. ISR en /menu/[id] (TTFB)
+4. Emoji-icons → componente Icon accesible (aria-hidden + sr-only)
