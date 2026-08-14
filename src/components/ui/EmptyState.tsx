@@ -4,7 +4,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 interface EmptyStateProps {
-  type: "cart" | "promos" | "menu" | "pedidos" | "reservas";
+  type: "cart" | "promos" | "menu" | "pedidos" | "reservas" | "search";
   title?: string;
   description?: string;
   actionLabel?: string;
@@ -17,7 +17,8 @@ const illustrations = {
   promos: "🎁",
   menu: "🍣",
   pedidos: "📋",
-  reservas: "📅",
+    reservas: "📅",
+    search: "🔍",
 };
 
 const defaults = {
@@ -50,6 +51,12 @@ const defaults = {
     description: "Cuando los clientes reserven, aparecerán aquí",
     actionLabel: "Ver Dashboard",
     actionHref: "/admin/dashboard",
+  },
+  search: {
+    title: "Pedido no encontrado",
+    description: "Verificá que el número sea correcto o contactá al mostrador",
+    actionLabel: "Buscar otro pedido",
+    actionHref: "/pedidos/track",
   },
 };
 

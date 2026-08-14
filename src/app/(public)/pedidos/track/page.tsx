@@ -2,6 +2,9 @@
 // src/app/(public)/pedidos/track/page.tsx — Tracking de pedido por número
 // confidence: high
 import { Suspense, FormEvent, useState } from "react";
+import { PedidoStepper } from "@/components/ui/PedidoStepper";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { formatearPrecio } from "@/lib/utils";
 
 async function trackPedido(numero: string) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/pedidos/track?numero=${numero}`, {
@@ -42,7 +45,7 @@ export default function TrackPage({
       </form>
 
       {numero && (
-        <Suspense fallback={<p>Buscando pedido...</p>}>
+        <Suspense fallback={<p className="text-muted-foreground">Buscando pedido...</p>}>
           <PedidoDetalle numero={numero} />
         </Suspense>
       )}
@@ -54,31 +57,27 @@ async function PedidoDetalle({ numero }: { numero: string }) {
   const data = await trackPedido(numero);
 
   if (data.error) {
-    return <p className="text-red-600">{data.error}</p>;
+    return <EmptyState type="search" title={data.error} />;
   }
-
-  const estadoLabels: Record<string, string> = {
-    PENDIENTE: "⏳ En espera",
-    EN_COCINA: "👨‍🍳 En cocina",
-    LISTO: "✅ Listo para retirar",
-    ENTREGADO: "🏠 Entregado",
-    CANCELADO: "❌ Cancelado",
-  };
 
   return (
     <div className="bg-card rounded-xl shadow-md p-6 border border-border">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Pedido {data.numero}</h2>
-        <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
-          {estadoLabels[data.estado] || data.estado}
-        </span>
       </div>
 
-      <p className="text-lg font-bold text-right mb-4">TOTAL: ${data.total.toFixed(2)}</p>
+      {/* Stepper timeline visual */}
+      <PedidoStepper
+        estado={data.estado}
+        createdAt={data.createdAt}
+        updatedAt={data.updatedAt}
+      />
+
+      <p className="text-lg font-bold text-right mb-2">TOTAL: {formatearPrecio(data.total)}</p>
 
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-gray-600">
+          <tr className="text-left text-muted-foreground">
             <th className="pb-2">Producto</th>
             <th className="pb-2 text-center">Cant.</th>
             <th className="pb-2 text-right">Precio</th>
@@ -86,16 +85,16 @@ async function PedidoDetalle({ numero }: { numero: string }) {
         </thead>
         <tbody>
           {data.items.map((item: any, i: number) => (
-            <tr key={i} className="border-t">
+            <tr key={i} className="border-t border-border">
               <td className="py-2">{item.nombre}</td>
               <td className="py-2 text-center">{item.cantidad}</td>
-              <td className="py-2 text-right">${(item.precio * item.cantidad).toFixed(2)}</td>
+              <td className="py-2 text-right">{formatearPrecio(item.precio * item.cantidad)}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <p className="text-xs text-gray-600 mt-4">
+      <p className="text-xs text-muted-foreground/80 mt-4">
         Pedido creado: {new Date(data.createdAt).toLocaleString("es-AR")}
       </p>
     </div>

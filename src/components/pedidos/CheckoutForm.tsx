@@ -69,9 +69,9 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
     <div className="max-w-2xl mx-auto">
       <h2 className="text-2xl font-bold text-primary-700 dark:text-primary-300 mb-6">💳 Checkout</h2>
 
-      <div className="bg-gray-50 p-4 rounded-lg mb-6">
-        <p className="font-medium">Resumen del pedido:</p>
-        <ul className="text-sm text-gray-600 mt-2 space-y-1">
+      <div className="bg-muted p-4 rounded-lg mb-6">
+        <p className="font-medium text-foreground">Resumen del pedido:</p>
+        <ul className="text-sm text-muted-foreground mt-2 space-y-1">
           {items.map((i) => (
             <li key={i.productoId}>{i.cantidad}x {i.nombre} — {formatearPrecio(i.precio * i.cantidad)}</li>
           ))}
