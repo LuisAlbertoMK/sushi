@@ -17,7 +17,7 @@ export function AdminLogout() {
   return (
     <button
       onClick={handleLogout}
-      className="text-sm text-gray-500 hover:text-red-700 transition-colors"
+      className="text-sm text-gray-600 hover:text-red-700 transition-colors"
     >
       ← Cerrar sesión
     </button>

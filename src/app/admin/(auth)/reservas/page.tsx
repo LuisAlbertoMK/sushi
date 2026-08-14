@@ -26,13 +26,13 @@ export default async function AdminReservasPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-gray-800">📅 Reservas</h1>
-        <p className="text-gray-500">{reservas.length} reservas en total</p>
+        <p className="text-gray-600">{reservas.length} reservas en total</p>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-left text-gray-500 border-b">
+            <tr className="text-left text-gray-600 border-b">
               <th className="pb-2">Nombre</th>
               <th className="pb-2">Fecha</th>
               <th className="pb-2">Personas</th>
@@ -77,14 +77,14 @@ function ReservaRow({ reserva, estadoOptions }: { reserva: Reservacion; estadoOp
         <select
           defaultValue={reserva.estado}
           onChange={handleChange}
-          className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white"
+          className="text-xs border border-gray-400 rounded px-1 py-0.5 bg-white"
         >
           {estadoOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
           ))}
         </select>
       </td>
-      <td className="py-2 text-gray-500">
+      <td className="py-2 text-gray-600">
         {reserva.email}
         {reserva.telefono && <span className="block text-xs">{reserva.telefono}</span>}
       </td>

@@ -22,7 +22,7 @@ export default async function AdminMenuPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-gray-800">🍱 Gestión de Menú</h1>
-        <p className="text-gray-500">Administrá categorías y productos</p>
+        <p className="text-gray-600">Administrá categorías y productos</p>
       </div>
 
       {/* Nueva categoría */}

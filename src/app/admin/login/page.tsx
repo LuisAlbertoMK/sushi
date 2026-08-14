@@ -47,7 +47,7 @@ export default function AdminLoginPage() {
         <div className="text-center mb-8">
           <span className="text-5xl" aria-hidden="true">🍣</span>
           <h1 className="text-2xl font-bold text-red-700 mt-2">Admin Login</h1>
-          <p className="text-gray-500 text-sm">Panel de administración Sushi Bar</p>
+          <p className="text-gray-600 text-sm">Panel de administración Sushi Bar</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -68,7 +68,7 @@ export default function AdminLoginPage() {
               required
               autoComplete="username"
               defaultValue="admin@sushi.local"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
             />
           </div>
 
@@ -83,7 +83,7 @@ export default function AdminLoginPage() {
               required
               autoComplete="current-password"
               defaultValue="admin123"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
             />
           </div>
 

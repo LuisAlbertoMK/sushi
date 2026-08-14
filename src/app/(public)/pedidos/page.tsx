@@ -28,7 +28,7 @@ export default function PedidosPage() {
       <div className="text-center py-16">
         <span className="text-6xl mb-4 block">🛒</span>
         <h2 className="text-2xl font-bold text-gray-700 mb-4">Tu carrito está vacío</h2>
-        <p className="text-gray-500 mb-6">Explorá nuestro menú y agregá delicias</p>
+        <p className="text-gray-600 mb-6">Explorá nuestro menú y agregá delicias</p>
         <Link
           href="/menu"
           className="bg-red-700 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-800 transition"
@@ -72,7 +72,7 @@ export default function PedidosPage() {
                   ) : <span className="text-3xl" aria-hidden="true">🍣</span>}
                     <div>
                       <span className="font-medium">{item.nombre}</span>
-                      {item.notas && <p className="text-xs text-gray-500">Nota: {item.notas}</p>}
+                      {item.notas && <p className="text-xs text-gray-600">Nota: {item.notas}</p>}
                     </div>
                   </div>
                 </td>

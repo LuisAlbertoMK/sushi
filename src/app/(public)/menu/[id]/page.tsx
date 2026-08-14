@@ -2,7 +2,7 @@
 // confidence: high
 import { db } from "@/lib/db";
 import Link from "next/link";
-import Image from "next/image";
+import { SushiImage } from "@/components/ui/SushiImage";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -64,10 +64,10 @@ export default async function ProductoPage({ params }: { params: { id: string } 
       <Link href="/menu" className="text-red-700 hover:underline mb-4 inline-block">
         ← Volver al menú
       </Link>
-      <div className="grid md:grid-cols-2 gap-8 bg-white rounded-xl shadow-md p-8">
+      <div className="grid md:grid-cols-2 gap-8 bg-card rounded-xl shadow-md p-8">
         <div className="bg-gray-100 rounded-lg aspect-square flex items-center justify-center overflow-hidden">
           {producto.imagen ? (
-            <Image
+            <SushiImage
               src={producto.imagen}
               alt={producto.nombre}
               fill
@@ -76,14 +76,16 @@ export default async function ProductoPage({ params }: { params: { id: string } 
               priority
             />
           ) : (
-            <span className="text-6xl" aria-hidden="true">🍣</span>
+            <span className="text-6xl" aria-hidden="true">
+              🍣
+            </span>
           )}
         </div>
         <div>
-          <h1 className="text-3xl font-bold text-red-700 mb-2">{producto.nombre}</h1>
+          <h1 className="text-3xl font-bold text-primary-700 mb-2">{producto.nombre}</h1>
           <p className="text-2xl font-bold text-gray-800 mb-4">${producto.precio.toFixed(2)}</p>
 
-          <span className="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded mb-4">
+          <span className="inline-block bg-primary-100 text-primary-800 text-xs px-2 py-1 rounded mb-4">
             {producto.categoria.nombre}
           </span>
 

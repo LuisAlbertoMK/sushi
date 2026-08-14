@@ -94,7 +94,7 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
               type="text"
               required
               autoComplete="name"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
             />
           </div>
           <div>
@@ -107,7 +107,7 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
               type="email"
               required
               autoComplete="email"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
             />
           </div>
         </div>
@@ -122,7 +122,7 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
             type="tel"
             required
             autoComplete="tel"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
           />
         </div>
 
@@ -134,7 +134,7 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
             id={`${formId}-notas`}
             name="notas"
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
             placeholder="Ej: sin wasabi, por favor"
           ></textarea>
         </div>

@@ -55,7 +55,7 @@ export default async function PromosPage() {
                     Código: {p.codigo}
                   </span>
                 )}
-                <p className="text-xs text-gray-500 mt-3">
+                <p className="text-xs text-gray-600 mt-3">
                   Vigente hasta: {new Date(p.fechaFin).toLocaleDateString("es-AR")}
                 </p>
               </div>
@@ -73,7 +73,7 @@ export default async function PromosPage() {
               <article key={pub.id} className="bg-white rounded-xl shadow-md p-6">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-xl font-bold text-gray-800">{pub.titulo}</h3>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-gray-600">
                     {new Date(pub.fechaPublica).toLocaleDateString("es-AR")}
                   </span>
                 </div>
@@ -87,7 +87,7 @@ export default async function PromosPage() {
       )}
 
       {promos.length === 0 && publicaciones.length === 0 && (
-        <p className="text-center text-gray-500 py-12">
+        <p className="text-center text-gray-600 py-12">
           Pronto novedades y promociones 💫
         </p>
       )}

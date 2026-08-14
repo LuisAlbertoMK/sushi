@@ -65,7 +65,7 @@ export default async function DashboardPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-gray-800">📊 Dashboard</h1>
-        <p className="text-gray-500">Resumen de Sushi Bar</p>
+        <p className="text-gray-600">Resumen de Sushi Bar</p>
       </div>
 
       {/* KPIs */}
@@ -73,31 +73,31 @@ export default async function DashboardPage() {
         <div className="bg-white p-6 rounded-xl shadow-md text-center">
           <div className="text-3xl mb-2">🛒</div>
           <p className="text-2xl font-bold text-gray-800">{data.pedidosHoy}</p>
-          <p className="text-sm text-gray-500">Pedidos hoy</p>
+          <p className="text-sm text-gray-600">Pedidos hoy</p>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow-md text-center">
           <div className="text-3xl mb-2">💰</div>
           <p className="text-2xl font-bold text-green-600">{formatearPrecio(data.ventasHoy)}</p>
-          <p className="text-sm text-gray-500">Ventas hoy</p>
+          <p className="text-sm text-gray-600">Ventas hoy</p>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow-md text-center">
           <div className="text-3xl mb-2">📅</div>
           <p className="text-2xl font-bold text-red-700">{data.reservasPendientes}</p>
-          <p className="text-sm text-gray-500">Reservas hoy</p>
+          <p className="text-sm text-gray-600">Reservas hoy</p>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow-md text-center">
           <div className="text-3xl mb-2">🍣</div>
           <p className="text-2xl font-bold text-gray-800">{data.productosTotal}</p>
-          <p className="text-sm text-gray-500">Productos</p>
+          <p className="text-sm text-gray-600">Productos</p>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow-md text-center">
           <div className="text-3xl mb-2">📋</div>
           <p className="text-2xl font-bold text-gray-800">{data.categoriasTotal}</p>
-          <p className="text-sm text-gray-500">Categorías</p>
+          <p className="text-sm text-gray-600">Categorías</p>
         </div>
       </div>
 
@@ -105,11 +105,11 @@ export default async function DashboardPage() {
       <div className="bg-white rounded-xl shadow-md p-6">
         <h2 className="text-xl font-bold text-gray-800 mb-4">📝 Últimos pedidos</h2>
         {data.ultimosPedidos.length === 0 ? (
-          <p className="text-gray-500 py-4">No hay pedidos todavía</p>
+          <p className="text-gray-600 py-4">No hay pedidos todavía</p>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-gray-500 border-b">
+              <tr className="text-left text-gray-600 border-b">
                 <th className="pb-2">Número</th>
                 <th className="pb-2">Estado</th>
                 <th className="pb-2">Total</th>
@@ -126,7 +126,7 @@ export default async function DashboardPage() {
                     </span>
                   </td>
                   <td className="py-2">{formatearPrecio(p.total)}</td>
-                  <td className="py-2 text-gray-500">
+                  <td className="py-2 text-gray-600">
                     {new Date(p.createdAt).toLocaleDateString("es-AR")}
                   </td>
                 </tr>

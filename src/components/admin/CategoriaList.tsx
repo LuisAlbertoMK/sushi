@@ -44,13 +44,13 @@ export function CategoriaList({ categorias }: Props) {
     window.location.reload();
   };
 
-  if (categorias.length === 0) return <p className="text-gray-500">No hay categorías.</p>;
+  if (categorias.length === 0) return <p className="text-gray-600">No hay categorías.</p>;
 
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-gray-500 border-b">
+          <tr className="text-left text-gray-600 border-b">
             <th className="pb-2">Nombre</th>
             <th className="pb-2">Orden</th>
             <th className="pb-2">Activo</th>
@@ -66,7 +66,7 @@ export function CategoriaList({ categorias }: Props) {
                   <input
                     value={editNombre}
                     onChange={(e) => setEditNombre(e.target.value)}
-                    className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                    className="w-full px-2 py-1 border border-gray-400 rounded text-sm"
                   />
                 ) : (
                   cat.nombre
@@ -78,7 +78,7 @@ export function CategoriaList({ categorias }: Props) {
                     type="number"
                     value={editOrden}
                     onChange={(e) => setEditOrden(parseInt(e.target.value, 10))}
-                    className="w-16 px-2 py-1 border border-gray-300 rounded text-sm"
+                    className="w-16 px-2 py-1 border border-gray-400 rounded text-sm"
                   />
                 ) : (
                   cat.orden
@@ -89,7 +89,7 @@ export function CategoriaList({ categorias }: Props) {
                   <select
                     value={editActivo ? "true" : "false"}
                     onChange={(e) => setEditActivo(e.target.value === "true")}
-                    className="px-2 py-1 border border-gray-300 rounded text-sm bg-white"
+                    className="px-2 py-1 border border-gray-400 rounded text-sm bg-white"
                   >
                     <option value="true">Sí</option>
                     <option value="false">No</option>
@@ -100,12 +100,12 @@ export function CategoriaList({ categorias }: Props) {
                   </span>
                 )}
               </td>
-              <td className="py-2 text-gray-500">{cat.productos.length}</td>
+              <td className="py-2 text-gray-600">{cat.productos.length}</td>
               <td className="py-2 text-center space-x-1">
                 {editingId === cat.id ? (
                   <>
                     <button onClick={() => saveEdit(cat.id)} className="text-green-600 hover:underline text-xs">💾</button>
-                    <button onClick={() => setEditingId(null)} className="text-gray-500 hover:underline text-xs">✕</button>
+                    <button onClick={() => setEditingId(null)} className="text-gray-600 hover:underline text-xs">✕</button>
                   </>
                 ) : (
                   <>

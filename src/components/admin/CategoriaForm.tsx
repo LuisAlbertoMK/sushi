@@ -52,10 +52,10 @@ export function CategoriaForm() {
       {success && <p className="text-green-600 text-sm mb-2">{success}</p>}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
         <div>
-          <input name="nombre" placeholder="Nombre de la categoría" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
+          <input name="nombre" placeholder="Nombre de la categoría" required className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
         </div>
         <div>
-          <input name="orden" type="number" min="0" defaultValue="0" placeholder="Orden" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
+          <input name="orden" type="number" min="0" defaultValue="0" placeholder="Orden" className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
         </div>
         <div className="flex items-center gap-2">
           <label className="flex items-center gap-1 text-sm">

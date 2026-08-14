@@ -92,7 +92,7 @@ export default function ReservasPage() {
               type="text"
               required
               autoComplete="name"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
             />
           </div>
           <div>
@@ -105,7 +105,7 @@ export default function ReservasPage() {
               type="email"
               required
               autoComplete="email"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
             />
           </div>
         </div>
@@ -120,7 +120,7 @@ export default function ReservasPage() {
             type="tel"
             required
             autoComplete="tel"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
           />
         </div>
 
@@ -135,7 +135,7 @@ export default function ReservasPage() {
               type="date"
               required
               min={new Date().toISOString().split("T")[0]}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
             />
           </div>
           <div>
@@ -146,7 +146,7 @@ export default function ReservasPage() {
               id={`${formId}-personas`}
               name="personas"
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 bg-white focus:outline-red-700"
+              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 bg-white focus:outline-red-700"
             >
               <option value="2">2 personas</option>
               <option value="1">1 persona</option>
@@ -166,7 +166,7 @@ export default function ReservasPage() {
             id={`${formId}-notas`}
             name="notas"
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
             placeholder="Ej: terraza, cumpleaños, etc."
           ></textarea>
         </div>

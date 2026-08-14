@@ -30,7 +30,7 @@ export default async function AdminPedidosPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-gray-800">🛒 Pedidos</h1>
-        <p className="text-gray-500">{pedidos.length} pedidos en total</p>
+        <p className="text-gray-600">{pedidos.length} pedidos en total</p>
       </div>
 
       <div className="space-y-4">
@@ -48,7 +48,7 @@ function PedidoCard({ pedido }: { pedido: PedidoWithItems }) {
       <div className="flex justify-between items-start mb-4">
         <div>
           <h2 className="text-xl font-bold text-gray-800">{pedido.numero}</h2>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-600">
             {pedido.nombre} · {pedido.email} · {pedido.telefono}
           </p>
           <p className="text-xs text-gray-400">
@@ -72,7 +72,7 @@ function PedidoCard({ pedido }: { pedido: PedidoWithItems }) {
 
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-gray-500 border-b">
+          <tr className="text-left text-gray-600 border-b">
             <th className="pb-1">Producto</th>
             <th className="pb-1 text-center">Cant.</th>
             <th className="pb-1 text-right">Precio</th>
@@ -118,7 +118,7 @@ function EstadoSelector({ pedidoId, currentEstado }: {
     <select
       defaultValue={currentEstado}
       onChange={handleChange}
-      className="text-sm border border-gray-300 rounded-lg px-2 py-1 bg-white"
+      className="text-sm border border-gray-400 rounded-lg px-2 py-1 bg-white"
     >
       {estadoOptions.map((opt) => (
         <option key={opt.value} value={opt.value}>{opt.label}</option>

@@ -30,7 +30,7 @@ export function Input({ className, label, error, id, ...props }: InputProps) {
         aria-invalid={error ? "true" : "false"}
         aria-describedby={error ? `${inputId}-error` : undefined}
         className={cn(
-          "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent",
+          "w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent",
           error && "border-red-500 focus:ring-red-500",
           className
         )}
@@ -65,7 +65,7 @@ export function Textarea({ className, label, error, id, ...props }: TextareaProp
         id={inputId}
         aria-invalid={error ? "true" : "false"}
         className={cn(
-          "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent resize-y",
+          "w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent resize-y",
           error && "border-red-500 focus:ring-red-500",
           className
         )}
@@ -100,7 +100,7 @@ export function Select({ className, label, error, id, ...props }: SelectProps) {
         id={inputId}
         aria-invalid={error ? "true" : "false"}
         className={cn(
-          "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 bg-white",
+          "w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 bg-white",
           error && "border-red-500 focus:ring-red-500",
           className
         )}

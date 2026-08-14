@@ -31,7 +31,7 @@ export default function TrackPage({
           type="text"
           name="numero"
           placeholder="PED-200814-1234"
-          className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="flex-1 px-4 py-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
         />
         <button
           type="submit"
@@ -78,7 +78,7 @@ async function PedidoDetalle({ numero }: { numero: string }) {
 
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-gray-500">
+          <tr className="text-left text-gray-600">
             <th className="pb-2">Producto</th>
             <th className="pb-2 text-center">Cant.</th>
             <th className="pb-2 text-right">Precio</th>
@@ -95,7 +95,7 @@ async function PedidoDetalle({ numero }: { numero: string }) {
         </tbody>
       </table>
 
-      <p className="text-xs text-gray-500 mt-4">
+      <p className="text-xs text-gray-600 mt-4">
         Pedido creado: {new Date(data.createdAt).toLocaleString("es-AR")}
       </p>
     </div>

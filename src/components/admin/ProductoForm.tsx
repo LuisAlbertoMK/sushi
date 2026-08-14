@@ -63,16 +63,16 @@ export function ProductoForm({ categorias }: Props) {
       {success && <p className="text-green-600 text-sm mb-2">{success}</p>}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
-          <input name="nombre" placeholder="Nombre del producto" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
+          <input name="nombre" placeholder="Nombre del producto" required className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
         </div>
         <div>
-          <input name="precio" type="number" step="0.01" placeholder="Precio ($)" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
+          <input name="precio" type="number" step="0.01" placeholder="Precio ($)" required className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
         </div>
         <div className="md:col-span-2">
-          <input name="descripcion" placeholder="Descripción" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
+          <input name="descripcion" placeholder="Descripción" className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
         </div>
         <div>
-          <select name="categoriaId" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm bg-white">
+          <select name="categoriaId" required className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm bg-white">
             <option value="">Seleccionar categoría</option>
             {categorias.map((c) => (
               <option key={c.id} value={c.id}>{c.nombre}</option>
@@ -80,7 +80,7 @@ export function ProductoForm({ categorias }: Props) {
           </select>
         </div>
         <div>
-          <input name="imagen" placeholder="URL de imagen (opcional)" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
+          <input name="imagen" placeholder="URL de imagen (opcional)" className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
         </div>
         <div className="flex items-center gap-2">
           <label className="flex items-center gap-1 text-sm">

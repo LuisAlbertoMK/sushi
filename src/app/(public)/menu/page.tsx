@@ -85,7 +85,7 @@ async function CategoriaTabsLoader({ categoriaSeleccionada }: { categoriaSelecci
       <CategoriaTabs categorias={categorias} activa={catValid?.id} />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
         {productosVisibles.length === 0 ? (
-          <p className="col-span-full text-center text-gray-500 py-8">
+          <p className="col-span-full text-center text-gray-600 py-8">
             Próximamente nuevas delicias en esta categoría 👨‍🍳
           </p>
         ) : (

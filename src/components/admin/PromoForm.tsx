@@ -56,19 +56,19 @@ export function PromoForm() {
       {error && <p className="text-red-600 text-sm mb-2">{error}</p>}
       {success && <p className="text-green-600 text-sm mb-2">{success}</p>}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <input name="titulo" placeholder="Título de la promoción" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
-        <input name="imagen" placeholder="URL de imagen" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
-        <textarea name="descripcion" placeholder="Descripción" rows={2} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm md:col-span-2"></textarea>
-        <select name="tipo" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm bg-white">
+        <input name="titulo" placeholder="Título de la promoción" required className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
+        <input name="imagen" placeholder="URL de imagen" className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
+        <textarea name="descripcion" placeholder="Descripción" rows={2} className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm md:col-span-2"></textarea>
+        <select name="tipo" required className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm bg-white">
           <option value="">Tipo de promoción</option>
           <option value="PORCENTUAL">Porcentaje (%) OFF</option>
           <option value="MONTO_FIJO">Monto fijo ($ OFF)</option>
           <option value="ENVIO_GRATIS">Envío gratis</option>
         </select>
-        <input name="valor" type="number" step="0.01" placeholder="Valor (ej: 15 para 15%)" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
-        <input name="codigo" placeholder="Código de cupón (opcional)" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
-        <input name="fechaInicio" type="date" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
-        <input name="fechaFin" type="date" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
+        <input name="valor" type="number" step="0.01" placeholder="Valor (ej: 15 para 15%)" className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
+        <input name="codigo" placeholder="Código de cupón (opcional)" className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
+        <input name="fechaInicio" type="date" required className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
+        <input name="fechaFin" type="date" required className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
         <div className="flex items-center gap-2">
           <label className="flex items-center gap-1 text-sm">
             <input type="checkbox" name="activa" value="true" defaultChecked className="rounded" /> Activa
