@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { ChatBot } from "@/components/ui/ChatBot";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -99,6 +100,7 @@ export default function RootLayout({
           </a>
           {children}
           <ThemeToggle />
+          <ChatBot />
         </ThemeProvider>
       </body>
     </html>

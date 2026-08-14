@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo degradé rojo sushi -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7F1D1D"/>
+      <stop offset="50%" stop-color="#B91C1C"/>
+      <stop offset="100%" stop-color="#7F1D1D"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Logo/ícono sushi central -->
+  <g transform="translate(600, 200)">
+    <!-- Plato -->
+    <circle cx="0" cy="20" r="110" fill="#FECDD4" stroke="#7F1D1D" stroke-width="8"/>
+    <!-- Rolls -->
+    <ellipse cx="-40" cy="0" rx="50" ry="14" fill="#FACC15"/>
+    <ellipse cx="0" cy="0" rx="50" ry="14" fill="#EF4444"/>
+    <ellipse cx="40" cy="0" rx="50" ry="14" fill="#FACC15"/>
+    <!-- Nigiri -->
+    <ellipse cx="-60" cy="30" rx="22" ry="10" fill="#FDE68A"/>
+    <ellipse cx="60" cy="30" rx="22" ry="10" fill="#FDE68A"/>
+  </g>
+
+  <!-- Texto institucional -->
+  <text x="600" y="380" text-anchor="middle" font-family="Arial, sans-serif" font-size="56" font-weight="bold" fill="#ffffff">
+    Sushi Bar
+  </text>
+  <text x="600" y="435" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" font-weight="600" fill="#FEE2E2">
+    Sushi fresco • Pedidos online • Reservas
+  </text>
+
+  <!-- Tag institucional -->
+  <text x="600" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#FECACA">
+    Desde 2018 • Hecho con pasión
+  </text>
+</svg>
