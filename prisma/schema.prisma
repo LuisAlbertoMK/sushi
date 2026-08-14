@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role      @default(CUSTOMER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  pedidos       Pedido[]
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+model Categoria {
+  id        String      @id @default(cuid())
+  nombre    String      @unique
+  orden     Int         @default(0)
+  activo    Boolean     @default(true)
+  productos Producto[]
+}
+
+model Producto {
+  id          String  @id @default(cuid())
+  nombre      String
+  descripcion String?
+  precio      Float
+  imagen      String?
+  categoriaId String
+  categoria   Categoria @relation(fields: [categoriaId], references: [id])
+  disponible  Boolean @default(true)
+  orden       Int     @default(0)
+  items       ItemPedido[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([nombre, categoriaId])
+}
+
+model Pedido {
+  id        String @id @default(cuid())
+  userId    String?
+  user      User? @relation(fields: [userId], references: [id])
+  numero    String @unique
+  estado    EstadoPedido @default(PENDIENTE)
+  total     Float
+  notas     String?
+  items     ItemPedido[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum EstadoPedido {
+  PENDIENTE
+  EN_COCINA
+  LISTO
+  ENTREGADO
+  CANCELADO
+}
+
+model ItemPedido {
+  id         String @id @default(cuid())
+  pedidoId   String
+  pedido     Pedido @relation(fields: [pedidoId], references: [id])
+  productoId String
+  producto   Producto @relation(fields: [productoId], references: [id])
+  cantidad   Int
+  precio     Float
+  notas      String?
+}
+
+model Reservacion {
+  id        String @id @default(cuid())
+  nombre    String
+  email     String
+  telefono  String?
+  fecha     DateTime
+  personas  Int @default(2)
+  mesa      String?
+  estado    EstadoReserva @default(CONFIRMADA)
+  notas     String?
+  createdAt DateTime @default(now())
+}
+
+enum EstadoReserva {
+  PENDIENTE
+  CONFIRMADA
+  CANCELADA
+  COMPLETADA
+}
+
+model Promocion {
+  id          String @id @default(cuid())
+  titulo      String
+  descripcion String?
+  imagen      String?
+  tipo        TipoPromo
+  valor       Float?
+  codigo      String? @unique
+  fechaInicio DateTime
+  fechaFin    DateTime
+  activa      Boolean @default(true)
+  createdAt   DateTime @default(now())
+}
+
+enum TipoPromo {
+  PORCENTUAL
+  MONTO_FIJO
+  ENVIO_GRATIS
+}
+
+model Publicacion {
+  id           String @id @default(cuid())
+  titulo       String
+  contenido    String?
+  imagen       String?
+  publicada    Boolean @default(false)
+  fechaPublica DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
