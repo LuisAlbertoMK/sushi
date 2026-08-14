@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "🍣 Sushi Bar — Sushi Fresco, Pedidos Online y Reservas",
     description: "Auténtico sushi fresco hecho al momento. Pedidos online con delivery o reservá tu mesa.",
-    images: [{ url: "/images/sushi-og-placeholder.svg", alt: "Sushi Bar — rolls, nigiris y sashimi frescos" }],
+    images: [{ url: "https://placehold.co/1200x630/8b4513/ffffff?font=montserrat&text=🍣+Sushi+Bar+%7C+Delivery+%26+Reservas", alt: "Sushi Bar — rolls, nigiris y sashimi frescos" }],
   },
 };
 
@@ -27,7 +27,12 @@ export default function LandingPage() {
     <div className="space-y-16">
       {/* Hero */}
       <section className="relative text-center py-24 bg-gradient-to-br from-primary-800 via-primary-700 to-primary-900 text-white rounded-2xl overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/images/sushi-og-placeholder.svg')] opacity-[0.08] bg-contain bg-center bg-no-repeat" aria-hidden="true"></div>
+        <img
+          src="https://placehold.co/1200x500/8b4513/ffffff?font=montserrat&text=Sushi+Bar+%E2%80%94+Hecho+con+Pasi%C3%B3n"
+          alt="Sushi Bar — rolls, nigiris y sashimi frescos"
+          className="absolute inset-0 w-full h-full object-cover opacity-[0.12]"
+          aria-hidden="true"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10"></div>
         <div className="relative z-10">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 tracking-tight drop-shadow-xl">
