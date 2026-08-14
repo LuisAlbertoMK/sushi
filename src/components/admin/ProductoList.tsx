@@ -86,7 +86,7 @@ export function ProductoList({ categorias }: Props) {
               </td>
               <td className="py-2">
                 {editingId === p.id ? (
-                  <select value={editCatId} onChange={(e) => setEditCatId(e.target.value)} className="px-2 py-1 border rounded text-sm bg-white">
+                  <select value={editCatId} onChange={(e) => setEditCatId(e.target.value)} className="px-2 py-1 border border-border rounded text-sm bg-input text-foreground">
                     {categorias.map((c) => (
                       <option key={c.id} value={c.id}>{c.nombre}</option>
                     ))}
@@ -95,7 +95,7 @@ export function ProductoList({ categorias }: Props) {
               </td>
               <td className="py-2">
                 {editingId === p.id ? (
-                  <select value={editDisp ? "true" : "false"} onChange={(e) => setEditDisp(e.target.value === "true")} className="px-2 py-1 border rounded text-sm bg-white">
+                  <select value={editDisp ? "true" : "false"} onChange={(e) => setEditDisp(e.target.value === "true")} className="px-2 py-1 border border-border rounded text-sm bg-input text-foreground">
                     <option value="true">✓</option><option value="false">✗</option>
                   </select>
                 ) : (

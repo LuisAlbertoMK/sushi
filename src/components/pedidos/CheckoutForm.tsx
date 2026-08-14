@@ -79,7 +79,7 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
         <p className="font-bold text-lg mt-2">TOTAL: {formatearPrecio(total)}</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-xl shadow-md">
+      <form onSubmit={handleSubmit} className="space-y-4 bg-card p-6 rounded-xl shadow-md border border-border">
         {error && <div role="alert" className="text-red-600 bg-red-50 p-3 rounded">{error}</div>}
         {success && <div role="status" aria-live="polite" className="text-green-600 bg-green-50 p-3 rounded">{success}</div>}
 
@@ -94,7 +94,7 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
               type="text"
               required
               autoComplete="name"
-              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground"
             />
           </div>
           <div>
@@ -107,7 +107,7 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
               type="email"
               required
               autoComplete="email"
-              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground"
             />
           </div>
         </div>
@@ -122,7 +122,7 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
             type="tel"
             required
             autoComplete="tel"
-            className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground"
           />
         </div>
 
@@ -134,7 +134,7 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
             id={`${formId}-notas`}
             name="notas"
             rows={3}
-            className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground"
             placeholder="Ej: sin wasabi, por favor"
           ></textarea>
         </div>
@@ -143,14 +143,14 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-bold hover:bg-gray-300 transition focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="flex-1 bg-muted text-foreground py-3 rounded-lg font-bold hover:bg-accent transition focus:outline-none focus:ring-2 focus:ring-ring"
           >
             ← Volver al carrito
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 bg-red-700 text-white py-3 rounded-lg font-bold hover:bg-red-800 transition disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="flex-1 bg-primary-700 text-white py-3 rounded-lg font-bold hover:bg-primary-800 transition disabled:cursor-not-allowed disabled:bg-primary-400 disabled:text-white focus:outline-none focus:ring-2 focus:ring-ring"
           >
             {loading ? "Procesando..." : "Confirmar Pedido"}
           </button>

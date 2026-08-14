@@ -25,7 +25,7 @@ export default async function AdminReservasPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-800">📅 Reservas</h1>
+        <h1 className="text-3xl font-bold text-foreground">📅 Reservas</h1>
         <p className="text-gray-600">{reservas.length} reservas en total</p>
       </div>
 
@@ -77,7 +77,7 @@ function ReservaRow({ reserva, estadoOptions }: { reserva: Reservacion; estadoOp
         <select
           defaultValue={reserva.estado}
           onChange={handleChange}
-          className="text-xs border border-gray-400 rounded px-1 py-0.5 bg-white"
+          className="text-xs border border-border rounded px-1 py-0.5 bg-input text-foreground"
         >
           {estadoOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>

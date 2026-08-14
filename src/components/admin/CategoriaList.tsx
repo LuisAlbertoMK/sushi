@@ -66,7 +66,7 @@ export function CategoriaList({ categorias }: Props) {
                   <input
                     value={editNombre}
                     onChange={(e) => setEditNombre(e.target.value)}
-                    className="w-full px-2 py-1 border border-gray-400 rounded text-sm"
+                    className="w-full px-2 py-1 border border-border rounded text-sm bg-input text-foreground"
                   />
                 ) : (
                   cat.nombre
@@ -78,7 +78,7 @@ export function CategoriaList({ categorias }: Props) {
                     type="number"
                     value={editOrden}
                     onChange={(e) => setEditOrden(parseInt(e.target.value, 10))}
-                    className="w-16 px-2 py-1 border border-gray-400 rounded text-sm"
+                    className="w-16 px-2 py-1 border border-border rounded text-sm bg-input text-foreground"
                   />
                 ) : (
                   cat.orden
@@ -89,7 +89,7 @@ export function CategoriaList({ categorias }: Props) {
                   <select
                     value={editActivo ? "true" : "false"}
                     onChange={(e) => setEditActivo(e.target.value === "true")}
-                    className="px-2 py-1 border border-gray-400 rounded text-sm bg-white"
+                    className="px-2 py-1 border border-border rounded text-sm bg-input text-foreground"
                   >
                     <option value="true">Sí</option>
                     <option value="false">No</option>

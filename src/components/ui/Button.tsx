@@ -14,13 +14,13 @@ export function Button({
   size = "md",
   ...props
 }: ButtonProps) {
-  const base = "rounded-lg font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 disabled:opacity-50";
+  const base = "rounded-lg font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 disabled:hover:bg-gray-300";
   const variants = {
-    primary: "bg-red-700 text-white hover:bg-red-800 shadow-sm hover:shadow",
-    secondary: "bg-gray-100 text-gray-800 hover:bg-gray-200",
-    outline: "border-2 border-red-700 text-red-700 hover:bg-red-50",
-    ghost: "text-gray-700 hover:bg-gray-100",
-    danger: "bg-red-600 text-white hover:bg-red-700",
+    primary: "bg-primary-700 text-white hover:bg-primary-800 shadow-sm hover:shadow disabled:bg-primary-400 disabled:text-white",
+    secondary: "bg-card text-foreground hover:bg-accent disabled:bg-gray-300",
+    outline: "border-2 border-primary-700 text-primary-700 hover:bg-primary-50 dark:hover:bg-primary-950/30 disabled:border-muted disabled:text-muted-foreground disabled:bg-card",
+    ghost: "text-foreground hover:bg-accent disabled:text-gray-400",
+    danger: "bg-red-600 text-white hover:bg-red-700 disabled:bg-red-400 disabled:text-white",
   };
   const sizes = {
     sm: "px-3 py-1.5 text-sm",

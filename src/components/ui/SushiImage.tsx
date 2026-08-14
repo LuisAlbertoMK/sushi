@@ -43,7 +43,7 @@ export function SushiImage({
       {isLoading && (
         <div
           className={cn(
-            "bg-gradient-to-br from-red-100 to-red-50 animate-pulse",
+            "bg-gradient-to-br from-muted to-accent animate-pulse",
             "absolute inset-0 z-10",
             "flex items-center justify-center"
           )}

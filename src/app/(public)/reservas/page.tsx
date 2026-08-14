@@ -69,21 +69,21 @@ export default function ReservasPage() {
         <p className="text-gray-600">Reservá tu mesa y disfrutá de una experiencia única</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-6 space-y-4">
+      <form onSubmit={handleSubmit} className="bg-card rounded-xl shadow-md p-6 space-y-4 border border-border">
         {error && (
-          <div role="alert" className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-lg text-sm">
+          <div role="alert" className="bg-destructive/10 dark:bg-destructive/20 border border-destructive/20 dark:border-destructive/30 text-destructive-600 dark:text-destructive-foreground p-3 rounded-lg text-sm">
             {error}
           </div>
         )}
         {success && (
-          <div role="status" aria-live="polite" className="bg-green-50 border border-green-200 text-green-700 p-3 rounded-lg text-sm">
+          <div role="status" aria-live="polite" className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-200 p-3 rounded-lg text-sm">
             {success}
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor={`${formId}-nombre`} className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor={`${formId}-nombre`} className="block text-sm font-medium text-foreground mb-1">
               Nombre completo *
             </label>
             <input
@@ -92,11 +92,11 @@ export default function ReservasPage() {
               type="text"
               required
               autoComplete="name"
-              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+className="w-full px-3 py-2 border border-border rounded-lg bg-input text-foreground placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-ring focus:outline-primary-500"
             />
           </div>
           <div>
-            <label htmlFor={`${formId}-email`} className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor={`${formId}-email`} className="block text-sm font-medium text-foreground mb-1">
               Email *
             </label>
             <input
@@ -105,13 +105,13 @@ export default function ReservasPage() {
               type="email"
               required
               autoComplete="email"
-              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+className="w-full px-3 py-2 border border-border rounded-lg bg-input text-foreground placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-ring focus:outline-primary-500"
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor={`${formId}-tel`} className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor={`${formId}-tel`} className="block text-sm font-medium text-foreground mb-1">
             Teléfono *
           </label>
           <input
@@ -120,13 +120,13 @@ export default function ReservasPage() {
             type="tel"
             required
             autoComplete="tel"
-            className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            className="w-full px-3 py-2 border border-border rounded-lg bg-input text-foreground placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-ring focus:outline-primary-500"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor={`${formId}-fecha`} className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor={`${formId}-fecha`} className="block text-sm font-medium text-foreground mb-1">
               Fecha *
             </label>
             <input
@@ -135,18 +135,18 @@ export default function ReservasPage() {
               type="date"
               required
               min={new Date().toISOString().split("T")[0]}
-              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+className="w-full px-3 py-2 border border-border rounded-lg bg-input text-foreground placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-ring focus:outline-primary-500"
             />
           </div>
           <div>
-            <label htmlFor={`${formId}-personas`} className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor={`${formId}-personas`} className="block text-sm font-medium text-foreground mb-1">
               Personas *
             </label>
             <select
               id={`${formId}-personas`}
               name="personas"
               required
-              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 bg-white focus:outline-red-700"
+              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground placeholder:text-gray-500 dark:placeholder:text-gray-400"
             >
               <option value="2">2 personas</option>
               <option value="1">1 persona</option>
@@ -159,14 +159,14 @@ export default function ReservasPage() {
         </div>
 
         <div>
-          <label htmlFor={`${formId}-notas`} className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor={`${formId}-notas`} className="block text-sm font-medium text-foreground mb-1">
             Notas (opcional)
           </label>
           <textarea
             id={`${formId}-notas`}
             name="notas"
             rows={3}
-            className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            className="w-full px-3 py-2 border border-border rounded-lg bg-input text-foreground placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-ring focus:outline-primary-500"
             placeholder="Ej: terraza, cumpleaños, etc."
           ></textarea>
         </div>
@@ -174,7 +174,7 @@ export default function ReservasPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-red-700 text-white py-3 rounded-lg font-bold hover:bg-red-800 transition disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full bg-primary-700 text-white py-3 rounded-lg font-bold hover:bg-primary-800 transition disabled:cursor-not-allowed disabled:bg-primary-400 disabled:text-white focus:outline-none focus:ring-2 focus:ring-ring"
         >
           {loading ? "Reservando..." : "Confirmar Reserva"}
         </button>

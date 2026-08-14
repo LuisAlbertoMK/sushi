@@ -29,8 +29,8 @@ export function CategoriaTabs({ categorias, activa }: Props) {
             className={cn(
               "px-4 py-2 rounded-full text-sm font-medium transition-all",
               isActive
-                ? "bg-red-700 text-white"
-                : "bg-white text-gray-700 hover:bg-red-50 hover:text-red-700 border border-gray-200"
+                ? "bg-primary-700 text-white"
+                : "bg-card text-muted-foreground hover:bg-accent hover:text-primary-700 border border-border"
             )}
           >
             {cat.nombre}

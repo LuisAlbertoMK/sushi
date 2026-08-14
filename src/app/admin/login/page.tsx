@@ -42,23 +42,23 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="bg-card rounded-2xl shadow-2xl p-8 w-full max-w-md border border-border">
         <div className="text-center mb-8">
           <span className="text-5xl" aria-hidden="true">🍣</span>
-          <h1 className="text-2xl font-bold text-red-700 mt-2">Admin Login</h1>
-          <p className="text-gray-600 text-sm">Panel de administración Sushi Bar</p>
+          <h1 className="text-2xl font-bold text-primary-700 dark:text-primary-300 mt-2">Admin Login</h1>
+          <p className="text-muted-foreground text-sm">Panel de administración Sushi Bar</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div role="alert" className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-lg text-sm">
+            <div role="alert" className="bg-destructive/10 dark:bg-destructive/20 border border-destructive/20 dark:border-destructive/30 text-destructive-600 dark:text-destructive-foreground p-3 rounded-lg text-sm">
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor={`${formId}-email`} className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor={`${formId}-email`} className="block text-sm font-medium text-foreground mb-1">
               Email
             </label>
             <input
@@ -68,12 +68,12 @@ export default function AdminLoginPage() {
               required
               autoComplete="username"
               defaultValue="admin@sushi.local"
-              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground"
             />
           </div>
 
           <div>
-            <label htmlFor={`${formId}-password`} className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor={`${formId}-password`} className="block text-sm font-medium text-foreground mb-1">
               Contraseña
             </label>
             <input
@@ -83,14 +83,14 @@ export default function AdminLoginPage() {
               required
               autoComplete="current-password"
               defaultValue="admin123"
-              className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-red-700 text-white py-3 rounded-lg font-bold hover:bg-red-800 transition disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="w-full bg-primary-700 text-white py-3 rounded-lg font-bold hover:bg-primary-800 transition disabled:cursor-not-allowed disabled:bg-primary-400 disabled:text-white focus:outline-none focus:ring-2 focus:ring-ring"
           >
             {loading ? "Ingresando..." : "Ingresar"}
           </button>

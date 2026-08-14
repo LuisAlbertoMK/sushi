@@ -20,7 +20,7 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans flex">
+    <div className="min-h-screen bg-muted font-sans flex">
       {/* Sidebar */}
       <aside className="w-64 bg-gray-900 text-white p-6 min-h-screen">
         <div className="flex items-center gap-2 mb-8">
@@ -42,7 +42,7 @@ export default async function AdminLayout({
       {/* Main */}
       <main className="flex-1 p-8 overflow-y-auto">
         <header className="mb-6 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-800">Panel de Administración</h1>
+          <h1 className="text-2xl font-bold text-foreground">Panel de Administración</h1>
         </header>
         {children}
       </main>

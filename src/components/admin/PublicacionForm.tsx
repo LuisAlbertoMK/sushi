@@ -48,20 +48,20 @@ export function PublicacionForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-4 rounded-xl shadow-md">
+    <form onSubmit={handleSubmit} className="bg-card p-4 rounded-xl shadow-md border border-border">
       {error && <p className="text-red-600 text-sm mb-2">{error}</p>}
       {success && <p className="text-green-600 text-sm mb-2">{success}</p>}
       <div className="grid grid-cols-1 gap-3">
-        <input name="titulo" placeholder="Título de la publicación" required className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
-        <input name="imagen" placeholder="URL de imagen (opcional)" className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
-        <textarea name="contenido" placeholder="Contenido..." rows={3} className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm"></textarea>
-        <input name="fechaPublica" type="date" required className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 text-sm" />
+        <input name="titulo" placeholder="Título de la publicación" required className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground text-sm" />
+        <input name="imagen" placeholder="URL de imagen (opcional)" className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground text-sm" />
+        <textarea name="contenido" placeholder="Contenido..." rows={3} className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground text-sm"></textarea>
+        <input name="fechaPublica" type="date" required className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground text-sm" />
         <div className="flex items-center gap-2">
           <label className="flex items-center gap-1 text-sm">
             <input type="checkbox" name="publicada" value="true" defaultChecked className="rounded" /> Publicada
           </label>
         </div>
-        <button type="submit" disabled={loading} className="bg-red-700 text-white py-2 rounded-lg font-bold hover:bg-red-800 transition disabled:opacity-50">
+        <button type="submit" disabled={loading} className="bg-primary-700 text-white py-2 rounded-lg font-bold hover:bg-primary-800 transition disabled:cursor-not-allowed disabled:bg-primary-400 disabled:text-white">
           {loading ? "Guardando..." : "Crear Publicación"}
         </button>
       </div>

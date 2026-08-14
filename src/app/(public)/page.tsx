@@ -33,13 +33,13 @@ export default function LandingPage() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/menu"
-            className="bg-white text-red-700 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition"
+            className="bg-card text-primary-700 px-8 py-3 rounded-full font-bold hover:bg-accent transition"
           >
             Ver Menú
           </Link>
           <Link
             href="/pedidos"
-            className="bg-white text-red-700 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition"
+            className="bg-card text-primary-700 px-8 py-3 rounded-full font-bold hover:bg-accent transition"
           >
             Pedir Ahora
           </Link>
@@ -49,24 +49,20 @@ export default function LandingPage() {
       {/* Features */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {features.map((f) => (
-          <Link
-            key={f.href}
-            href={f.href}
-            className="bg-white p-6 rounded-xl shadow-md text-center hover:shadow-lg transition group"
-          >
-            <h3 className="font-bold text-lg mb-2 group-hover:text-red-700">{f.title}</h3>
+          <Link key={f.href} href={f.href} className="bg-card p-6 rounded-xl shadow-md text-center hover:shadow-lg transition group border border-border">
+            <h3 className="font-bold text-lg mb-2 group-hover:text-primary-700 dark:group-hover:text-primary-400">{f.title}</h3>
             <p className="text-sm text-gray-600">{f.desc}</p>
           </Link>
         ))}
       </section>
 
       {/* CTA Reserva */}
-      <section className="text-center py-12 bg-red-50 rounded-xl">
-        <h2 className="text-3xl font-bold text-red-700 mb-4">¿Listo para compartir?</h2>
-        <p className="text-gray-700 mb-6">Reservá mesa y disfrutá de una experiencia única</p>
+      <section className="text-center py-12 bg-primary-50 dark:bg-primary-950/30 rounded-xl">
+        <h2 className="text-3xl font-bold text-primary-700 dark:text-primary-300 mb-4">¿Listo para compartir?</h2>
+        <p className="text-muted-foreground mb-6">Reservá mesa y disfrutá de una experiencia única</p>
         <Link
           href="/reservas"
-          className="bg-red-700 text-white px-8 py-3 rounded-full font-bold hover:bg-red-800 transition"
+          className="bg-primary-700 text-white px-8 py-3 rounded-full font-bold hover:bg-primary-800 transition focus:outline-none focus:ring-2 focus:ring-ring"
         >
           Reservar Mesa
         </Link>

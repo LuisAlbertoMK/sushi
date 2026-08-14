@@ -16,31 +16,31 @@ export default async function AdminPromosPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-800">🎁 Promociones & Publicaciones</h1>
+        <h1 className="text-3xl font-bold text-foreground">🎁 Promociones & Publicaciones</h1>
         <p className="text-gray-600">Administrá ofertas, cupones y publicaciones</p>
       </div>
 
       {/* Nueva promoción */}
       <section>
-        <h2 className="text-xl font-bold text-gray-800 mb-3">➕ Nueva promoción</h2>
+        <h2 className="text-xl font-bold text-foreground mb-3">➕ Nueva promoción</h2>
         <PromoForm />
       </section>
 
       {/* Lista de promociones */}
       <section>
-        <h2 className="text-xl font-bold text-gray-800 mb-3">📋 Promociones</h2>
+        <h2 className="text-xl font-bold text-foreground mb-3">📋 Promociones</h2>
         <PromoList promos={promos} />
       </section>
 
       {/* Nueva publicación */}
       <section className="mt-8">
-        <h2 className="text-xl font-bold text-gray-800 mb-3">➕ Nueva publicación</h2>
+        <h2 className="text-xl font-bold text-foreground mb-3">➕ Nueva publicación</h2>
         <PublicacionForm />
       </section>
 
       {/* Lista de publicaciones */}
       <section>
-        <h2 className="text-xl font-bold text-gray-800 mb-3">📋 Publicaciones</h2>
+        <h2 className="text-xl font-bold text-foreground mb-3">📋 Publicaciones</h2>
         <PublicacionList publicaciones={publicaciones} />
       </section>
     </div>

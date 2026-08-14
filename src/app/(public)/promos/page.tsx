@@ -35,10 +35,10 @@ export default async function PromosPage() {
       {/* Promociones activas */}
       {promos.length > 0 && (
         <section>
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">🔥 Promociones activas</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-4">🔥 Promociones activas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {promos.map((p) => (
-              <div key={p.id} className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl shadow-md p-6 border-2 border-red-200">
+              <div key={p.id} className="bg-gradient-to-br from-primary-50 dark:from-primary-950/30 to-orange-50 dark:to-orange-950/30 rounded-xl shadow-md p-6 border-2 border-primary-200 dark:border-primary-800">
                 <h3 className="text-xl font-bold text-red-700 mb-2">{p.titulo}</h3>
                 {p.descripcion && <p className="text-gray-600 mb-3">{p.descripcion}</p>}
                 {p.tipo === "PORCENTUAL" && p.valor && (
@@ -67,12 +67,12 @@ export default async function PromosPage() {
       {/* Publicaciones */}
       {publicaciones.length > 0 && (
         <section>
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">📰 Novedades</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-4">📰 Novedades</h2>
           <div className="space-y-6">
             {publicaciones.map((pub) => (
-              <article key={pub.id} className="bg-white rounded-xl shadow-md p-6">
+              <article key={pub.id} className="bg-card rounded-xl shadow-md p-6 border border-border">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xl font-bold text-gray-800">{pub.titulo}</h3>
+                  <h3 className="text-xl font-bold text-foreground">{pub.titulo}</h3>
                   <span className="text-xs text-gray-600">
                     {new Date(pub.fechaPublica).toLocaleDateString("es-AR")}
                   </span>

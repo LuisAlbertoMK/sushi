@@ -24,6 +24,12 @@
   --border: oklch(0.85 0 0);
   --input: oklch(0.92 0 0);
   --ring: oklch(0.644 0.245 24.5);
+  --muted: oklch(0.94 0 0);
+  --muted-foreground: oklch(0.5 0 0);
+  /* Destructive (errores) — accesible en ambos temas */
+  --color-destructive: oklch(0.571 0.312 24.5);
+  --color-destructive-foreground: oklch(1 0 0);
+  --color-destructive-600: oklch(0.571 0.312 24.5);
 }
 
 /* Tema oscuro */
@@ -36,6 +42,10 @@
     --border: oklch(0.27 0 0);
     --input: oklch(0.22 0 0);
     --ring: oklch(0.644 0.245 24.5);
+    --muted: oklch(0.22 0 0);
+    --muted-foreground: oklch(0.6 0 0);
+    /* Destructive (errores) */
+    --color-destructive-600: oklch(0.571 0.312 24.5);
   }
 }
 
@@ -48,6 +58,10 @@ html.dark {
   --border: oklch(0.27 0 0);
   --input: oklch(0.22 0 0);
   --ring: oklch(0.644 0.245 24.5);
+  --muted: oklch(0.22 0 0);
+  --muted-foreground: oklch(0.6 0 0);
+  /* Destructive (errores) */
+  --color-destructive-600: oklch(0.571 0.312 24.5);
 }
 
 @theme inline {
@@ -58,6 +72,10 @@ html.dark {
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--color-destructive-600);
+  --color-destructive-foreground: oklch(1 0 0);
   --color-primary: var(--color-primary);
   --color-primary-foreground: var(--color-primary-foreground);
   --color-primary-50: var(--color-primary-50);
@@ -80,7 +98,7 @@ html.dark {
   top: -40px;
   left: 6px;
   z-index: 100;
-  background: #b91c1c;
+  background: var(--color-destructive);
   color: white;
   padding: 8px 12px;
   border-radius: 4px;
@@ -93,7 +111,7 @@ html.dark {
 
 /* Focus visible global — todos los elementos interactivos */
 :focus-visible {
-  outline: 2px solid #b91c1c;
+  outline: 2px solid var(--color-destructive);
   outline-offset: 2px;
 }
 

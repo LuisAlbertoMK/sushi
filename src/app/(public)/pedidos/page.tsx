@@ -46,9 +46,9 @@ export default function PedidosPage() {
   return (
     <div className="max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold text-red-700 mb-6">🛒 Tu Carrito</h1>
-      <div className="bg-white rounded-xl shadow-md overflow-hidden">
+      <div className="bg-card rounded-xl shadow-md overflow-hidden border border-border">
         <table className="w-full">
-          <thead className="bg-gray-50">
+          <thead className="bg-muted">
             <tr>
               <th className="text-left p-4">Producto</th>
               <th className="text-center p-4">Cant.</th>
@@ -80,14 +80,14 @@ export default function PedidosPage() {
                   <div className="flex justify-center items-center gap-1">
                     <button
                       onClick={() => updateCantidad(item.productoId, item.cantidad - 1)}
-                      className="w-6 h-6 rounded bg-gray-200 hover:bg-gray-300 flex items-center justify-center"
+                      className="w-6 h-6 rounded bg-border hover:bg-accent flex items-center justify-center text-foreground"
                     >
                       <MinusIcon />
                     </button>
                     <span className="w-6 text-center">{item.cantidad}</span>
                     <button
                       onClick={() => updateCantidad(item.productoId, item.cantidad + 1)}
-                      className="w-6 h-6 rounded bg-gray-200 hover:bg-gray-300 flex items-center justify-center"
+                      className="w-6 h-6 rounded bg-border hover:bg-accent flex items-center justify-center text-foreground"
                     >
                       <PlusIcon />
                     </button>

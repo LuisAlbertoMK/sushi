@@ -18,8 +18,8 @@ interface Props {
 export function ProductoCard({ producto }: Props) {
   return (
     <Link href={`/menu/${producto.id}`} className="group block">
-      <div className="bg-card rounded-xl shadow-md overflow-hidden group-hover:shadow-lg transition-shadow">
-        <div className="aspect-square bg-gray-100 flex items-center justify-center overflow-hidden">
+      <div className="bg-card rounded-xl shadow-md overflow-hidden group-hover:shadow-lg transition-shadow border border-border">
+        <div className="aspect-square bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
           {producto.imagen ? (
             <SushiImage
               src={producto.imagen}
@@ -35,14 +35,14 @@ export function ProductoCard({ producto }: Props) {
           )}
         </div>
         <div className="p-4">
-          <h3 className="font-bold text-lg text-gray-800 group-hover:text-primary-700 transition">
+          <h3 className="font-bold text-lg text-foreground group-hover:text-primary-700 dark:group-hover:text-primary-400 transition">
             {producto.nombre}
           </h3>
-          <p className="text-xl font-bold text-primary-700 my-2">
+          <p className="text-xl font-bold text-primary-700 dark:text-primary-400 my-2">
             {formatearPrecio(producto.precio)}
           </p>
           {producto.descripcion && (
-            <p className="text-sm text-gray-600 line-clamp-2">
+            <p className="text-sm text-muted-foreground line-clamp-2">
               {producto.descripcion}
             </p>
           )}

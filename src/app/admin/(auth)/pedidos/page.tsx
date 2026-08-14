@@ -3,6 +3,7 @@
 import { db } from "@/lib/db";
 import { formatearPrecio } from "@/lib/utils";
 import { PedidoWithItems } from "@/lib/types";
+import { Badge } from "@/components/ui/Badge";
 
 const estadoOptions = [
   { value: "PENDIENTE", label: "⏳ En espera" },
@@ -29,8 +30,8 @@ export default async function AdminPedidosPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-800">🛒 Pedidos</h1>
-        <p className="text-gray-600">{pedidos.length} pedidos en total</p>
+        <h1 className="text-3xl font-bold text-foreground">🛒 Pedidos</h1>
+        <p className="text-muted-foreground">{pedidos.length} pedidos en total</p>
       </div>
 
       <div className="space-y-4">
@@ -44,14 +45,14 @@ export default async function AdminPedidosPage() {
 
 function PedidoCard({ pedido }: { pedido: PedidoWithItems }) {
   return (
-    <div className="bg-white rounded-xl shadow-md p-6">
+    <div className="bg-card rounded-xl shadow-md p-6">
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h2 className="text-xl font-bold text-gray-800">{pedido.numero}</h2>
-          <p className="text-sm text-gray-600">
+          <h2 className="text-xl font-bold text-foreground">{pedido.numero}</h2>
+          <p className="text-sm text-muted-foreground">
             {pedido.nombre} · {pedido.email} · {pedido.telefono}
           </p>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-muted-foreground/70 dark:text-muted-foreground/60">
             Creado: {new Date(pedido.createdAt).toLocaleString("es-AR")}
           </p>
         </div>
@@ -59,20 +60,22 @@ function PedidoCard({ pedido }: { pedido: PedidoWithItems }) {
       </div>
 
       <div className="mb-4">
-        <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
-          pedido.estado === "PENDIENTE" ? "bg-yellow-100 text-yellow-800" :
-          pedido.estado === "EN_COCINA" ? "bg-orange-100 text-orange-800" :
-          pedido.estado === "LISTO" ? "bg-blue-100 text-blue-800" :
-          pedido.estado === "ENTREGADO" ? "bg-green-100 text-green-800" :
-          "bg-red-100 text-red-800"
-        }`}>
+        <Badge
+          variant={
+            pedido.estado === "PENDIENTE" ? "pending" :
+            pedido.estado === "EN_COCINA" ? "cooking" :
+            pedido.estado === "LISTO" ? "ready" :
+            pedido.estado === "ENTREGADO" ? "delivered" :
+            pedido.estado === "CANCELADO" ? "cancelled" : "default"
+          }
+        >
           {estadoLabels[pedido.estado] || pedido.estado}
-        </span>
+        </Badge>
       </div>
 
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-gray-600 border-b">
+          <tr className="text-left text-muted-foreground border-b border-border">
             <th className="pb-1">Producto</th>
             <th className="pb-1 text-center">Cant.</th>
             <th className="pb-1 text-right">Precio</th>
@@ -80,21 +83,21 @@ function PedidoCard({ pedido }: { pedido: PedidoWithItems }) {
         </thead>
         <tbody>
           {pedido.items.map((item) => (
-            <tr key={item.id} className="border-t">
-              <td className="py-1">{item.producto.nombre}{item.notas ? ` (${item.notas})` : ""}</td>
+            <tr key={item.id} className="border-t border-border">
+              <td className="py-1 text-foreground">{item.producto.nombre}{item.notas ? ` (${item.notas})` : ""}</td>
               <td className="py-1 text-center">{item.cantidad}</td>
               <td className="py-1 text-right">{formatearPrecio(item.precio * item.cantidad)}</td>
             </tr>
           ))}
-          <tr className="border-t font-bold">
-            <td colSpan={2} className="py-2 text-right">TOTAL:</td>
-            <td className="py-2 text-right text-red-700">{formatearPrecio(pedido.total)}</td>
+          <tr className="border-t border-border font-bold">
+            <td colSpan={2} className="py-2 text-right text-foreground">TOTAL:</td>
+            <td className="py-2 text-right text-primary-700 dark:text-primary-400">{formatearPrecio(pedido.total)}</td>
           </tr>
         </tbody>
       </table>
 
       {pedido.notas && (
-        <p className="text-sm text-gray-600 mt-2">📝 Nota: {pedido.notas}</p>
+        <p className="text-sm text-muted-foreground mt-2">📝 Nota: {pedido.notas}</p>
       )}
     </div>
   );
@@ -115,10 +118,10 @@ function EstadoSelector({ pedidoId, currentEstado }: {
   };
 
   return (
-    <select
+      <select
       defaultValue={currentEstado}
       onChange={handleChange}
-      className="text-sm border border-gray-400 rounded-lg px-2 py-1 bg-white"
+      className="text-sm border border-border rounded-lg px-2 py-1 bg-input"
     >
       {estadoOptions.map((opt) => (
         <option key={opt.value} value={opt.value}>{opt.label}</option>

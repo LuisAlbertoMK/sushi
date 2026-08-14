@@ -31,7 +31,7 @@ export default function TrackPage({
           type="text"
           name="numero"
           placeholder="PED-200814-1234"
-          className="flex-1 px-4 py-3 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="flex-1 px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground"
         />
         <button
           type="submit"
@@ -66,7 +66,7 @@ async function PedidoDetalle({ numero }: { numero: string }) {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6">
+    <div className="bg-card rounded-xl shadow-md p-6 border border-border">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Pedido {data.numero}</h2>
         <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">

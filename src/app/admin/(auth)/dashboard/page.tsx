@@ -3,6 +3,7 @@
 import { db } from "@/lib/db";
 import { formatearPrecio } from "@/lib/utils";
 import { redirect } from "next/navigation";
+import { Badge } from "@/components/ui/Badge";
 
 async function getDatosDashboard() {
   const now = new Date();
@@ -61,55 +62,55 @@ const estadoLabels: Record<string, string> = {
 export default async function DashboardPage() {
   const data = await getDatosDashboard();
 
-  return (
+   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-800">📊 Dashboard</h1>
-        <p className="text-gray-600">Resumen de Sushi Bar</p>
+        <h1 className="text-3xl font-bold text-foreground">📊 Dashboard</h1>
+        <p className="text-muted-foreground">Resumen de Sushi Bar</p>
       </div>
 
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        <div className="bg-white p-6 rounded-xl shadow-md text-center">
+        <div className="bg-card p-6 rounded-xl shadow-md text-center">
           <div className="text-3xl mb-2">🛒</div>
-          <p className="text-2xl font-bold text-gray-800">{data.pedidosHoy}</p>
-          <p className="text-sm text-gray-600">Pedidos hoy</p>
+          <p className="text-2xl font-bold text-foreground">{data.pedidosHoy}</p>
+          <p className="text-sm text-muted-foreground">Pedidos hoy</p>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-md text-center">
+        <div className="bg-card p-6 rounded-xl shadow-md text-center">
           <div className="text-3xl mb-2">💰</div>
           <p className="text-2xl font-bold text-green-600">{formatearPrecio(data.ventasHoy)}</p>
-          <p className="text-sm text-gray-600">Ventas hoy</p>
+          <p className="text-sm text-muted-foreground">Ventas hoy</p>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-md text-center">
+        <div className="bg-card p-6 rounded-xl shadow-md text-center">
           <div className="text-3xl mb-2">📅</div>
-          <p className="text-2xl font-bold text-red-700">{data.reservasPendientes}</p>
-          <p className="text-sm text-gray-600">Reservas hoy</p>
+          <p className="text-2xl font-bold text-primary-700 dark:text-primary-400">{data.reservasPendientes}</p>
+          <p className="text-sm text-muted-foreground">Reservas hoy</p>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-md text-center">
+        <div className="bg-card p-6 rounded-xl shadow-md text-center">
           <div className="text-3xl mb-2">🍣</div>
-          <p className="text-2xl font-bold text-gray-800">{data.productosTotal}</p>
-          <p className="text-sm text-gray-600">Productos</p>
+          <p className="text-2xl font-bold text-foreground">{data.productosTotal}</p>
+          <p className="text-sm text-muted-foreground">Productos</p>
         </div>
 
-        <div className="bg-white p-6 rounded-xl shadow-md text-center">
+        <div className="bg-card p-6 rounded-xl shadow-md text-center">
           <div className="text-3xl mb-2">📋</div>
-          <p className="text-2xl font-bold text-gray-800">{data.categoriasTotal}</p>
-          <p className="text-sm text-gray-600">Categorías</p>
+          <p className="text-2xl font-bold text-foreground">{data.categoriasTotal}</p>
+          <p className="text-sm text-muted-foreground">Categorías</p>
         </div>
       </div>
 
       {/* Últimos pedidos */}
-      <div className="bg-white rounded-xl shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">📝 Últimos pedidos</h2>
+      <div className="bg-card rounded-xl shadow-md p-6">
+        <h2 className="text-xl font-bold text-foreground mb-4">📝 Últimos pedidos</h2>
         {data.ultimosPedidos.length === 0 ? (
-          <p className="text-gray-600 py-4">No hay pedidos todavía</p>
+          <p className="text-muted-foreground py-4">No hay pedidos todavía</p>
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-gray-600 border-b">
+              <tr className="text-left text-muted-foreground border-b border-border">
                 <th className="pb-2">Número</th>
                 <th className="pb-2">Estado</th>
                 <th className="pb-2">Total</th>
@@ -118,15 +119,23 @@ export default async function DashboardPage() {
             </thead>
             <tbody>
               {data.ultimosPedidos.map((p) => (
-                <tr key={p.numero} className="border-t">
-                  <td className="py-2 font-mono">{p.numero}</td>
+                <tr key={p.numero} className="border-t border-border">
+                  <td className="py-2 font-mono text-foreground">{p.numero}</td>
                   <td className="py-2">
-                    <span className="text-xs px-2 py-1 rounded-full bg-gray-100">
+                    <Badge
+                      variant={
+                        p.estado === "PENDIENTE" ? "pending" :
+                        p.estado === "EN_COCINA" ? "cooking" :
+                        p.estado === "LISTO" ? "ready" :
+                        p.estado === "ENTREGADO" ? "delivered" :
+                        p.estado === "CANCELADO" ? "cancelled" : "default"
+                      }
+                    >
                       {estadoLabels[p.estado] || p.estado}
-                    </span>
+                    </Badge>
                   </td>
-                  <td className="py-2">{formatearPrecio(p.total)}</td>
-                  <td className="py-2 text-gray-600">
+                  <td className="py-2 text-foreground">{formatearPrecio(p.total)}</td>
+                  <td className="py-2 text-muted-foreground">
                     {new Date(p.createdAt).toLocaleDateString("es-AR")}
                   </td>
                 </tr>
