@@ -59,7 +59,7 @@ export default async function MenuPage({
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-red-700 mb-2">🍣 Nuestro Menú</h1>
+        <h1 className="text-4xl font-bold text-primary-700 mb-2">🍣 Nuestro Menú</h1>
         <p className="text-gray-600">Ingredientes frescos, preparado al momento</p>
       </div>
 

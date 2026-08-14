@@ -65,7 +65,7 @@ export default function ReservasPage() {
     <div className="max-w-2xl mx-auto">
       <div className="text-center mb-8">
         <span className="text-5xl mb-2 block" aria-hidden="true">📅</span>
-        <h1 className="text-4xl font-bold text-red-700 mb-2">Reservación de Mesa</h1>
+        <h1 className="text-4xl font-bold text-primary-700 mb-2">Reservación de Mesa</h1>
         <p className="text-gray-600">Reservá tu mesa y disfrutá de una experiencia única</p>
       </div>
 

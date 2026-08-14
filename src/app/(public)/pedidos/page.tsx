@@ -6,6 +6,7 @@ import { formatearPrecio } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { CheckoutForm } from "@/components/pedidos/CheckoutForm";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { useState } from "react";
 
 // Emojis/inline en lugar de lucide-react (no instalado)
@@ -25,17 +26,10 @@ export default function PedidosPage() {
 
   if (items.length === 0) {
     return (
-      <div className="text-center py-16">
-        <span className="text-6xl mb-4 block">🛒</span>
-        <h2 className="text-2xl font-bold text-gray-700 mb-4">Tu carrito está vacío</h2>
-        <p className="text-gray-600 mb-6">Explorá nuestro menú y agregá delicias</p>
-        <Link
-          href="/menu"
-          className="bg-red-700 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-800 transition"
-        >
-          Ver Menú
-        </Link>
-      </div>
+      <EmptyState
+        type="cart"
+        className="min-h-[400px]"
+      />
     );
   }
 
@@ -45,7 +39,7 @@ export default function PedidosPage() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold text-red-700 mb-6">🛒 Tu Carrito</h1>
+      <h1 className="text-3xl font-bold text-primary-700 dark:text-primary-300 mb-6">🛒 Tu Carrito</h1>
       <div className="bg-card rounded-xl shadow-md overflow-hidden border border-border">
         <table className="w-full">
           <thead className="bg-muted">
@@ -97,7 +91,7 @@ export default function PedidosPage() {
                 <td className="p-4 text-center">
                   <button
                     onClick={() => removeItem(item.productoId)}
-                    className="hover:text-red-700"
+                    className="hover:text-primary-700"
                   >
                     <TrashIcon />
                   </button>
@@ -108,19 +102,19 @@ export default function PedidosPage() {
         </table>
         <div className="border-t p-4 flex justify-between items-center">
           <span className="text-lg font-bold">Total:</span>
-          <span className="text-2xl font-bold text-red-700">{formatearPrecio(total)}</span>
+          <span className="text-2xl font-bold text-primary-700">{formatearPrecio(total)}</span>
         </div>
       </div>
       <div className="mt-6 flex gap-4 justify-between">
         <button
           onClick={clearCart}
-          className="text-gray-600 hover:text-red-700"
+          className="text-gray-600 hover:text-primary-700"
         >
           Vaciar carrito
         </button>
         <button
           onClick={() => setShowCheckout(true)}
-          className="bg-red-700 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-800 transition"
+          className="bg-primary-700 dark:bg-primary-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-primary-800 dark:hover:bg-primary-500 transition focus:outline-none focus:ring-2 focus:ring-ring"
         >
           Continuar → Checkout
         </button>

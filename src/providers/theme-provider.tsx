@@ -33,8 +33,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return (window.localStorage.getItem(STORAGE_KEY_THEME) as ThemeMode) || "auto";
   });
   const [colorMode, setColorModeState] = useState<ColorMode>(() => {
-    if (typeof window === "undefined") return "red";
-    return (window.localStorage.getItem(STORAGE_KEY_COLOR) as ColorMode) || "red";
+    if (typeof window === "undefined") return "amber";
+    return (window.localStorage.getItem(STORAGE_KEY_COLOR) as ColorMode) || "amber";
   });
   const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
 
@@ -104,7 +104,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, [theme, setTheme]);
 
   const toggleColorMode = useCallback(() => {
-    const modes: ColorMode[] = ["red", "rose", "blue", "violet", "green", "amber"];
+    const modes: ColorMode[] = ["amber", "rose", "red", "blue", "violet", "green"];
     const idx = modes.indexOf(colorMode);
     setColorMode(modes[(idx + 1) % modes.length]);
   }, [colorMode, setColorMode]);

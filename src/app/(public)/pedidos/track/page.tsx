@@ -23,7 +23,7 @@ export default function TrackPage({
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">
-      <h1 className="text-3xl font-bold text-red-700 mb-2">📍 Seguimiento de pedido</h1>
+      <h1 className="text-3xl font-bold text-primary-700 mb-2">📍 Seguimiento de pedido</h1>
       <p className="text-gray-600">Ingresá tu número de pedido para ver el estado</p>
 
       <form action="/pedidos/track" className="flex gap-3 mt-4">
@@ -35,7 +35,7 @@ export default function TrackPage({
         />
         <button
           type="submit"
-          className="bg-red-700 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-800 transition"
+          className="bg-primary-700 dark:bg-primary-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-primary-800 dark:hover:bg-primary-500 transition focus:outline-none focus:ring-2 focus:ring-ring"
         >
           Buscar
         </button>

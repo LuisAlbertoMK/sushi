@@ -26,27 +26,60 @@ export default function LandingPage() {
   return (
     <div className="space-y-16">
       {/* Hero */}
-      <section className="text-center py-20 bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 text-white rounded-2xl relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/images/sushi-og-placeholder.svg')] opacity-5 bg-cover bg-center" aria-hidden="true"></div>
+      <section className="relative text-center py-24 bg-gradient-to-br from-primary-800 via-primary-700 to-primary-900 text-white rounded-2xl overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/images/sushi-og-placeholder.svg')] opacity-[0.08] bg-contain bg-center bg-no-repeat" aria-hidden="true"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10"></div>
         <div className="relative z-10">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg">🍣 Sushi Bar</h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto drop-shadow">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 tracking-tight drop-shadow-xl">
+            🍣 Sushi Bar
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto drop-shadow-lg">
             Auténtico sushi fresco, hecho con pasión. Pedí online o reservá tu mesa.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/menu"
-              className="bg-white text-primary-700 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-white/50"
+              className="bg-white text-primary-700 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition shadow-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-white/50 text-lg"
             >
               Ver Menú
             </Link>
             <Link
               href="/pedidos"
-              className="bg-white text-primary-700 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-white/50"
+              className="bg-amber-400 dark:bg-amber-300 text-gray-900 px-8 py-3 rounded-full font-bold hover:bg-amber-300 dark:hover:bg-amber-200 transition shadow-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-white/50 text-lg"
             >
               Pedir Ahora
             </Link>
+            <Link
+              href="/reservas"
+              className="border-2 border-white/30 text-white px-8 py-3 rounded-full font-bold hover:bg-white/10 transition focus:outline-none focus:ring-2 focus:ring-white/50"
+            >
+              📅 Reservar Mesa
+            </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Trust signals */}
+      <section className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="bg-muted/60 dark:bg-muted/50 rounded-xl p-4 text-center border border-border">
+          <span className="text-2xl mb-1 block">🍣</span>
+          <p className="font-bold text-primary-700 dark:text-primary-300">Desde 2018</p>
+          <p className="text-xs text-muted-foreground">Tradición japonesa</p>
+        </div>
+        <div className="bg-muted/60 dark:bg-muted/50 rounded-xl p-4 text-center border border-border">
+          <span className="text-2xl mb-1 block">👨‍🍳</span>
+          <p className="font-bold text-primary-700 dark:text-primary-300">Chef certificado</p>
+          <p className="text-xs text-muted-foreground">Sushi masters</p>
+        </div>
+        <div className="bg-muted/60 dark:bg-muted/50 rounded-xl p-4 text-center border border-border">
+          <span className="text-2xl mb-1 block">🚚</span>
+          <p className="font-bold text-primary-700 dark:text-primary-300">30 min</p>
+          <p className="text-xs text-muted-foreground">Delivery rápido</p>
+        </div>
+        <div className="bg-muted/60 dark:bg-muted/50 rounded-xl p-4 text-center border border-border">
+          <span className="text-2xl mb-1 block">💳</span>
+          <p className="font-bold text-primary-700 dark:text-primary-300">Pago seguro</p>
+          <p className="text-xs text-muted-foreground">100% protegido</p>
         </div>
       </section>
 

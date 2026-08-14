@@ -67,7 +67,7 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h2 className="text-2xl font-bold text-red-700 mb-6">💳 Checkout</h2>
+      <h2 className="text-2xl font-bold text-primary-700 dark:text-primary-300 mb-6">💳 Checkout</h2>
 
       <div className="bg-gray-50 p-4 rounded-lg mb-6">
         <p className="font-medium">Resumen del pedido:</p>
@@ -80,7 +80,7 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4 bg-card p-6 rounded-xl shadow-md border border-border">
-        {error && <div role="alert" className="text-red-600 bg-red-50 p-3 rounded">{error}</div>}
+        {error && <div role="alert" className="text-destructive-600 dark:text-destructive-foreground bg-destructive/10 p-3 rounded">{error}</div>}
         {success && <div role="status" aria-live="polite" className="text-green-600 bg-green-50 p-3 rounded">{success}</div>}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

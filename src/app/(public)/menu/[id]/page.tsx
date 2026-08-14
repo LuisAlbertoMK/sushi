@@ -61,7 +61,7 @@ export default async function ProductoPage({ params }: { params: { id: string } 
           { name: "Menú", url: "/menu" },
           { name: producto.nombre, url: `/menu/${params.id}` },
       ])} />
-      <Link href="/menu" className="text-red-700 hover:underline mb-4 inline-block">
+      <Link href="/menu" className="text-primary-700 hover:underline mb-4 inline-block">
         ← Volver al menú
       </Link>
       <div className="grid md:grid-cols-2 gap-8 bg-card rounded-xl shadow-md p-8">
@@ -103,7 +103,7 @@ export default async function ProductoPage({ params }: { params: { id: string } 
               });
               alert(`${producto.nombre} agregado al carrito`);
             }}
-            className="mt-6 w-full bg-red-700 text-white py-3 rounded-lg font-bold hover:bg-red-800 transition"
+            className="mt-6 w-full bg-primary-700 dark:bg-primary-600 text-white py-3 rounded-lg font-bold hover:bg-primary-800 dark:hover:bg-primary-500 transition focus:outline-none focus:ring-2 focus:ring-ring"
           >
             🛒 Agregar al carrito
           </button>

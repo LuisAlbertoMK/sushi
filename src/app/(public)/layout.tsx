@@ -13,7 +13,7 @@ export default function PublicLayout({
   return (
     <CartProvider>
       <JsonLd data={localBusinessSchema()} />
-      <div className="min-h-screen flex flex-col bg-gradient-to-b from-red-50 to-white font-sans dark:from-red-950/30 dark:to-background">
+      <div className="min-h-screen flex flex-col bg-gradient-to-b from-primary-50 dark:from-primary-950/30 to-background font-sans">
         <header className="bg-card shadow-sm border-b-2 border-primary-100 sticky top-0 z-10 dark:border-primary-900/30">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3">
