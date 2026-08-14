@@ -39,13 +39,13 @@ export default function PublicLayout({
         <main id="main-content" className="flex-1 container mx-auto px-4 py-8">
           {children}
         </main>
-        <footer className="bg-gray-900 text-gray-300 py-8 mt-auto dark:bg-gray-950 dark:text-gray-400">
+        <footer className="bg-muted/30 text-muted-foreground py-8 mt-auto dark:bg-background dark:text-muted-foreground/70">
           <div className="container mx-auto px-4 text-center">
-            <p className="text-sm">© {new Date().getFullYear()} Sushi Bar — Todos los derechos reservados</p>
-            <p className="text-xs mt-1">Pedidos y reservas online · Entrega a domicilio</p>
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground/80">© {new Date().getFullYear()} Sushi Bar — Todos los derechos reservados</p>
+            <p className="text-xs mt-1 text-muted-foreground/80 dark:text-muted-foreground/60">Pedidos y reservas online · Entrega a domicilio</p>
           </div>
           {/* Link admin discreto (para el dueño) — contraste accesible + dark mode */}
-          <Link href="/admin/login" className="fixed bottom-4 right-4 bg-gray-200 hover:bg-gray-300 text-gray-700 hover:text-gray-900 text-xs px-2.5 py-1.5 rounded opacity-40 hover:opacity-100 transition-all dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" aria-label="Admin login">
+          <Link href="/admin/login" className="fixed bottom-4 right-4 bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground text-xs px-2.5 py-1.5 rounded opacity-40 hover:opacity-100 transition-all dark:bg-muted/50 dark:hover:bg-muted/70 dark:text-muted-foreground dark:hover:text-foreground" aria-label="Admin login">
             admin
           </Link>
         </footer>

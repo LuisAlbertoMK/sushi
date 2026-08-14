@@ -28,11 +28,11 @@ export default async function AdminLayout({
           <span className="font-bold text-xl">Sushi Admin</span>
         </div>
         <nav className="space-y-1">
-          <Link href="/admin/dashboard" className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors">📊 Dashboard</Link>
-          <Link href="/admin/menu" className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors">🍱 Menú</Link>
-          <Link href="/admin/pedidos" className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors">🛒 Pedidos</Link>
-          <Link href="/admin/reservas" className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors">📅 Reservas</Link>
-          <Link href="/admin/promos" className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors">🎁 Promos & Publicaciones</Link>
+          <Link href="/admin/dashboard" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">📊 Dashboard</Link>
+          <Link href="/admin/menu" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">🍱 Menú</Link>
+          <Link href="/admin/pedidos" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">🛒 Pedidos</Link>
+          <Link href="/admin/reservas" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">📅 Reservas</Link>
+          <Link href="/admin/promos" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">🎁 Promos & Publicaciones</Link>
         </nav>
         <div className="mt-8 pt-4 border-t border-gray-700">
           <AdminLogout />

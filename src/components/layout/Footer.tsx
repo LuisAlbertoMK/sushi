@@ -21,7 +21,7 @@ export function Footer() {
                 href="https://instagram.com/sushibar"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition text-xl"
+                className="text-gray-300 dark:text-gray-400 hover:text-primary-400 transition text-2xl"
                 aria-label="Instagram"
               >
                 📷
@@ -30,7 +30,7 @@ export function Footer() {
                 href="https://wa.me/5491112345678"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition text-xl"
+                className="text-gray-300 dark:text-gray-400 hover:text-primary-400 transition text-2xl"
                 aria-label="WhatsApp"
               >
                 💬

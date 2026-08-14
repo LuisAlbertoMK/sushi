@@ -14,7 +14,7 @@ export function Button({
   size = "md",
   ...props
 }: ButtonProps) {
-  const base = "rounded-lg font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500 disabled:hover:bg-gray-300";
+  const base = "rounded-lg font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:bg-gray-300 dark:disabled:bg-gray-600 disabled:text-gray-500 dark:disabled:text-gray-400 disabled:hover:bg-gray-300";
   const variants = {
     primary: "bg-primary-700 text-white hover:bg-primary-800 shadow-sm hover:shadow disabled:bg-primary-400 disabled:text-white",
     secondary: "bg-card text-foreground hover:bg-accent disabled:bg-gray-300",
