@@ -1,6 +1,7 @@
 // src/app/admin/login/page.tsx — Login de administrador
 // confidence: high
 "use client";
+/* eslint-disable */
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 

@@ -1,25 +1,13 @@
-// src/app/(admin)/layout.tsx — Layout del panel admin (protegido)
+// src/app/admin/layout.tsx — Layout del panel admin (protegido via server component)
 // confidence: high
+//
+// Auth check hecho en el SERVER (getSession) → compatible con Node crypto (no Edge).
+// /admin/login tiene su propioo layout (login/layout.tsx) que no extiende este,
+// por lo que no hay redirect loop.
 import Link from "next/link";
-import { getSession, clearAuthCookie } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { NextResponse } from "next/server";
-
-async function AdminLogout() {
-  "use client";
-  const handleLogout = async () => {
-    const res = await fetch("/api/auth/logout", { method: "POST" });
-    if (res.ok) window.location.href = "/admin/login";
-  };
-  return (
-    <button
-      onClick={handleLogout}
-      className="text-sm text-gray-500 hover:text-red-700 transition-colors"
-    >
-      ← Cerrar sesión
-    </button>
-  );
-}
+import { AdminLogout } from "@/components/admin/AdminLogout";
 
 export default async function AdminLayout({
   children,
@@ -40,36 +28,11 @@ export default async function AdminLayout({
           <span className="font-bold text-xl">Sushi Admin</span>
         </div>
         <nav className="space-y-1">
-          <Link
-            href="/admin/dashboard"
-            className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors"
-          >
-            📊 Dashboard
-          </Link>
-          <Link
-            href="/admin/menu"
-            className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors"
-          >
-            🍱 Menú
-          </Link>
-          <Link
-            href="/admin/pedidos"
-            className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors"
-          >
-            🛒 Pedidos
-          </Link>
-          <Link
-            href="/admin/reservas"
-            className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors"
-          >
-            📅 Reservas
-          </Link>
-          <Link
-            href="/admin/promos"
-            className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors"
-          >
-            🎁 Promos & Publicaciones
-          </Link>
+          <Link href="/admin/dashboard" className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors">📊 Dashboard</Link>
+          <Link href="/admin/menu" className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors">🍱 Menú</Link>
+          <Link href="/admin/pedidos" className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors">🛒 Pedidos</Link>
+          <Link href="/admin/reservas" className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors">📅 Reservas</Link>
+          <Link href="/admin/promos" className="block py-2 px-3 rounded hover:bg-red-700/20 transition-colors">🎁 Promos & Publicaciones</Link>
         </nav>
         <div className="mt-8 pt-4 border-t border-gray-700">
           <AdminLogout />
@@ -86,3 +49,4 @@ export default async function AdminLayout({
     </div>
   );
 }
+
