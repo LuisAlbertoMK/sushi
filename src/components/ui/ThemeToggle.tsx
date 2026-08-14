@@ -15,9 +15,9 @@ export function ThemeToggle() {
         onClick={toggleColorMode}
         aria-label="Cambiar color del tema"
         title="Cambiar color primario"
-        className="bg-card border border-border text-foreground hover:bg-primary hover:text-primary-foreground transition-all rounded-full p-2 shadow-md hover:shadow-lg"
+        className="bg-card border border-border text-foreground hover:bg-primary hover:text-primary-foreground transition-all rounded-full p-2.5 shadow-md hover:shadow-lg"
       >
-        <Icon emoji="🎨" label="Cambiar color" className="w-5 h-5" />
+        <Icon emoji="🎨" label="Cambiar color" className="text-xl" />
       </button>
 
       {/* Toggle dark/light */}
@@ -25,12 +25,12 @@ export function ThemeToggle() {
         onClick={toggleTheme}
         aria-label={`Cambiar a modo ${resolvedTheme === "dark" ? "claro" : "oscuro"}`}
         title={`Modo ${resolvedTheme === "dark" ? "claro" : "oscuro"}`}
-        className="bg-card border border-border text-foreground hover:bg-primary hover:text-primary-foreground transition-all rounded-full p-2 shadow-md hover:shadow-lg"
+        className="bg-card border border-border text-foreground hover:bg-primary hover:text-primary-foreground transition-all rounded-full p-2.5 shadow-md hover:shadow-lg"
       >
         {resolvedTheme === "dark" ? (
-          <Icon emoji="☀️" label="Modo claro" />
+          <Icon emoji="☀️" label="Modo claro" className="text-xl" />
         ) : (
-          <Icon emoji="🌙" label="Modo oscuro" />
+          <Icon emoji="🌙" label="Modo oscuro" className="text-xl" />
         )}
       </button>
 

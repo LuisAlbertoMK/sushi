@@ -4,7 +4,6 @@ import Link from "next/link";
 import { CartProvider } from "@/lib/cart-context";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { localBusinessSchema } from "@/lib/seo";
-import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export default function PublicLayout({
   children,
@@ -50,7 +49,6 @@ export default function PublicLayout({
             admin
           </Link>
         </footer>
-        <ThemeToggle />
       </div>
     </CartProvider>
   );

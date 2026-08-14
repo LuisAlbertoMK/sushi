@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -92,10 +93,12 @@ export default function RootLayout({
     <html lang="es-AR" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
         <ThemeProvider>
+          <div id="theme-transition" className="fixed inset-0 pointer-events-none z-[100] opacity-0 transition-opacity duration-300" />
           <a href="#main-content" id="skip-to-content">
             Saltar al contenido
           </a>
           {children}
+          <ThemeToggle />
         </ThemeProvider>
       </body>
     </html>
