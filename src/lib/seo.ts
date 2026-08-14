@@ -11,7 +11,7 @@ export function localBusinessSchema() {
     "@context": "https://schema.org",
     "@type": ["Restaurant", "LocalBusiness"],
     name: "Sushi Bar",
-    image: `${BASE_URL}/og-sushi.jpg`,
+    image: `${BASE_URL}/images/sushi-og-placeholder.svg`,
     url: BASE_URL,
     telephone: "+54-11-XXXX-XXXX",
     address: {
@@ -81,7 +81,7 @@ export function productSchema(producto: {
     "@type": "Product",
     name: producto.nombre,
     description: producto.descripcion || producto.nombre,
-    image: producto.imagen || `${BASE_URL}/og-sushi.jpg`,
+    image: producto.imagen || `${BASE_URL}/images/sushi-og-placeholder.svg`,
     brand: {
       "@type": "Brand",
       name: "Sushi Bar",

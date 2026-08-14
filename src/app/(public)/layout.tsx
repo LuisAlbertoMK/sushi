@@ -21,16 +21,16 @@ export default function PublicLayout({
               <span className="font-bold text-2xl text-primary-700 dark:text-primary-200">Sushi Bar</span>
             </Link>
             <nav className="flex items-center gap-6" aria-label="Navegación principal">
-              <Link href="/menu" aria-label="Ver menú de sushi" className="flex items-center gap-2 text-gray-700 hover:text-primary-700 dark:text-gray-300 dark:hover:text-primary-400 transition-colors focus:outline-none focus:text-primary-700">
+              <Link href="/menu" prefetch aria-label="Ver menú de sushi" className="flex items-center gap-2 text-gray-700 hover:text-primary-700 dark:text-gray-300 dark:hover:text-primary-400 transition-colors focus:outline-none focus:text-primary-700">
                 🍱 Menú
               </Link>
-              <Link href="/pedidos" aria-label="Ver carrito y pedir online" className="flex items-center gap-2 text-gray-700 hover:text-primary-700 dark:text-gray-300 dark:hover:text-primary-400 transition-colors focus:outline-none focus:text-primary-700">
+              <Link href="/pedidos" prefetch aria-label="Ver carrito y pedir online" className="flex items-center gap-2 text-gray-700 hover:text-primary-700 dark:text-gray-300 dark:hover:text-primary-400 transition-colors focus:outline-none focus:text-primary-700">
                 🛒 Pedidos
               </Link>
-              <Link href="/reservas" aria-label="Reservar mesa" className="flex items-center gap-2 text-gray-700 hover:text-primary-700 dark:text-gray-300 dark:hover:text-primary-400 transition-colors focus:outline-none focus:text-primary-700">
+              <Link href="/reservas" prefetch aria-label="Reservar mesa" className="flex items-center gap-2 text-gray-700 hover:text-primary-700 dark:text-gray-300 dark:hover:text-primary-400 transition-colors focus:outline-none focus:text-primary-700">
                 📅 Reservas
               </Link>
-              <Link href="/promos" aria-label="Ver promociones" className="flex items-center gap-2 text-gray-700 hover:text-primary-700 dark:text-gray-300 dark:hover:text-primary-400 transition-colors focus:outline-none focus:text-primary-700">
+              <Link href="/promos" prefetch aria-label="Ver promociones" className="flex items-center gap-2 text-gray-700 hover:text-primary-700 dark:text-gray-300 dark:hover:text-primary-400 transition-colors focus:outline-none focus:text-primary-700">
                 🎁 Promos
               </Link>
             </nav>

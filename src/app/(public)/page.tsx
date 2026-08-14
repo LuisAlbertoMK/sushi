@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "🍣 Sushi Bar — Sushi Fresco, Pedidos Online y Reservas",
     description: "Auténtico sushi fresco hecho al momento. Pedidos online con delivery o reservá tu mesa.",
-    images: [{ url: "/og-sushi.jpg", alt: "Sushi Bar — rolls frescos" }],
+    images: [{ url: "/images/sushi-og-placeholder.svg", alt: "Sushi Bar — rolls, nigiris y sashimi frescos" }],
   },
 };
 

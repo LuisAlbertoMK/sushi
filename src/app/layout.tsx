@@ -50,7 +50,8 @@ export const metadata: Metadata = {
       "Auténtico sushi fresco hecho al momento. Pedidos online con delivery o reservá tu mesa.",
     images: [
       {
-        url: "/og-sushi.jpg",
+        url: "/images/sushi-og-placeholder.svg",
+
         width: 1200,
         height: 630,
         alt: "Sushi Bar — rolls, nigiris y sashimi frescos",
@@ -62,7 +63,7 @@ export const metadata: Metadata = {
     title: "🍣 Sushi Bar — Pedidos Online y Reservas",
     description:
       "Auténtico sushi fresco. Pedidos online, delivery, reservas de mesa.",
-    images: ["/og-sushi.jpg"],
+    images: ["/images/sushi-og-placeholder.svg"],
   },
   robots: {
     index: true,
