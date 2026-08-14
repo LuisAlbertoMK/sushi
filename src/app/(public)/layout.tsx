@@ -17,23 +17,23 @@ export default function PublicLayout({
               <span className="text-3xl">🍣</span>
               <span className="font-bold text-2xl text-red-700">Sushi Bar</span>
             </Link>
-            <nav className="flex items-center gap-6">
-              <Link href="/menu" className="flex items-center gap-2 text-gray-700 hover:text-red-700 transition-colors">
+            <nav className="flex items-center gap-6" aria-label="Navegación principal">
+              <Link href="/menu" aria-label="Ver menú de sushi" className="flex items-center gap-2 text-gray-700 hover:text-red-700 transition-colors focus:outline-none focus:text-red-700">
                 🍱 Menú
               </Link>
-              <Link href="/pedidos" className="flex items-center gap-2 text-gray-700 hover:text-red-700 transition-colors">
+              <Link href="/pedidos" aria-label="Ver carrito y pedir online" className="flex items-center gap-2 text-gray-700 hover:text-red-700 transition-colors focus:outline-none focus:text-red-700">
                 🛒 Pedidos
               </Link>
-              <Link href="/reservas" className="flex items-center gap-2 text-gray-700 hover:text-red-700 transition-colors">
+              <Link href="/reservas" aria-label="Reservar mesa" className="flex items-center gap-2 text-gray-700 hover:text-red-700 transition-colors focus:outline-none focus:text-red-700">
                 📅 Reservas
               </Link>
-              <Link href="/promos" className="flex items-center gap-2 text-gray-700 hover:text-red-700 transition-colors">
+              <Link href="/promos" aria-label="Ver promociones" className="flex items-center gap-2 text-gray-700 hover:text-red-700 transition-colors focus:outline-none focus:text-red-700">
                 🎁 Promos
               </Link>
             </nav>
           </div>
         </header>
-        <main className="flex-1 container mx-auto px-4 py-8">
+        <main id="main-content" className="flex-1 container mx-auto px-4 py-8">
           {children}
         </main>
         <footer className="bg-gray-900 text-gray-300 py-8 mt-auto">

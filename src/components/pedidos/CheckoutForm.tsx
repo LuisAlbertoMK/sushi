@@ -3,7 +3,7 @@
 "use client";
 import { useCart } from "@/lib/cart-context";
 import { formatearPrecio } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useId } from "react";
 import { useRouter } from "next/navigation";
 import { CartItem } from "@/lib/types";
 
@@ -18,6 +18,7 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const router = useRouter();
+  const formId = useId();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -53,12 +54,11 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
         setError(result.error);
       } else {
         setSuccess(`¡Pedido ${result.pedido.numero} creado!`);
-        // Limpiar carrito y redirigir a tracking
         setTimeout(() => {
           router.push(`/pedidos/track?numero=${result.pedido.numero}`);
         }, 1500);
       }
-    } catch (err) {
+    } catch {
       setError("Error de red. Intenta de nuevo.");
     } finally {
       setLoading(false);
@@ -80,42 +80,77 @@ export function CheckoutForm({ items, total, onCancel }: Props) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-xl shadow-md">
-        {error && <p className="text-red-600 bg-red-50 p-3 rounded">{error}</p>}
-        {success && <p className="text-green-600 bg-green-50 p-3 rounded">{success}</p>}
+        {error && <div role="alert" className="text-red-600 bg-red-50 p-3 rounded">{error}</div>}
+        {success && <div role="status" aria-live="polite" className="text-green-600 bg-green-50 p-3 rounded">{success}</div>}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre completo *</label>
-            <input name="nombre" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+            <label htmlFor={`${formId}-nombre`} className="block text-sm font-medium text-gray-700 mb-1">
+              Nombre completo *
+            </label>
+            <input
+              id={`${formId}-nombre`}
+              name="nombre"
+              type="text"
+              required
+              autoComplete="name"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-            <input type="email" name="email" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+            <label htmlFor={`${formId}-email`} className="block text-sm font-medium text-gray-700 mb-1">
+              Email *
+            </label>
+            <input
+              id={`${formId}-email`}
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono *</label>
-          <input name="telefono" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+          <label htmlFor={`${formId}-tel`} className="block text-sm font-medium text-gray-700 mb-1">
+            Teléfono *
+          </label>
+          <input
+            id={`${formId}-tel`}
+            name="telefono"
+            type="tel"
+            required
+            autoComplete="tel"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+          />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Notas (opcional)</label>
-          <textarea name="notas" rows={3} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Ej: sin wasabi, por favor"></textarea>
+          <label htmlFor={`${formId}-notas`} className="block text-sm font-medium text-gray-700 mb-1">
+            Notas (opcional)
+          </label>
+          <textarea
+            id={`${formId}-notas`}
+            name="notas"
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            placeholder="Ej: sin wasabi, por favor"
+          ></textarea>
         </div>
 
         <div className="flex gap-4 pt-4">
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-bold hover:bg-gray-300 transition"
+            className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-lg font-bold hover:bg-gray-300 transition focus:outline-none focus:ring-2 focus:ring-red-500"
           >
             ← Volver al carrito
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 bg-red-700 text-white py-3 rounded-lg font-bold hover:bg-red-800 transition disabled:opacity-50"
+            className="flex-1 bg-red-700 text-white py-3 rounded-lg font-bold hover:bg-red-800 transition disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-500"
           >
             {loading ? "Procesando..." : "Confirmar Pedido"}
           </button>

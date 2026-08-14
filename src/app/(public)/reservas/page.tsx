@@ -1,12 +1,14 @@
 // src/app/(public)/reservas/page.tsx — Formulario de reservación
 // confidence: high
+// metadata está en: src/app/(public)/reservas/layout.tsx (server, envuelve cliente)
 "use client";
-import { useState } from "react";
+import { useState, useId } from "react";
 
 export default function ReservasPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const formId = useId();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,7 +25,6 @@ export default function ReservasPage() {
       setLoading(false);
       return;
     }
-    // Verificar que no sea pasado
     if (fecha < new Date(Date.now() - 60000)) {
       setError("No podés reservar en el pasado");
       setLoading(false);
@@ -63,58 +64,117 @@ export default function ReservasPage() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="text-center mb-8">
-        <span className="text-5xl mb-2 block">📅</span>
+        <span className="text-5xl mb-2 block" aria-hidden="true">📅</span>
         <h1 className="text-4xl font-bold text-red-700 mb-2">Reservación de Mesa</h1>
-        <p className="text-gray-600">Reservá tu mesa y disfrutá sin esperar</p>
+        <p className="text-gray-600">Reservá tu mesa y disfrutá de una experiencia única</p>
       </div>
 
       <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-6 space-y-4">
-        {error && <p className="text-red-600 bg-red-50 p-3 rounded">{error}</p>}
-        {success && <p className="text-green-600 bg-green-50 p-3 rounded">{success}</p>}
+        {error && (
+          <div role="alert" className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-lg text-sm">
+            {error}
+          </div>
+        )}
+        {success && (
+          <div role="status" aria-live="polite" className="bg-green-50 border border-green-200 text-green-700 p-3 rounded-lg text-sm">
+            {success}
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre *</label>
-            <input name="nombre" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+            <label htmlFor={`${formId}-nombre`} className="block text-sm font-medium text-gray-700 mb-1">
+              Nombre completo *
+            </label>
+            <input
+              id={`${formId}-nombre`}
+              name="nombre"
+              type="text"
+              required
+              autoComplete="name"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-            <input type="email" name="email" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+            <label htmlFor={`${formId}-email`} className="block text-sm font-medium text-gray-700 mb-1">
+              Email *
+            </label>
+            <input
+              id={`${formId}-email`}
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono *</label>
-          <input name="telefono" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+          <label htmlFor={`${formId}-tel`} className="block text-sm font-medium text-gray-700 mb-1">
+            Teléfono *
+          </label>
+          <input
+            id={`${formId}-tel`}
+            name="telefono"
+            type="tel"
+            required
+            autoComplete="tel"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Fecha *</label>
-            <input type="date" name="fecha" required min={new Date().toISOString().split("T")[0]} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
+            <label htmlFor={`${formId}-fecha`} className="block text-sm font-medium text-gray-700 mb-1">
+              Fecha *
+            </label>
+            <input
+              id={`${formId}-fecha`}
+              name="fecha"
+              type="date"
+              required
+              min={new Date().toISOString().split("T")[0]}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Personas *</label>
-            <select name="personas" required className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 bg-white">
-              <option value="2">2</option>
-              <option value="1">1</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              <option value="6">6</option>
+            <label htmlFor={`${formId}-personas`} className="block text-sm font-medium text-gray-700 mb-1">
+              Personas *
+            </label>
+            <select
+              id={`${formId}-personas`}
+              name="personas"
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 bg-white focus:outline-red-700"
+            >
+              <option value="2">2 personas</option>
+              <option value="1">1 persona</option>
+              <option value="3">3 personas</option>
+              <option value="4">4 personas</option>
+              <option value="5">5 personas</option>
+              <option value="6">6 personas</option>
             </select>
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Notas (opcional)</label>
-          <textarea name="notas" rows={3} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Ej: terraza, cumpleaños, etc."></textarea>
+          <label htmlFor={`${formId}-notas`} className="block text-sm font-medium text-gray-700 mb-1">
+            Notas (opcional)
+          </label>
+          <textarea
+            id={`${formId}-notas`}
+            name="notas"
+            rows={3}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:outline-red-700"
+            placeholder="Ej: terraza, cumpleaños, etc."
+          ></textarea>
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-red-700 text-white py-3 rounded-lg font-bold hover:bg-red-800 transition disabled:opacity-50"
+          className="w-full bg-red-700 text-white py-3 rounded-lg font-bold hover:bg-red-800 transition disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-500"
         >
           {loading ? "Reservando..." : "Confirmar Reserva"}
         </button>

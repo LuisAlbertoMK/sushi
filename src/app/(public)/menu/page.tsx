@@ -1,6 +1,19 @@
 // src/app/(public)/menu/page.tsx — Menú digital público
 // confidence: high
 import { db } from "@/lib/db";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Menú Digital — Rolls, Nigiris, Combos y Especiales | Sushi Bar",
+  description:
+    "Explorá nuestro menú completo: rolls frescos, nigiris, sashimi, combos familiares y postres. Precios actualizados. Pedí online con delivery.",
+  openGraph: {
+    title: "Menú Digital — Sushi Bar",
+    description: "Explorá nuestro menú completo: rolls, nigiris, combos y especiales.",
+  },
+  alternates: { canonical: "/menu" },
+};
+
 import { ProductoCard } from "@/components/menu/ProductoCard";
 import { CategoriaTabs } from "@/components/menu/CategoriaTabs";
 import { Suspense } from "react";

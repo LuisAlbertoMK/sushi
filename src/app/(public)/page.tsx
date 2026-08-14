@@ -1,7 +1,18 @@
 // src/app/(public)/page.tsx — Landing page
 // confidence: high
 import Link from "next/link";
-import Image from "next/image";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "🍣 Sushi Bar — Sushi Fresco, Pedidos Online y Reservas",
+  description:
+    "Auténtico sushi fresco hecho al momento. Pedidos online con delivery o reservá tu mesa. Menú: rolls, nigiris, sashimi, combos. Promociones semanales.",
+  openGraph: {
+    title: "🍣 Sushi Bar — Sushi Fresco, Pedidos Online y Reservas",
+    description: "Auténtico sushi fresco hecho al momento. Pedidos online con delivery o reservá tu mesa.",
+    images: [{ url: "/og-sushi.jpg", alt: "Sushi Bar — rolls frescos" }],
+  },
+};
 
 const features = [
   { title: "🍱 Menú Digital", desc: "Explorá nuestros rolls, nigiris y especiales frescos", href: "/menu" },

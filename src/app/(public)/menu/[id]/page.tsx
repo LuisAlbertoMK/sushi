@@ -3,12 +3,37 @@
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 async function getProducto(id: string) {
   return await db.producto.findUnique({
     where: { id },
     include: { categoria: true },
   });
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  const producto = await getProducto(params.id);
+  if (!producto) {
+    return { title: "Producto no encontrado | Sushi Bar" };
+  }
+  return {
+    title: `${producto.nombre} — Sushi Bar`,
+    description:
+      producto.descripcion ||
+      `Ordená ${producto.nombre} por ${producto.precio.toFixed(2)}. Sushi fresco hecho al momento.`,
+    openGraph: {
+      title: `${producto.nombre} — Sushi Bar`,
+      description: producto.descripcion || `Ordená ${producto.nombre}.`,
+      images: producto.imagen
+        ? [{ url: producto.imagen, alt: producto.nombre }]
+        : undefined,
+    },
+  };
 }
 
 export default async function ProductoPage({ params }: { params: { id: string } }) {
