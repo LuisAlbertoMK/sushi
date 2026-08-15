@@ -1,15 +1,14 @@
-// src/components/menu/KaitenMenu.tsx — Mesa giratoria kaiten-zushi (demo interactivo v2)
-// confidence: high — CSS 3D puro (perspective + preserve-3d + translateZ), cero dependencias,
-// rotación confiable vía keyframes en globals.css, submenú en cinta interactiva,
-// respeta prefers-reduced-motion
+// src/components/menu/KaitenMenu.tsx — Mesa giratoria kaiten-zushi (port de docs/ejemplos/kaiten_menu.html)
+// confidence: high — órbita elíptica con drag físico + inercia, profundidad simulada (escala/zIndex),
+// cinta transportadora en loop infinito con tiers de precio, bandeja de pedido conectada al carrito real.
+// Datos REALES de /api/categorias. Respeta prefers-reduced-motion.
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { useCart } from "@/lib/cart-context";
+import type { ProductoWithCategoria } from "@/lib/types";
 
-// ─── Tipos (shape de /api/categorias y /api/productos) ───
+// ─── Tipos (shape de /api/categorias) ───
 interface Producto {
   id: string;
   nombre: string;
@@ -27,6 +26,25 @@ interface Categoria {
   productos: Producto[];
 }
 
+// ─── Tema (paleta del ejemplo de referencia) ───
+const THEME = {
+  bg: "#12151a",
+  bg2: "#1a1e25",
+  wood1: "#4a3222",
+  wood2: "#6b4a30",
+  wood3: "#2e2015",
+  red: "#b7302c",
+  gold: "#c9a15a",
+  cream: "#efe4cf",
+  ink: "#ece5d6",
+  muted: "#9aa0ab",
+  tierGreen: "#4f7c6b",
+  tierYellow: "#c9962f",
+  tierRed: "#b7302c",
+  tierSilver: "#8892a6",
+  tierGold: "#1c1a16",
+};
+
 const CATEGORY_EMOJI: Record<string, string> = {
   "Sushi Rolls": "🍣",
   "Nigiri & Sashimi": "🍱",
@@ -37,37 +55,69 @@ const CATEGORY_EMOJI: Record<string, string> = {
   Combos: "🎁",
 };
 
-const CATEGORY_COLOR: Record<string, string> = {
-  "Sushi Rolls": "#e2703a",
-  "Nigiri & Sashimi": "#e0395f",
-  Especiales: "#c97bd8",
-  Entradas: "#e0a13a",
-  Bebidas: "#3a9be0",
-  Postres: "#e07bc0",
-  Combos: "#7bc05a",
-};
+// Tier de precio por color (referencia adaptada a precios USD del menú real)
+function tierFor(price: number): { name: string; color: string; border: string } {
+  if (price <= 5) return { name: "verde", color: THEME.tierGreen, border: THEME.tierGreen };
+  if (price <= 8) return { name: "amarillo", color: THEME.tierYellow, border: THEME.tierYellow };
+  if (price <= 12) return { name: "rojo", color: THEME.tierRed, border: THEME.tierRed };
+  if (price <= 18) return { name: "plata", color: THEME.tierSilver, border: THEME.tierSilver };
+  return { name: "oro", color: THEME.tierGold, border: THEME.gold };
+}
 
-const SPEED_LABEL: Record<number, string> = { 0: "⏸", 1: "🐢", 2: "🍣", 3: "🐇" };
+function fmt(n: number): string {
+  return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+}
 
-// Tamaño de la mesa (px) — el radio de órbita deriva de esto
-const MESA = 520;
-const RADIO = 188;
+// ─── Geometría de la órbita elíptica ───
+interface Geo {
+  cx: number;
+  cy: number;
+  rx: number;
+  ry: number;
+  plateHalf: number;
+}
 
 export function KaitenMenu() {
+  const { items, addItem, removeItem, updateCantidad, clearCart, total, itemCount } = useCart();
+
   const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [speed, setSpeed] = useState(2); // 0=detenido, 1=lento, 2=normal, 3=rápido
-  const [direction, setDirection] = useState(1); // 1=horario, -1=antihorario
-  const [reducedMotion, setReducedMotion] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const beltRef = useRef<HTMLDivElement>(null);
+  const [reducedMotion, setReducedMotion] = useState(false);
+  const [view, setView] = useState<"wheel" | "belt">("wheel");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [playing, setPlaying] = useState(true);
+  const [speed, setSpeed] = useState(4); // 0..10 (referencia: 4 = ritmo calmado)
+  const [hoverPaused, setHoverPaused] = useState(false);
+  const [trayOpen, setTrayOpen] = useState(false);
+  const [pulsingId, setPulsingId] = useState<string | null>(null);
+
+  const wheelWrapRef = useRef<HTMLDivElement>(null);
+  const plateElsRef = useRef<Map<string, HTMLButtonElement>>(new Map());
+  const beltTrackRef = useRef<HTMLDivElement>(null);
+  const geoRef = useRef<Geo>({ cx: 0, cy: 0, rx: 0, ry: 0, plateHalf: 36 });
+  const angleRef = useRef(0);
+  const velocityRef = useRef(0);
+  const dragRef = useRef({
+    isDragging: false,
+    startAngle: 0,
+    startCurrent: 0,
+    lastAngle: 0,
+    lastTime: 0,
+    pStartX: 0,
+    pStartY: 0,
+    pStartTime: 0,
+  });
 
   // Detectar prefers-reduced-motion
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReducedMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
+    setPlaying(!mq.matches);
+    const handler = (e: MediaQueryListEvent) => {
+      setReducedMotion(e.matches);
+      setPlaying(!e.matches);
+    };
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
   }, []);
@@ -82,10 +132,9 @@ export function KaitenMenu() {
         const enriched = data.map((c: Categoria) => ({
           ...c,
           emoji: CATEGORY_EMOJI[c.nombre] || "🍽️",
-          color: CATEGORY_COLOR[c.nombre] || "#888",
+          color: c.color || THEME.gold,
         }));
         setCategorias(enriched);
-        if (enriched.length > 0) setSelectedId(enriched[0].id);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Error al cargar el menú");
       } finally {
@@ -94,17 +143,198 @@ export function KaitenMenu() {
     })();
   }, []);
 
+  // Ángulos base de los platos (distribución uniforme)
+  const baseAngles = useMemo(
+    () => categorias.map((_, i) => -90 + (360 / Math.max(categorias.length, 1)) * i),
+    [categorias]
+  );
+
   const selected = useMemo(
     () => categorias.find((c) => c.id === selectedId) || null,
     [categorias, selectedId]
   );
 
-  const plateCount = categorias.length || 1;
-  const plateAngle = (i: number) => (i / plateCount) * 360;
+  // ─── Geometría de la mesa (elipse) ───
+  // deps: [categorias.length] — debe recalcularse cuando el DOM del wheel-wrap existe
+  // (tras cargar datos). Con [] corría durante loading (ref null) y rx/ry quedaban en 0.
+  useEffect(() => {
+    const updateGeometry = () => {
+      const el = wheelWrapRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      geoRef.current = {
+        cx: r.width / 2,
+        cy: r.height / 2,
+        rx: (r.width / 2) * 0.78,
+        ry: (r.height / 2) * 0.72,
+        plateHalf: 36,
+      };
+    };
+    updateGeometry();
+    window.addEventListener("resize", updateGeometry);
+    return () => window.removeEventListener("resize", updateGeometry);
+  }, [categorias.length]);
 
-  // Navegación de la cinta (submenú): avanzar/retroceder una card
-  const scrollBelt = (dir: number) => {
-    beltRef.current?.scrollBy({ left: dir * 320, behavior: "smooth" });
+  // Posicionar platos según ángulo (profundidad simulada: escala + zIndex)
+  const updatePlates = () => {
+    const geo = geoRef.current;
+    categorias.forEach((cat, i) => {
+      const el = plateElsRef.current.get(cat.id);
+      if (!el || !geo.rx) return;
+      const a = ((baseAngles[i] + angleRef.current) * Math.PI) / 180;
+      const x = geo.cx + geo.rx * Math.cos(a) - geo.plateHalf;
+      const y = geo.cy + geo.ry * Math.sin(a) - geo.plateHalf;
+      const depth = (Math.sin(a) + 1) / 2; // 0 atrás .. 1 al frente
+      const scale = 0.82 + 0.28 * depth;
+      el.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+      el.style.zIndex = String(Math.round(depth * 100) + 1);
+    });
+  };
+
+  // ─── Bucle de animación (solo en vista mesa) ───
+  useEffect(() => {
+    if (view !== "wheel" || categorias.length === 0) return;
+    let raf = 0;
+    let last = performance.now();
+    const autoSpeed = speed * 6; // deg/sec (referencia)
+    const frame = (now: number) => {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      const d = dragRef.current;
+      if (!d.isDragging) {
+        if (Math.abs(velocityRef.current) > 2) {
+          angleRef.current += velocityRef.current * dt;
+          velocityRef.current *= Math.pow(0.05, dt); // inercia con decaimiento
+        } else {
+          velocityRef.current = 0;
+          if (playing) angleRef.current += autoSpeed * dt;
+        }
+      }
+      updatePlates();
+      raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, playing, speed, categorias.length, baseAngles]);
+
+  // ─── Drag para girar la mesa ───
+  const pointerAngleDeg = (clientX: number, clientY: number) => {
+    const el = wheelWrapRef.current;
+    const geo = geoRef.current;
+    if (!el || !geo.rx) return 0;
+    const r = el.getBoundingClientRect();
+    const lx = clientX - r.left - geo.cx;
+    const ly = clientY - r.top - geo.cy;
+    const ny = ly / ((geo.ry || 1) / geo.rx);
+    return (Math.atan2(ny, lx) * 180) / Math.PI;
+  };
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = wheelWrapRef.current;
+    if (!el) return;
+    el.setPointerCapture(e.pointerId);
+    const d = dragRef.current;
+    d.isDragging = true;
+    velocityRef.current = 0;
+    d.startAngle = pointerAngleDeg(e.clientX, e.clientY);
+    d.startCurrent = angleRef.current;
+    d.lastAngle = d.startAngle;
+    d.lastTime = performance.now();
+    d.pStartX = e.clientX;
+    d.pStartY = e.clientY;
+    d.pStartTime = Date.now();
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const d = dragRef.current;
+    if (!d.isDragging) return;
+    const now = performance.now();
+    const ang = pointerAngleDeg(e.clientX, e.clientY);
+    let delta = ang - d.startAngle;
+    while (delta > 180) delta -= 360;
+    while (delta < -180) delta += 360;
+    angleRef.current = d.startCurrent + delta;
+    const dt = Math.max(1, now - d.lastTime);
+    let instDelta = ang - d.lastAngle;
+    while (instDelta > 180) instDelta -= 360;
+    while (instDelta < -180) instDelta += 360;
+    velocityRef.current = instDelta / (dt / 1000);
+    d.lastAngle = ang;
+    d.lastTime = now;
+  };
+
+  const endDrag = (e: React.PointerEvent<HTMLDivElement>) => {
+    const d = dragRef.current;
+    if (!d.isDragging) return;
+    d.isDragging = false;
+    const dist = Math.hypot(e.clientX - d.pStartX, e.clientY - d.pStartY);
+    const dur = Date.now() - d.pStartTime;
+    if (dist < 6 && dur < 350) {
+      // fue un tap (no arrastre): elegir el plato tocado
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      const plate = el && el.closest ? el.closest("[data-cat-key]") : null;
+      if (plate instanceof HTMLElement && plate.dataset.catKey) {
+        velocityRef.current = 0;
+        selectCategory(plate.dataset.catKey);
+      }
+    }
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "ArrowLeft") {
+      angleRef.current -= 15;
+      velocityRef.current = 0;
+      e.preventDefault();
+    } else if (e.key === "ArrowRight") {
+      angleRef.current += 15;
+      velocityRef.current = 0;
+      e.preventDefault();
+    } else if (e.key === "Enter" || e.key === " ") {
+      // elegir el plato más cercano al frente (ángulo 90°)
+      let best = 1e9;
+      let frontIdx = 0;
+      categorias.forEach((_, i) => {
+        const a = ((baseAngles[i] + angleRef.current) % 360 + 360) % 360;
+        const dist = Math.min(Math.abs(a - 90), 360 - Math.abs(a - 90));
+        if (dist < best) {
+          best = dist;
+          frontIdx = i;
+        }
+      });
+      if (categorias[frontIdx]) selectCategory(categorias[frontIdx].id);
+      e.preventDefault();
+    }
+  };
+
+  // ─── Vista cinta (conveyor) ───
+  const selectCategory = (id: string) => {
+    setSelectedId(id);
+    setView("belt");
+  };
+
+  const goBack = () => setView("wheel");
+
+  // Duración del loop de la cinta según cantidad de items y velocidad
+  const beltDuration = useMemo(() => {
+    if (!selected) return 18;
+    const speedMult = 0.4 + speed * 0.16; // 0.4x .. 2.0x
+    return Math.max(4, (selected.productos.length * 3.4) / speedMult);
+  }, [selected, speed]);
+
+  const beltRunning = playing && !hoverPaused && !reducedMotion;
+
+  // Aplicar duración dinámica a la cinta
+  useEffect(() => {
+    if (beltTrackRef.current) beltTrackRef.current.style.animationDuration = `${beltDuration}s`;
+  }, [beltDuration]);
+
+  // ─── Tomar un platillo (agregar al carrito real) ───
+  const takeItem = (p: Producto) => {
+    const cartProduct = { ...p, categoria: { id: p.categoriaId } } as unknown as ProductoWithCategoria;
+    addItem(cartProduct);
+    setPulsingId(p.id);
+    window.setTimeout(() => setPulsingId((cur) => (cur === p.id ? null : cur)), 600);
   };
 
   if (loading) {
@@ -125,293 +355,330 @@ export function KaitenMenu() {
     );
   }
 
-  const animate = !reducedMotion && speed > 0;
-  const spinDuration = speed === 1 ? 80 : speed === 2 ? 40 : 20;
-  const beltDuration = speed === 1 ? 24 : speed === 2 ? 12 : 6;
-
   return (
-    <div className="space-y-8">
-      {/* ── Controles ── */}
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        <span className="text-sm font-medium text-muted-foreground mr-2">Mesa Kaiten:</span>
-        <button
-          onClick={() => setSpeed((s) => (s === 0 ? 2 : 0))}
-          className="px-4 py-2 rounded-full bg-primary-700 dark:bg-primary-600 text-white text-sm font-bold hover:bg-primary-800 transition focus:outline-none focus:ring-2 focus:ring-ring"
-          aria-label={speed === 0 ? "Iniciar rotación" : "Detener rotación"}
-        >
-          {speed === 0 ? "▶ Iniciar" : "⏸ Detener"}
-        </button>
-        <div className="flex items-center gap-1 bg-muted rounded-full p-1" role="group" aria-label="Velocidad de rotación">
-          {[0, 1, 2, 3].map((s) => (
-            <button
-              key={s}
-              onClick={() => setSpeed(s)}
-              aria-label={`Velocidad ${s}`}
-              aria-pressed={speed === s}
-              className={cn(
-                "w-9 h-9 rounded-full text-sm transition focus:outline-none focus:ring-2 focus:ring-ring",
-                speed === s ? "bg-primary-700 dark:bg-primary-600 text-white" : "text-muted-foreground hover:bg-accent"
-              )}
-            >
-              {SPEED_LABEL[s]}
-            </button>
-          ))}
-        </div>
-        <button
-          onClick={() => setDirection((d) => -d)}
-          className="px-4 py-2 rounded-full border border-border bg-card text-sm font-medium hover:bg-muted transition focus:outline-none focus:ring-2 focus:ring-ring"
-          aria-label="Cambiar sentido de rotación"
-        >
-          {direction === 1 ? "↻ Horario" : "↺ Antihorario"}
-        </button>
-        {reducedMotion && (
-          <span className="text-xs text-muted-foreground bg-accent/50 px-3 py-1 rounded-full" role="status">
-            ♿ Movimiento reducido activo
-          </span>
-        )}
-      </div>
-
-      {/* ── La mesa giratoria (vista isométrica con profundidad real) ── */}
+    <div
+      className="relative rounded-3xl border"
+      style={{ background: THEME.bg, borderColor: "#232830", color: THEME.ink }}
+    >
+      {/* Glow superior */}
       <div
-        className="relative select-none overflow-visible"
-        style={{ perspective: "800px" }}
+        className="absolute inset-x-0 top-0 h-40 pointer-events-none rounded-t-3xl"
+        style={{ background: "radial-gradient(ellipse at 50% -10%, rgba(35,40,48,0.6) 0%, transparent 60%)" }}
         aria-hidden="true"
-      >
+      />
+
+      {/* ── Header ── */}
+      <header className="relative text-center pt-7 pb-1 px-4 max-w-[560px] mx-auto">
         <div
-          className="relative mx-auto"
-          style={{
-            width: MESA,
-            height: MESA,
-            transform: "rotateX(62deg)",
-            transformStyle: "preserve-3d",
-          }}
+          className="inline-flex items-center justify-center w-11 h-11 rounded-full border-2"
+          style={{ background: THEME.red, borderColor: "#7d1e1b", color: THEME.cream, boxShadow: "0 2px 6px rgba(0,0,0,.4)" }}
+          aria-hidden="true"
         >
-          {/* Sombra proyectada bajo la mesa */}
-          <div
-            className="absolute rounded-full"
-            style={{
-              inset: "-3%",
-              background: "rgba(0,0,0,0.35)",
-              filter: "blur(28px)",
-              transform: "translateZ(-60px)",
-            }}
-          />
+          <span className="text-[22px] leading-none" style={{ fontFamily: "Georgia, 'Hiragino Mincho ProN', serif" }}>
+            鮨
+          </span>
+        </div>
+        <h2
+          className="text-2xl font-bold mt-2 mb-1 tracking-wide"
+          style={{ color: THEME.cream, fontFamily: "Georgia, 'Hiragino Mincho ProN', serif" }}
+        >
+          廻る寿司 · Menú Kaiten
+        </h2>
+        <p className="text-[13.5px] m-0" style={{ color: THEME.muted }}>
+          Arrastrá la mesa para girar · tocá un plato para elegir · tocá un platillo para pedirlo
+        </p>
+      </header>
 
-          {/* Canto/espesor de la mesa (madera oscura) */}
+      {/* ── Vista: mesa giratoria ── */}
+      {view === "wheel" && (
+        <section className="relative px-4">
           <div
-            className="absolute rounded-full"
+            ref={wheelWrapRef}
+            tabIndex={0}
+            aria-label="Mesa giratoria de categorías. Flechas para girar, Enter para elegir el platillo al frente."
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={endDrag}
+            onPointerCancel={endDrag}
+            onKeyDown={onKeyDown}
+            className="relative mx-auto outline-none cursor-grab active:cursor-grabbing select-none"
             style={{
-              inset: "-1.5%",
-              background: "linear-gradient(180deg, #3a2412 0%, #2a1a0c 100%)",
-              transform: "translateZ(-22px)",
-            }}
-          />
-
-          {/* Banda conveyor exterior: rayas que se deslizan (sensación de movimiento) */}
-          <div
-            className="absolute rounded-full"
-            style={{
-              inset: "0%",
-              background:
-                "repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0 28px, rgba(0,0,0,0.06) 28px 56px), radial-gradient(circle at 35% 30%, #7a4e28 0%, #5e3a1c 55%, #4a2a12 100%)",
-              animation: animate ? `kaiten-belt ${beltDuration}s linear infinite ${direction === -1 ? "reverse" : ""}` : "none",
-              border: "4px solid rgba(0,0,0,0.3)",
-              boxShadow: "inset 0 -14px 28px rgba(0,0,0,0.4)",
-            }}
-          />
-
-          {/* Superficie de la mesa */}
-          <div
-            className="absolute rounded-full"
-            style={{
-              inset: "6%",
-              background:
-                "radial-gradient(circle at 38% 30%, #a06a3c 0%, #7a4e28 45%, #553419 100%)",
-              border: "3px solid rgba(0,0,0,0.22)",
-              boxShadow: "inset 0 10px 24px rgba(255,255,255,0.08), inset 0 -18px 36px rgba(0,0,0,0.35)",
-            }}
-          />
-
-          {/* Anillo interior decorativo */}
-          <div
-            className="absolute rounded-full"
-            style={{
-              inset: "16%",
-              border: "2px dashed rgba(255,255,255,0.15)",
-              borderRadius: "9999px",
-            }}
-          />
-
-          {/* Centro de la mesa (de pie con translateZ) */}
-          <div
-            className="absolute rounded-full flex items-center justify-center"
-            style={{
-              inset: "40%",
-              background: "radial-gradient(circle at 40% 35%, #b0703e 0%, #6e4526 70%)",
-              border: "3px solid rgba(0,0,0,0.25)",
-              boxShadow: "inset 0 6px 12px rgba(255,255,255,0.12), 0 10px 20px rgba(0,0,0,0.3)",
-              transform: "translateZ(6px)",
+              width: "clamp(280px, 86vw, 520px)",
+              aspectRatio: "5 / 3.05",
+              touchAction: "none",
+              marginTop: 18,
+              marginBottom: 4,
             }}
           >
-            <span className="text-3xl" style={{ transform: "rotateX(-62deg)" }}>
-              🍣
-            </span>
+            {/* Disco de madera */}
+            <div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background:
+                  "repeating-radial-gradient(circle at 50% 50%, rgba(0,0,0,.08) 0px, rgba(0,0,0,.08) 2px, transparent 2px, transparent 10px), radial-gradient(circle at 38% 32%, var(--wood-2, #6b4a30), var(--wood-1, #4a3222) 55%, var(--wood-3, #2e2015) 100%)",
+                border: "6px solid " + THEME.gold,
+                boxShadow: "0 14px 30px rgba(0,0,0,.55), inset 0 0 40px rgba(0,0,0,.5)",
+              }}
+            />
+            {/* Hub con kanji */}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none"
+              style={{ zIndex: 50 }}
+            >
+              <span
+                className="leading-none"
+                style={{ color: THEME.gold, fontFamily: "Georgia, 'Hiragino Mincho ProN', serif", fontSize: "clamp(26px,5.5vw,38px)" }}
+              >
+                鮨
+              </span>
+              <span className="text-[11px] mt-1.5 tracking-wide" style={{ color: THEME.cream, opacity: 0.75 }}>
+                Gira la mesa
+                <br />
+                para elegir
+              </span>
+            </div>
+            {/* Platos de categoría (posicionados por JS en órbita elíptica) */}
+            {categorias.map((cat) => (
+              <button
+                key={cat.id}
+                ref={(el) => {
+                  if (el) plateElsRef.current.set(cat.id, el);
+                  else plateElsRef.current.delete(cat.id);
+                }}
+                data-cat-key={cat.id}
+                type="button"
+                onClick={() => selectCategory(cat.id)}
+                aria-label={`Ver categoría ${cat.nombre}`}
+                title={cat.nombre}
+                className="absolute top-0 left-0 rounded-full flex flex-col items-center justify-center cursor-pointer will-change-transform focus-visible:outline-none"
+                style={{
+                  width: "clamp(64px,15vw,82px)",
+                  height: "clamp(64px,15vw,82px)",
+                  border: "2px solid " + THEME.gold,
+                  background: "radial-gradient(circle at 35% 30%, #2a2f38, #171a1f 70%)",
+                  color: THEME.cream,
+                  fontFamily: "inherit",
+                  fontSize: 11,
+                  fontWeight: 600,
+                  gap: 2,
+                  boxShadow: "0 6px 12px rgba(0,0,0,.5)",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.filter = "brightness(1.18)")}
+                onMouseLeave={(e) => (e.currentTarget.style.filter = "")}
+              >
+                <span className="text-xl leading-none" aria-hidden="true">
+                  {cat.emoji}
+                </span>
+                <span className="leading-tight px-1 text-center">{cat.nombre}</span>
+              </button>
+            ))}
           </div>
 
-          {/* Anillo giratorio de platos — keyframe en globals.css (siempre inyectado) */}
+          {/* Controles */}
+          <div className="flex items-center flex-wrap justify-center gap-4 mt-3.5 mb-5">
+            <button
+              type="button"
+              onClick={() => setPlaying((p) => !p)}
+              className="px-3.5 py-2 rounded-full text-[13px] cursor-pointer border transition-colors hover:border-[var(--gold,#c9a15a)]"
+              style={{ background: THEME.bg2, color: THEME.cream, borderColor: "#333a44" }}
+            >
+              {playing ? "⏸ Pausar giro" : "▶ Reanudar giro"}
+            </button>
+            <label className="text-[12.5px] flex items-center gap-2" style={{ color: THEME.muted }}>
+              Velocidad
+              <span className="text-[10.5px] opacity-65">Lento</span>
+              <input
+                type="range"
+                min={0}
+                max={10}
+                step={1}
+                value={speed}
+                onChange={(e) => setSpeed(Number(e.target.value))}
+                className="cursor-pointer"
+                style={{ accentColor: THEME.gold }}
+                aria-label="Velocidad de rotación"
+              />
+              <span className="text-[10.5px] opacity-65">Rápido</span>
+            </label>
+            {reducedMotion && (
+              <span className="text-[11px] px-3 py-1 rounded-full" style={{ background: "#232830", color: THEME.muted }} role="status">
+                ♿ Movimiento reducido activo
+              </span>
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* ── Vista: cinta transportadora ── */}
+      {view === "belt" && selected && (
+        <section className="relative px-4 pb-4">
+          <div className="flex items-center gap-3.5 mt-4 mb-3">
+            <button
+              type="button"
+              onClick={goBack}
+              className="px-3.5 py-2 rounded-full text-[13px] cursor-pointer border transition-colors hover:border-[var(--gold,#c9a15a)]"
+              style={{ background: THEME.bg2, color: THEME.cream, borderColor: "#333a44" }}
+            >
+              ← Volver a la mesa
+            </button>
+            <h3
+              className="text-xl font-bold m-0"
+              style={{ color: THEME.cream, fontFamily: "Georgia, 'Hiragino Mincho ProN', serif" }}
+            >
+              {selected.emoji} {selected.nombre}
+            </h3>
+          </div>
+
           <div
-            className="absolute inset-0"
+            className="relative rounded-2xl overflow-hidden border px-2 py-5"
+            onPointerEnter={() => setHoverPaused(true)}
+            onPointerLeave={() => setHoverPaused(false)}
             style={{
-              animation: animate ? `kaiten-spin ${spinDuration}s linear infinite ${direction === -1 ? "reverse" : ""}` : "none",
-              transformStyle: "preserve-3d",
+              background: "repeating-linear-gradient(180deg, #23262c 0px, #23262c 2px, #1b1e23 2px, #1b1e23 4px)",
+              borderColor: "#30343c",
+              boxShadow: "inset 0 3px 10px rgba(0,0,0,.5)",
             }}
+            role="list"
+            aria-label={`Cinta de platillos de ${selected.nombre}. Pasa el cursor para pausar.`}
           >
-            {categorias.map((cat, i) => {
-              const ang = plateAngle(i);
-              return (
-                <div
-                  key={cat.id}
-                  className="absolute left-1/2 top-1/2"
-                  style={{
-                    width: 72,
-                    height: 72,
-                    marginLeft: -36,
-                    marginTop: -36,
-                    transform: `rotate(${ang}deg) translateX(${RADIO}px) rotate(${-ang}deg)`,
-                    transformStyle: "preserve-3d",
-                  }}
-                >
-                  {/* Plato con relieve + sombra proyectada en la mesa */}
+            <div
+              ref={beltTrackRef}
+              className="flex w-max"
+              style={{
+                animation: beltRunning ? `kaiten-belt-scroll ${beltDuration}s linear infinite` : "none",
+                animationPlayState: beltRunning ? "running" : "paused",
+              }}
+            >
+              {/* Items duplicados (x2) para loop seamless con translateX(-50%) */}
+              {[...selected.productos, ...selected.productos].map((p, i) => {
+                const tier = tierFor(p.precio);
+                return (
                   <button
-                    onClick={() => setSelectedId(cat.id)}
-                    aria-label={`Ver categoría ${cat.nombre}`}
-                    title={cat.nombre}
-                    className={cn(
-                      "w-[72px] h-[72px] rounded-full flex flex-col items-center justify-center gap-0.5 cursor-pointer",
-                      "transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-ring",
-                      selectedId === cat.id ? "ring-4 ring-white/80 scale-110 z-10" : "opacity-90 hover:opacity-100"
-                    )}
-                    style={{
-                      transform: "rotateX(-62deg) translateZ(18px)",
-                      background: `radial-gradient(circle at 35% 30%, #fff 0%, #e8e4dd 55%, #c8c2b8 100%)`,
-                      border: `4px solid ${cat.color}`,
-                      boxShadow: `0 14px 22px rgba(0,0,0,0.45), inset 0 -6px 12px rgba(0,0,0,0.18), inset 0 4px 8px rgba(255,255,255,0.7)`,
-                    }}
+                    key={`${p.id}-${i}`}
+                    type="button"
+                    role="listitem"
+                    onClick={() => takeItem(p)}
+                    aria-label={`Pedir ${p.nombre} (${fmt(p.precio)})`}
+                    className="flex flex-col items-center gap-2 bg-none border-none cursor-pointer"
+                    style={{ width: 118, flex: "0 0 auto", padding: "0 10px", color: "inherit", fontFamily: "inherit" }}
                   >
-                    {/* Sombra proyectada del plato sobre la mesa */}
                     <span
-                      className="absolute rounded-full"
+                      className="w-16 h-16 rounded-full flex items-center justify-center text-[26px]"
                       style={{
-                        inset: "-6%",
-                        background: "rgba(0,0,0,0.28)",
-                        filter: "blur(6px)",
-                        transform: "translateZ(-16px)",
+                        background: tier.color,
+                        border: `2px solid ${tier.border}`,
+                        boxShadow: "0 4px 10px rgba(0,0,0,.4), inset 0 0 0 2px rgba(255,255,255,.15)",
+                        transition: "transform .18s ease",
+                        animation: pulsingId === p.id ? "kaiten-pulse-taken .5s ease" : "none",
                       }}
+                      onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-4px) scale(1.06)")}
+                      onMouseLeave={(e) => (e.currentTarget.style.transform = "")}
                       aria-hidden="true"
-                    />
-                    <span className="text-2xl leading-none">{cat.emoji}</span>
-                    <span className="text-[9px] font-bold text-gray-800 leading-tight px-1 text-center">
-                      {cat.nombre}
+                    >
+                      {selected.emoji}
+                    </span>
+                    <span className="text-center leading-snug">
+                      <span className="block text-[12px]">{p.nombre}</span>
+                      <span className="block text-[12.5px] font-bold" style={{ color: THEME.gold }}>
+                        {fmt(p.precio)}
+                      </span>
                     </span>
                   </button>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Submenú: cinta con los productos de la categoría seleccionada ── */}
-      <div className="mt-4" aria-live="polite">
-        {selected ? (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between flex-wrap gap-2">
-              <h3 className="text-2xl font-bold text-foreground flex items-center gap-2">
-                <span className="text-3xl">{selected.emoji}</span>
-                {selected.nombre}
-                <span className="text-sm font-normal text-muted-foreground">
-                  · {selected.productos.length} {selected.productos.length === 1 ? "plato" : "platos"}
-                </span>
-              </h3>
-              {/* Controles de la cinta (submenú) */}
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => scrollBelt(-1)}
-                  className="w-10 h-10 rounded-full border border-border bg-card text-lg hover:bg-muted transition focus:outline-none focus:ring-2 focus:ring-ring"
-                  aria-label="Ver platos anteriores"
-                >
-                  ←
-                </button>
-                <button
-                  onClick={() => scrollBelt(1)}
-                  className="w-10 h-10 rounded-full border border-border bg-card text-lg hover:bg-muted transition focus:outline-none focus:ring-2 focus:ring-ring"
-                  aria-label="Ver más platos"
-                >
-                  →
-                </button>
-              </div>
-            </div>
-
-            {/* Cinta horizontal con scroll-snap + swipe touch nativo */}
-            <div
-              ref={beltRef}
-              className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 scroll-smooth"
-              style={{ scrollbarWidth: "thin" }}
-              role="list"
-              aria-label={`Productos de ${selected.nombre}`}
-            >
-              {selected.productos.map((p) => (
-                <Link
-                  key={p.id}
-                  href={`/menu/${p.id}`}
-                  role="listitem"
-                  className="snap-start shrink-0 w-64 bg-card rounded-2xl shadow-md overflow-hidden group hover:shadow-xl transition-shadow border border-border"
-                >
-                  <div className="aspect-square bg-muted relative overflow-hidden">
-                    {p.imagen ? (
-                      <Image
-                        src={p.imagen}
-                        alt={p.nombre}
-                        fill
-                        sizes="256px"
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    ) : (
-                      <span className="absolute inset-0 flex items-center justify-center text-5xl" aria-hidden="true">
-                        🍣
-                      </span>
-                    )}
-                    {/* Etiqueta tipo plato kaiten */}
-                    <span
-                      className="absolute top-2 left-2 w-3 h-3 rounded-full border-2 border-white/70"
-                      style={{ background: selected.color || "#888" }}
-                      aria-hidden="true"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h4 className="font-bold text-foreground group-hover:text-primary-700 dark:group-hover:text-primary-400 transition">
-                      {p.nombre}
-                    </h4>
-                    <p className="text-lg font-bold text-primary-700 dark:text-primary-400 mt-1">
-                      ${p.precio.toFixed(2)}
-                    </p>
-                    {p.descripcion && (
-                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{p.descripcion}</p>
-                    )}
-                  </div>
-                </Link>
-              ))}
+                );
+              })}
               {selected.productos.length === 0 && (
-                <p className="text-muted-foreground w-full text-center py-8">
-                  No hay platos disponibles en esta categoría aún.
+                <p className="text-[12.5px] w-full text-center" style={{ color: THEME.muted }}>
+                  No hay platillos disponibles en esta categoría aún.
                 </p>
               )}
             </div>
           </div>
-        ) : (
-          <p className="text-center text-muted-foreground py-8">
-            Seleccioná un plato de la mesa para ver su submenú.
+          <p className="text-[10.5px] text-center mt-2 mb-0" style={{ color: THEME.muted, opacity: 0.7 }}>
+            pasa el cursor para pausar
           </p>
+        </section>
+      )}
+
+      {/* ── Bandeja de pedido (carrito real) ── */}
+      <div
+        className="relative sticky bottom-3 mx-4 mb-4 rounded-2xl border overflow-hidden"
+        style={{ background: THEME.bg2, borderColor: "#30343c", zIndex: 60 }}
+      >
+        <button
+          type="button"
+          onClick={() => setTrayOpen((o) => !o)}
+          className="w-full flex items-center justify-between px-4 py-3 cursor-pointer text-sm font-semibold"
+          style={{ color: THEME.ink, background: "transparent", border: "none" }}
+          aria-expanded={trayOpen}
+          aria-controls="kaiten-tray-details"
+        >
+          <span>
+            🧾 {itemCount} {itemCount === 1 ? "plato" : "platos"} · {fmt(total)}
+          </span>
+          <span className="text-[11px] font-normal" style={{ color: THEME.muted }}>
+            {trayOpen ? "ocultar ▴" : "ver orden ▾"}
+          </span>
+        </button>
+        {trayOpen && (
+          <div id="kaiten-tray-details" className="px-4 pb-3 pt-2" style={{ borderTop: "1px solid #30343c" }}>
+            {items.length === 0 ? (
+              <p className="text-[12.5px] m-0 py-1" style={{ color: THEME.muted }}>
+                Aún no has tomado ningún platillo.
+              </p>
+            ) : (
+              <>
+                {items.map((it) => (
+                  <div
+                    key={it.productoId}
+                    className="flex items-center justify-between text-[13px] py-1.5"
+                    style={{ borderBottom: "1px dashed #2a2e35" }}
+                  >
+                    <span className="flex items-center gap-1.5">
+                      <span
+                        className="inline-block w-2 h-2 rounded-full"
+                        style={{ background: tierFor(it.precio).color }}
+                        aria-hidden="true"
+                      />
+                      {it.nombre} × {it.cantidad}
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <span>{fmt(it.precio * it.cantidad)}</span>
+                      <button
+                        type="button"
+                        onClick={() => updateCantidad(it.productoId, it.cantidad - 1)}
+                        className="w-6 h-6 rounded-full border text-[12px] cursor-pointer hover:opacity-80"
+                        style={{ borderColor: "#3a3f48", color: THEME.muted, background: "transparent" }}
+                        aria-label={`Quitar uno de ${it.nombre}`}
+                      >
+                        −
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => removeItem(it.productoId)}
+                        className="w-6 h-6 rounded-full border text-[11px] cursor-pointer hover:opacity-80"
+                        style={{ borderColor: "#3a3f48", color: THEME.muted, background: "transparent" }}
+                        aria-label={`Quitar ${it.nombre}`}
+                      >
+                        ✕
+                      </button>
+                    </span>
+                  </div>
+                ))}
+                <div className="flex items-center justify-between font-bold text-[14.5px] mt-2.5 pt-2" style={{ borderTop: "1px solid #30343c" }}>
+                  <span>Total</span>
+                  <span>{fmt(total)}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={clearCart}
+                  className="w-full mt-2.5 py-1.5 rounded-lg text-[12px] cursor-pointer transition-colors hover:opacity-90"
+                  style={{ background: "transparent", border: "1px solid #3a3f48", color: THEME.muted }}
+                >
+                  Vaciar orden
+                </button>
+              </>
+            )}
+          </div>
         )}
       </div>
     </div>
