@@ -62,6 +62,10 @@ export function Footer() {
             <a href="/terminos" className="block text-sm hover:text-primary-300 transition">Términos y Condiciones</a>
             <a href="/privacidad" className="block text-sm hover:text-primary-300 transition">Política de Privacidad</a>
             <a href="/contacto" className="block text-sm hover:text-primary-300 transition">Contacto</a>
+            {/* Link admin discreto (para el dueño) — sin pisar ThemeToggle */}
+            <Link href="/admin/login" className="inline-block mt-2 bg-gray-800 dark:bg-gray-900 hover:bg-gray-700 dark:hover:bg-gray-800 text-gray-400 hover:text-gray-200 dark:text-gray-500 dark:hover:text-gray-300 text-xs px-2.5 py-1 rounded opacity-40 hover:opacity-100 transition-all" aria-label="Admin login">
+              admin
+            </Link>
           </div>
         </div>
 

@@ -13,6 +13,7 @@ export function SushiImage({
   alt,
   width,
   height,
+  fill = false,
   className,
   sizes,
   priority = false,
@@ -53,7 +54,14 @@ export function SushiImage({
   const handleLoad = () => setLoaded(true);
 
   return (
-    <div className={cn("relative overflow-hidden bg-muted", className)}>
+    <div
+      className={cn(
+        "relative overflow-hidden bg-muted",
+        // con fill, el wrapper debe llenar al padre dimensionado (aspect-square)
+        fill && "h-full w-full",
+        className
+      )}
+    >
       {!loaded && (
         <div
           className={cn(
@@ -70,6 +78,7 @@ export function SushiImage({
         alt={alt || ""}
         width={width}
         height={height}
+        fill={fill}
         sizes={sizes}
         priority={priority}
         onLoad={handleLoad}

@@ -6,7 +6,6 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { ChatBot } from "@/components/ui/ChatBot";
-import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
 const geistSans = Geist({
@@ -104,7 +103,9 @@ export default function RootLayout({
           <a href="#main-content" id="skip-to-content">
             Saltar al contenido
           </a>
-          {children}
+          <main id="main-content" className="flex-1 flex flex-col">
+            {children}
+          </main>
           <Footer />
           <ThemeToggle />
           <ChatBot />
