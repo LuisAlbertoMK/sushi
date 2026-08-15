@@ -15,27 +15,27 @@ async function main() {
   await Promise.all([
     prisma.producto.upsert({
       where: {nombre_categoriaId: {nombre: "California Roll", categoriaId: cats[0].id}},
-      create: {nombre: "California Roll", descripcion: "Arroz, cangrejo, aguacate y mayo", precio: 12.5, categoriaId: cats[0].id, orden: 1, imagen: "https://placehold.co/400x300/ffe5d9/8b4513?font=montserrat&text=California+Roll"},
+      create: {nombre: "California Roll", descripcion: "Arroz, cangrejo, aguacate y mayo", precio: 12.5, categoriaId: cats[0].id, orden: 1, imagen: "/images/products/03_rollos_especiales.jpg"},
       update: {}
     }),
     prisma.producto.upsert({
       where: {nombre_categoriaId: {nombre: "Spicy Tuna Roll", categoriaId: cats[0].id}},
-      create: {nombre: "Spicy Tuna Roll", descripcion: "Atún picante, jengibre y wasabi", precio: 14.0, categoriaId: cats[0].id, orden: 2, imagen: "https://placehold.co/400x300/ffe5d9/8b4513?font=montserrat&text=Spicy+Tuna+Roll"},
+      create: {nombre: "Spicy Tuna Roll", descripcion: "Atún picante, jengibre y wasabi", precio: 14.0, categoriaId: cats[0].id, orden: 2, imagen: "/images/products/01_sushi_variedad.jpg"},
       update: {}
     }),
     prisma.producto.upsert({
       where: {nombre_categoriaId: {nombre: "Salmon Nigiri", categoriaId: cats[1].id}},
-      create: {nombre: "Salmon Nigiri", descripcion: "2 piezas de salmon fresco", precio: 8.0, categoriaId: cats[1].id, orden: 1, imagen: "https://placehold.co/400x300/ffe5d9/8b4513?font=montserrat&text=Salmon+Nigiri"},
+      create: {nombre: "Salmon Nigiri", descripcion: "2 piezas de salmon fresco", precio: 8.0, categoriaId: cats[1].id, orden: 1, imagen: "/images/products/02_nigiri_salmon.jpg"},
       update: {}
     }),
     prisma.producto.upsert({
       where: {nombre_categoriaId: {nombre: "Tuna Sashimi", categoriaId: cats[1].id}},
-      create: {nombre: "Tuna Sashimi", descripcion: "5 piezas de atún fresco", precio: 16.0, categoriaId: cats[1].id, orden: 2, imagen: "https://placehold.co/400x300/ffe5d9/8b4513?font=montserrat&text=Tuna+Sashimi"},
+      create: {nombre: "Tuna Sashimi", descripcion: "5 piezas de atún fresco", precio: 16.0, categoriaId: cats[1].id, orden: 2, imagen: "/images/products/04_sashimi.jpg"},
       update: {}
     }),
     prisma.producto.upsert({
       where: {nombre_categoriaId: {nombre: "Dragon Roll Especial", categoriaId: cats[2].id}},
-      create: {nombre: "Dragon Roll Especial", descripcion: "Langosta, cangrejo y mango", precio: 22.0, categoriaId: cats[2].id, orden: 1, imagen: "https://placehold.co/400x300/ffe5d9/8b4513?font=montserrat&text=Dragon+Roll"},
+      create: {nombre: "Dragon Roll Especial", descripcion: "Langosta, cangrejo y mango", precio: 22.0, categoriaId: cats[2].id, orden: 1, imagen: "/images/products/05_temaki.jpg"},
       update: {}
     }),
   ])

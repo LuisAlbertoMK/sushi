@@ -1,6 +1,7 @@
 // src/app/(public)/page.tsx — Landing page
 // confidence: high
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { SobreNosotros } from "@/components/institucional/SobreNosotros";
 
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "🍣 Sushi Bar — Sushi Fresco, Pedidos Online y Reservas",
     description: "Auténtico sushi fresco hecho al momento. Pedidos online con delivery o reservá tu mesa.",
-    images: [{ url: "https://placehold.co/1200x630/8b4513/ffffff?font=montserrat&text=🍣+Sushi+Bar+%7C+Delivery+%26+Reservas", alt: "Sushi Bar — rolls, nigiris y sashimi frescos" }],
+    images: [{ url: "/images/products/01_sushi_variedad.jpg", alt: "Sushi Bar — rolls, nigiris y sashimi frescos" }],
   },
 };
 
@@ -27,10 +28,14 @@ export default function LandingPage() {
     <div className="space-y-16">
       {/* Hero */}
       <section className="relative text-center py-24 bg-gradient-to-br from-primary-800 via-primary-700 to-primary-900 text-white rounded-2xl overflow-hidden">
-        <img
-          src="https://placehold.co/1200x500/8b4513/ffffff?font=montserrat&text=Sushi+Bar+%E2%80%94+Hecho+con+Pasi%C3%B3n"
+        <Image
+          src="/images/products/01_sushi_variedad.jpg"
           alt="Sushi Bar — rolls, nigiris y sashimi frescos"
-          className="absolute inset-0 w-full h-full object-cover opacity-[0.12]"
+          fill
+          sizes="100vw"
+          priority
+          className="object-cover opacity-[0.18]"
+          style={{ objectPosition: "center 30%" }}
           aria-hidden="true"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10"></div>
