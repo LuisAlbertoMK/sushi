@@ -3,6 +3,7 @@
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { SushiImage } from "@/components/ui/SushiImage";
+import { AddToCartButton } from "@/components/menu/AddToCartButton";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -92,23 +93,18 @@ export default async function ProductoPage({ params }: { params: Promise<{ id: s
           </span>
 
           {producto.descripcion && (
-            <p className="text-gray-600 mt-4 leading-relaxed">{producto.descripcion}</p>
+            <p className="text-muted-foreground mt-4 leading-relaxed">{producto.descripcion}</p>
           )}
 
-          <button
-            onClick={() => {
-              // Agrega al carrito vía fetch (cliente)
-              fetch("/api/cart/add", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ productoId: producto.id, cantidad: 1 }),
-              });
-              alert(`${producto.nombre} agregado al carrito`);
+          <AddToCartButton
+            producto={{
+              id: producto.id,
+              nombre: producto.nombre,
+              precio: producto.precio,
+              imagen: producto.imagen,
+              descripcion: producto.descripcion,
             }}
-            className="mt-6 w-full bg-primary-700 dark:bg-primary-600 text-white py-3 rounded-lg font-bold hover:bg-primary-800 dark:hover:bg-primary-500 transition focus:outline-none focus:ring-2 focus:ring-ring"
-          >
-            🛒 Agregar al carrito
-          </button>
+          />
         </div>
       </div>
     </div>
