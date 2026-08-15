@@ -158,3 +158,17 @@ body {
 .animate-pulse-slow {
   animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
+
+/* Mesa kaiten: rotación del anillo de platos (definido aquí para que
+   Turbopack/next start SIEMPRE lo inyecte — style jsx global fallaba) */
+@keyframes kaiten-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* La banda exterior (conveyor) del kaiten: rayas que se deslizan para
+   dar sensación de movimiento aunque los platos estén quietos */
+@keyframes kaiten-belt {
+  from { background-position: 0 0; }
+  to { background-position: 56px 0; }
+}
