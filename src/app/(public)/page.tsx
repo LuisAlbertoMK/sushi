@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { SobreNosotros } from "@/components/institucional/SobreNosotros";
+import { Reveal } from "@/components/animations/Reveal";
 
 export const metadata: Metadata = {
   title: "🍣 Sushi Bar — Sushi Fresco, Pedidos Online y Reservas",
@@ -27,7 +28,8 @@ export default function LandingPage() {
   return (
     <div className="space-y-16">
       {/* Hero */}
-      <section className="relative text-center py-24 bg-gradient-to-br from-primary-800 via-primary-700 to-primary-900 text-white rounded-2xl overflow-hidden">
+      <Reveal from="none" delay={100}>
+        <section className="relative text-center py-24 bg-gradient-to-br from-primary-800 via-primary-700 to-primary-900 text-white rounded-2xl overflow-hidden">
         <div className="absolute inset-0 bg-enso opacity-60" aria-hidden="true"></div>
         <Image
           src="/images/products/01_sushi_variedad.jpg"
@@ -69,8 +71,10 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+      </Reveal>
 
       {/* Trust signals */}
+      <Reveal delay={80}>
       <section className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="bg-muted/60 dark:bg-muted/50 rounded-xl p-4 text-center border border-border">
           <span className="text-2xl mb-1 block">🍣</span>
@@ -93,11 +97,15 @@ export default function LandingPage() {
           <p className="text-xs text-muted-foreground">100% protegido</p>
         </div>
       </section>
+      </Reveal>
 
       {/* Historia institucional */}
-      <SobreNosotros />
+      <Reveal delay={60}>
+        <SobreNosotros />
+      </Reveal>
 
       {/* Features */}
+      <Reveal delay={80}>
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {features.map((f) => (
           <Link key={f.href} href={f.href} className="bg-card p-6 rounded-xl shadow-md text-center hover:shadow-lg transition group border border-border">
@@ -106,8 +114,10 @@ export default function LandingPage() {
           </Link>
         ))}
       </section>
+      </Reveal>
 
       {/* CTA Reserva */}
+      <Reveal delay={60}>
       <section className="text-center py-12 bg-primary-50 dark:bg-primary-950/30 rounded-xl">
         <h2 className="text-3xl font-bold text-primary-700 dark:text-primary-300 mb-4">¿Listo para compartir?</h2>
         <p className="text-muted-foreground mb-6">Reservá mesa y disfrutá de una experiencia única</p>
@@ -118,6 +128,7 @@ export default function LandingPage() {
           Reservar Mesa
         </Link>
       </section>
+      </Reveal>
     </div>
   );
 }

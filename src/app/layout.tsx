@@ -97,6 +97,30 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es-AR" className={`${geistSans.variable} ${geistMono.variable} ${notoSansJP.variable} h-full antialiased`}>
+      <head>
+        {/* Speculation Rules API — prerenderiza rutas clave al hover (estándar web, 0 librerías)
+            confidence: high — solo rutas públicas estáticas; NO admin (auth) ni data-dinámicas */}
+        <script
+          type="speculationrules"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              prerender: [
+                {
+                  source: "list",
+                  urls: ["/menu", "/pedidos", "/reservas", "/promos"],
+                },
+              ],
+              prefetch: [
+                {
+                  source: "document",
+                  where: { href_matches: "/*" },
+                  eagerness: "moderate",
+                },
+              ],
+            }),
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-sans">
         <ThemeProvider>
           <div id="theme-transition" className="fixed inset-0 pointer-events-none z-[100] opacity-0 transition-opacity duration-300" />
