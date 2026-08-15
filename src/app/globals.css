@@ -185,3 +185,12 @@ body {
   40% { transform: scale(1.25); box-shadow: 0 0 0 6px rgba(201,161,90,.35); }
   100% { transform: scale(1); }
 }
+
+/* Hover suave en la mesa kaiten: sin animación si el usuario prefiere
+   movimiento reducido (las transiciones de hover también son movimiento) */
+@media (prefers-reduced-motion: reduce) {
+  .kaiten-stage * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

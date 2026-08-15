@@ -357,7 +357,7 @@ export function KaitenMenu() {
 
   return (
     <div
-      className="relative rounded-3xl border"
+      className="relative rounded-3xl border kaiten-stage"
       style={{ background: THEME.bg, borderColor: "#232830", color: THEME.ink }}
     >
       {/* Glow superior */}
@@ -462,9 +462,19 @@ export function KaitenMenu() {
                   fontWeight: 600,
                   gap: 2,
                   boxShadow: "0 6px 12px rgba(0,0,0,.5)",
+                  // hover suave: brillo + borde dorado con easing decelerado
+                  transition: "filter 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.filter = "brightness(1.18)")}
-                onMouseLeave={(e) => (e.currentTarget.style.filter = "")}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.filter = "brightness(1.18)";
+                  e.currentTarget.style.boxShadow = "0 0 0 3px " + THEME.gold + "55, 0 10px 18px rgba(0,0,0,.55)";
+                  e.currentTarget.style.borderColor = "#fff";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.filter = "";
+                  e.currentTarget.style.boxShadow = "";
+                  e.currentTarget.style.borderColor = "";
+                }}
               >
                 <span className="text-xl leading-none" aria-hidden="true">
                   {cat.emoji}
@@ -568,17 +578,30 @@ export function KaitenMenu() {
                         background: tier.color,
                         border: `2px solid ${tier.border}`,
                         boxShadow: "0 4px 10px rgba(0,0,0,.4), inset 0 0 0 2px rgba(255,255,255,.15)",
-                        transition: "transform .18s ease",
+                        // hover suave: elevación con easing spring + sombra flotante
+                        transition: "transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease",
                         animation: pulsingId === p.id ? "kaiten-pulse-taken .5s ease" : "none",
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-4px) scale(1.06)")}
-                      onMouseLeave={(e) => (e.currentTarget.style.transform = "")}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "translateY(-5px) scale(1.08)";
+                        e.currentTarget.style.boxShadow = "0 12px 22px rgba(0,0,0,.5), inset 0 0 0 2px rgba(255,255,255,.15)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "";
+                        e.currentTarget.style.boxShadow = "";
+                      }}
                       aria-hidden="true"
                     >
                       {selected.emoji}
                     </span>
                     <span className="text-center leading-snug">
-                      <span className="block text-[12px]">{p.nombre}</span>
+                      <span className="block text-[12px] transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                        style={{ color: pulsingId === p.id ? THEME.gold : THEME.ink }}
+                        onMouseEnter={(e) => (e.currentTarget.style.color = THEME.gold)}
+                        onMouseLeave={(e) => (e.currentTarget.style.color = THEME.ink)}
+                      >
+                        {p.nombre}
+                      </span>
                       <span className="block text-[12.5px] font-bold" style={{ color: THEME.gold }}>
                         {fmt(p.precio)}
                       </span>
