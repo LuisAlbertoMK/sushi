@@ -59,8 +59,8 @@ export default async function MenuPage({
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-primary-700 mb-2">🍣 Nuestro Menú</h1>
-        <p className="text-gray-600">Ingredientes frescos, preparado al momento</p>
+        <h1 className="font-display text-4xl font-bold text-primary-700 mb-2">🍣 Nuestro Menú</h1>
+        <p className="text-muted-foreground">Ingredientes frescos, preparado al momento</p>
       </div>
 
       <Suspense fallback={<p>Cargando categorías...</p>}>
@@ -85,7 +85,7 @@ async function CategoriaTabsLoader({ categoriaSeleccionada }: { categoriaSelecci
       <CategoriaTabs categorias={categorias} activa={catValid?.id} />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
         {productosVisibles.length === 0 ? (
-          <p className="col-span-full text-center text-gray-600 py-8">
+          <p className="col-span-full text-center text-muted-foreground py-8">
             Próximamente nuevas delicias en esta categoría 👨‍🍳
           </p>
         ) : (

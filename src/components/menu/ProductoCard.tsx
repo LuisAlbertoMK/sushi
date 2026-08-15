@@ -19,7 +19,7 @@ export function ProductoCard({ producto }: Props) {
   return (
     <Link href={`/menu/${producto.id}`} className="group block">
       <div className="bg-card rounded-xl shadow-md overflow-hidden group-hover:shadow-lg transition-shadow border border-border">
-        <div className="aspect-square bg-gray-100 dark:bg-gray-800 flex items-center justify-center overflow-hidden">
+        <div className="aspect-square bg-muted flex items-center justify-center overflow-hidden">
           {producto.imagen ? (
             <SushiImage
               src={producto.imagen}

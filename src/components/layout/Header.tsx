@@ -84,19 +84,54 @@ export function Header() {
   );
 }
 
-// Mobile menu toggle (simple)
+// Mobile menu toggle (drawer funcional con links)
 function MobileMenu() {
+  const [open, setOpen] = useState(false);
+
+  const links = [
+    { href: "/menu", label: "🍱 Menú" },
+    { href: "/promos", label: "🎁 Promos" },
+    { href: "/reservas", label: "📅 Reservas" },
+    { href: "/pedidos", label: "🛒 Pedir Ahora" },
+  ];
+
   return (
-    <button
-      aria-label="Abrir menú"
-      className="md:hidden p-2 rounded-lg text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring"
-    >
-      <span className="sr-only">Abrir menú</span>
-      <div className="w-5 h-5 flex flex-col justify-around">
-        <span className="block h-0.5 bg-current rounded transition"></span>
-        <span className="block h-0.5 bg-current rounded transition"></span>
-        <span className="block h-0.5 bg-current rounded transition"></span>
-      </div>
-    </button>
+    <>
+      <button
+        onClick={() => setOpen(!open)}
+        aria-label={open ? "Cerrar menú" : "Abrir menú"}
+        aria-expanded={open}
+        aria-controls="mobile-nav"
+        className="md:hidden p-2 rounded-lg text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring"
+      >
+        <span className="sr-only">{open ? "Cerrar menú" : "Abrir menú"}</span>
+        <div className="w-5 h-5 flex flex-col justify-around">
+          <span className={`block h-0.5 bg-current rounded transition-all ${open ? "rotate-45 translate-y-2" : ""}`}></span>
+          <span className={`block h-0.5 bg-current rounded transition-all ${open ? "opacity-0" : ""}`}></span>
+          <span className={`block h-0.5 bg-current rounded transition-all ${open ? "-rotate-45 -translate-y-2" : ""}`}></span>
+        </div>
+      </button>
+
+      {/* Drawer móvil */}
+      {open && (
+        <div
+          id="mobile-nav"
+          className="md:hidden fixed top-[57px] left-0 right-0 z-40 bg-background/95 backdrop-blur border-b border-border shadow-lg animate-in slide-in-from-top-2"
+        >
+          <nav className="flex flex-col px-4 py-4 space-y-2" aria-label="Navegación móvil">
+            {links.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-2 text-foreground hover:text-primary-700 dark:hover:text-primary-400 font-medium py-2.5 px-3 rounded-lg hover:bg-muted transition-colors"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
+    </>
   );
 }

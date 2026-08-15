@@ -90,6 +90,13 @@ html.dark {
   --color-primary-900: var(--color-primary-900);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
+}
+
+/* Fuente display japonesa para headings */
+.font-display {
+  font-family: var(--font-display, var(--font-geist-sans, sans-serif));
+  letter-spacing: -0.02em;
 }
 
 /* Skip-to-content link (accesibilidad teclado) */
@@ -98,7 +105,7 @@ html.dark {
   top: -40px;
   left: 6px;
   z-index: 100;
-  background: var(--color-destructive);
+  background: var(--color-primary-700);
   color: white;
   padding: 8px 12px;
   border-radius: 4px;
@@ -111,7 +118,7 @@ html.dark {
 
 /* Focus visible global — todos los elementos interactivos */
 :focus-visible {
-  outline: 2px solid var(--color-destructive);
+  outline: 2px solid var(--color-ring);
   outline-offset: 2px;
 }
 
@@ -135,6 +142,12 @@ body {
 .bg-sushi-pattern {
   background-image: radial-gradient(circle at 50% 50%, rgba(254, 202, 10, 0.1) 1px, transparent 1px);
   background-size: 20px 20px;
+}
+
+/* Patrón decorativo enso (círculo zen) — identidad sushi, SVG inline 0KB */
+.bg-enso {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Ccircle cx='60' cy='60' r='45' fill='none' stroke='%23d97706' stroke-opacity='0.08' stroke-width='2.5'/%3E%3Ccircle cx='60' cy='60' r='28' fill='none' stroke='%23d97706' stroke-opacity='0.05' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
 }
 
 /* Animaciones personalizadas */

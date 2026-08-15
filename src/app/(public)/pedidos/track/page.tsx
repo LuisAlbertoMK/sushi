@@ -26,7 +26,7 @@ export default function TrackPage({
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">
-      <h1 className="text-3xl font-bold text-primary-700 mb-2">📍 Seguimiento de pedido</h1>
+      <h1 className="font-display text-3xl font-bold text-primary-700 mb-2">📍 Seguimiento de pedido</h1>
       <p className="text-gray-600">Ingresá tu número de pedido para ver el estado</p>
 
       <form action="/pedidos/track" className="flex gap-3 mt-4">

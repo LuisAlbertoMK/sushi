@@ -28,6 +28,7 @@ export default function LandingPage() {
     <div className="space-y-16">
       {/* Hero */}
       <section className="relative text-center py-24 bg-gradient-to-br from-primary-800 via-primary-700 to-primary-900 text-white rounded-2xl overflow-hidden">
+        <div className="absolute inset-0 bg-enso opacity-60" aria-hidden="true"></div>
         <Image
           src="/images/products/01_sushi_variedad.jpg"
           alt="Sushi Bar — rolls, nigiris y sashimi frescos"
@@ -40,7 +41,7 @@ export default function LandingPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10"></div>
         <div className="relative z-10">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 tracking-tight drop-shadow-xl">
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 tracking-tight drop-shadow-xl">
             🍣 Sushi Bar
           </h1>
           <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto drop-shadow-lg">

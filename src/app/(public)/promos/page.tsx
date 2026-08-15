@@ -28,8 +28,8 @@ export default async function PromosPage() {
   return (
     <div className="space-y-12">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-primary-700 mb-2">🎁 Promociones &amp; Novedades</h1>
-        <p className="text-gray-600">No te perdás nuestras ofertas y publicaciones</p>
+        <h1 className="font-display text-4xl font-bold text-primary-700 mb-2">🎁 Promociones &amp; Novedades</h1>
+        <p className="text-muted-foreground">No te perdás nuestras ofertas y publicaciones</p>
       </div>
 
       {/* Promociones activas */}
@@ -38,9 +38,9 @@ export default async function PromosPage() {
           <h2 className="text-2xl font-bold text-foreground mb-4">🔥 Promociones activas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {promos.map((p) => (
-              <div key={p.id} className="bg-gradient-to-br from-primary-50 dark:from-primary-950/30 to-orange-50 dark:to-orange-950/30 rounded-xl shadow-md p-6 border-2 border-primary-200 dark:border-primary-800">
+              <div key={p.id} className="bg-gradient-to-br from-primary-50 dark:from-primary-950/30 to-primary-100/60 dark:to-primary-900/20 rounded-xl shadow-md p-6 border-2 border-primary-200 dark:border-primary-800">
                 <h3 className="text-xl font-bold text-primary-700 mb-2">{p.titulo}</h3>
-                {p.descripcion && <p className="text-gray-600 mb-3">{p.descripcion}</p>}
+                {p.descripcion && <p className="text-muted-foreground mb-3">{p.descripcion}</p>}
                 {p.tipo === "PORCENTUAL" && p.valor && (
                   <p className="text-3xl font-bold text-green-600">{p.valor}% OFF</p>
                 )}
@@ -51,11 +51,11 @@ export default async function PromosPage() {
                   <p className="text-3xl font-bold text-green-600">🚚 Envío Gratis</p>
                 )}
                 {p.codigo && (
-                  <span className="inline-block bg-red-700 text-white text-xs px-2 py-1 rounded mt-2 font-mono">
+                  <span className="inline-block bg-primary-700 text-white text-xs px-2 py-1 rounded mt-2 font-mono">
                     Código: {p.codigo}
                   </span>
                 )}
-                <p className="text-xs text-gray-600 mt-3">
+                <p className="text-xs text-muted-foreground mt-3">
                   Vigente hasta: {new Date(p.fechaFin).toLocaleDateString("es-AR")}
                 </p>
               </div>
@@ -73,12 +73,12 @@ export default async function PromosPage() {
               <article key={pub.id} className="bg-card rounded-xl shadow-md p-6 border border-border">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-xl font-bold text-foreground">{pub.titulo}</h3>
-                  <span className="text-xs text-gray-600">
+                  <span className="text-xs text-muted-foreground">
                     {new Date(pub.fechaPublica).toLocaleDateString("es-AR")}
                   </span>
                 </div>
                 {pub.contenido && (
-                  <p className="text-gray-600 leading-relaxed">{pub.contenido}</p>
+                  <p className="text-muted-foreground leading-relaxed">{pub.contenido}</p>
                 )}
               </article>
             ))}
@@ -87,7 +87,7 @@ export default async function PromosPage() {
       )}
 
       {promos.length === 0 && publicaciones.length === 0 && (
-        <p className="text-center text-gray-600 py-12">
+        <p className="text-center text-muted-foreground py-12">
           Pronto novedades y promociones 💫
         </p>
       )}

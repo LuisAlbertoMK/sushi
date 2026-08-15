@@ -2,13 +2,13 @@
 // confidence: high
 // metadata está en: src/app/(public)/reservas/layout.tsx (server, envuelve cliente)
 "use client";
-import { useState, useId } from "react";
+import { useState } from "react";
+import { Input, Textarea, Select } from "@/components/ui/Input";
 
 export default function ReservasPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const formId = useId();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -65,8 +65,8 @@ export default function ReservasPage() {
     <div className="max-w-2xl mx-auto">
       <div className="text-center mb-8">
         <span className="text-5xl mb-2 block" aria-hidden="true">📅</span>
-        <h1 className="text-4xl font-bold text-primary-700 mb-2">Reservación de Mesa</h1>
-        <p className="text-gray-600">Reservá tu mesa y disfrutá de una experiencia única</p>
+        <h1 className="font-display text-4xl font-bold text-primary-700 mb-2">Reservación de Mesa</h1>
+        <p className="text-muted-foreground">Reservá tu mesa y disfrutá de una experiencia única</p>
       </div>
 
       <form onSubmit={handleSubmit} className="bg-card rounded-xl shadow-md p-6 space-y-4 border border-border">
@@ -82,94 +82,36 @@ export default function ReservasPage() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor={`${formId}-nombre`} className="block text-sm font-medium text-foreground mb-1">
-              Nombre completo *
-            </label>
-            <input
-              id={`${formId}-nombre`}
-              name="nombre"
-              type="text"
-              required
-              autoComplete="name"
-className="w-full px-3 py-2 border border-border rounded-lg bg-input text-foreground placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-ring focus:outline-primary-500"
-            />
-          </div>
-          <div>
-            <label htmlFor={`${formId}-email`} className="block text-sm font-medium text-foreground mb-1">
-              Email *
-            </label>
-            <input
-              id={`${formId}-email`}
-              name="email"
-              type="email"
-              required
-              autoComplete="email"
-className="w-full px-3 py-2 border border-border rounded-lg bg-input text-foreground placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-ring focus:outline-primary-500"
-            />
-          </div>
+          <Input label="Nombre completo *" name="nombre" type="text" required autoComplete="name" />
+          <Input label="Email *" name="email" type="email" required autoComplete="email" />
         </div>
 
-        <div>
-          <label htmlFor={`${formId}-tel`} className="block text-sm font-medium text-foreground mb-1">
-            Teléfono *
-          </label>
-          <input
-            id={`${formId}-tel`}
-            name="telefono"
-            type="tel"
-            required
-            autoComplete="tel"
-            className="w-full px-3 py-2 border border-border rounded-lg bg-input text-foreground placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-ring focus:outline-primary-500"
-          />
-        </div>
+        <Input label="Teléfono *" name="telefono" type="tel" required autoComplete="tel" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor={`${formId}-fecha`} className="block text-sm font-medium text-foreground mb-1">
-              Fecha *
-            </label>
-            <input
-              id={`${formId}-fecha`}
-              name="fecha"
-              type="date"
-              required
-              min={new Date().toISOString().split("T")[0]}
-className="w-full px-3 py-2 border border-border rounded-lg bg-input text-foreground placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-ring focus:outline-primary-500"
-            />
-          </div>
-          <div>
-            <label htmlFor={`${formId}-personas`} className="block text-sm font-medium text-foreground mb-1">
-              Personas *
-            </label>
-            <select
-              id={`${formId}-personas`}
-              name="personas"
-              required
-              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground placeholder:text-gray-500 dark:placeholder:text-gray-400"
-            >
-              <option value="2">2 personas</option>
-              <option value="1">1 persona</option>
-              <option value="3">3 personas</option>
-              <option value="4">4 personas</option>
-              <option value="5">5 personas</option>
-              <option value="6">6 personas</option>
-            </select>
-          </div>
+          <Input
+            label="Fecha *"
+            name="fecha"
+            type="date"
+            required
+            min={new Date().toISOString().split("T")[0]}
+          />
+          <Select label="Personas *" name="personas" required defaultValue="2">
+            <option value="2">2 personas</option>
+            <option value="1">1 persona</option>
+            <option value="3">3 personas</option>
+            <option value="4">4 personas</option>
+            <option value="5">5 personas</option>
+            <option value="6">6 personas</option>
+          </Select>
         </div>
 
-        <div>
-          <label htmlFor={`${formId}-notas`} className="block text-sm font-medium text-foreground mb-1">
-            Notas (opcional)
-          </label>
-          <textarea
-            id={`${formId}-notas`}
-            name="notas"
-            rows={3}
-            className="w-full px-3 py-2 border border-border rounded-lg bg-input text-foreground placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-ring focus:outline-primary-500"
-            placeholder="Ej: terraza, cumpleaños, etc."
-          ></textarea>
-        </div>
+        <Textarea
+          label="Notas (opcional)"
+          name="notas"
+          rows={3}
+          placeholder="Ej: terraza, cumpleaños, etc."
+        />
 
         <button
           type="submit"
