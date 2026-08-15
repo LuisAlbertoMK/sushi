@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 
 const features = [
   { title: "🍱 Menú Digital", desc: "Explorá nuestros rolls, nigiris y especiales frescos", href: "/menu" },
+  { title: "🎡 Mesa Kaiten", desc: "Girá la mesa y elegí tu plato, como en Japón", href: "/kaiten" },
   { title: "🛒 Pedidos Online", desc: "Hacé tu pedido y coordiná la entrega", href: "/pedidos" },
   { title: "📅 Reservas", desc: "Reservá mesa para compartir sushi", href: "/reservas" },
   { title: "🎁 Promociones", desc: "Ofertas y publicaciones nuevas", href: "/promos" },
@@ -106,7 +107,7 @@ export default function LandingPage() {
 
       {/* Features */}
       <Reveal delay={80}>
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
         {features.map((f) => (
           <Link key={f.href} href={f.href} className="bg-card p-6 rounded-xl shadow-md text-center hover:shadow-lg transition group border border-border">
             <h3 className="font-bold text-lg mb-2 group-hover:text-primary-700 dark:group-hover:text-primary-400">{f.title}</h3>
