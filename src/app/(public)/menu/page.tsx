@@ -52,9 +52,10 @@ async function getCategorias(): Promise<Categoria[]> {
 export default async function MenuPage({
   searchParams,
 }: {
-  searchParams: { categoria?: string };
+  searchParams: Promise<{ categoria?: string }>;
 }) {
-  const categoriaSeleccionada = searchParams.categoria || undefined;
+  const { categoria } = await searchParams;
+  const categoriaSeleccionada = categoria || undefined;
 
   return (
     <div className="space-y-8">

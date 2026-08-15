@@ -21,9 +21,10 @@ async function getProducto(id: string) {
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const producto = await getProducto(params.id);
+  const { id } = await params;
+  const producto = await getProducto(id);
   if (!producto) {
     return { title: "Producto no encontrado | Sushi Bar" };
   }
@@ -42,8 +43,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductoPage({ params }: { params: { id: string } }) {
-  const producto = await getProducto(params.id);
+export default async function ProductoPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const producto = await getProducto(id);
   if (!producto) notFound();
 
   return (
@@ -54,12 +56,12 @@ export default async function ProductoPage({ params }: { params: { id: string } 
           precio: producto.precio,
           imagen: producto.imagen,
           categoria: producto.categoria.nombre,
-          url: `/menu/${params.id}`,
+          url: `/menu/${id}`,
       })} />
       <JsonLd data={breadcrumbSchema([
           { name: "Inicio", url: "/" },
           { name: "Menú", url: "/menu" },
-          { name: producto.nombre, url: `/menu/${params.id}` },
+          { name: producto.nombre, url: `/menu/${id}` },
       ])} />
       <Link href="/menu" className="text-primary-700 hover:underline mb-4 inline-block">
         ← Volver al menú

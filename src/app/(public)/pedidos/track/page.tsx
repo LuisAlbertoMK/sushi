@@ -1,7 +1,8 @@
 "use client";
 // src/app/(public)/pedidos/track/page.tsx — Tracking de pedido por número
 // confidence: high
-import { Suspense, FormEvent, useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { PedidoStepper } from "@/components/ui/PedidoStepper";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { formatearPrecio } from "@/lib/utils";
@@ -17,17 +18,22 @@ async function trackPedido(numero: string) {
   return res.json();
 }
 
-export default function TrackPage({
-  searchParams,
-}: {
-  searchParams: { numero?: string };
-}) {
-  const numero = searchParams.numero;
+export default function TrackPage() {
+  return (
+    <Suspense fallback={<div className="max-w-3xl mx-auto space-y-8" aria-busy="true" />}>
+      <TrackContent />
+    </Suspense>
+  );
+}
+
+function TrackContent() {
+  const searchParams = useSearchParams();
+  const numero = searchParams.get("numero") || undefined;
 
   return (
     <div className="max-w-3xl mx-auto space-y-8">
       <h1 className="font-display text-3xl font-bold text-primary-700 mb-2">📍 Seguimiento de pedido</h1>
-      <p className="text-gray-600">Ingresá tu número de pedido para ver el estado</p>
+      <p className="text-muted-foreground">Ingresá tu número de pedido para ver el estado</p>
 
       <form action="/pedidos/track" className="flex gap-3 mt-4">
         <input
