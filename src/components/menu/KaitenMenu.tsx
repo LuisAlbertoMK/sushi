@@ -734,7 +734,7 @@ export function KaitenMenu() {
         onClick={() => openModal(p)}
         aria-label={`Ver detalles de ${p.nombre} (${fmt(p.precio)})`}
         className="kaiten-belt-item flex flex-col items-center gap-[7px] bg-none border-none cursor-pointer"
-        style={{ width: "clamp(84px, 24vw, 112px)", flex: "0 0 auto", padding: "8px 9px 10px", borderRadius: 14, border: "1px solid transparent", background: "linear-gradient(180deg,rgba(20,13,9,.10),rgba(20,13,9,.34))", color: "inherit", fontFamily: "inherit", transition: "background .2s ease, border-color .2s ease, filter .2s ease" }}
+        style={{ width: "clamp(96px, min(22vw, 20vh), 200px)", flex: "0 0 auto", padding: "8px 9px 10px", borderRadius: 14, border: "1px solid transparent", background: "linear-gradient(180deg,rgba(20,13,9,.10),rgba(20,13,9,.34))", color: "inherit", fontFamily: "inherit", transition: "background .2s ease, border-color .2s ease, filter .2s ease" }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = "rgba(255,255,255,.07)";
           e.currentTarget.style.borderColor = "rgba(201,161,90,.48)";
@@ -746,20 +746,20 @@ export function KaitenMenu() {
           e.currentTarget.style.filter = "";
         }}
       >
-        <span className="w-[60px] h-[60px]" style={{ filter: "drop-shadow(0 7px 5px rgba(0,0,0,.34))" }}>
+        <span className="w-[64%] aspect-square" style={{ filter: "drop-shadow(0 7px 5px rgba(0,0,0,.34))" }}>
           <PorcelainPlate className={pulsingId === p.id ? "plate-pulse" : ""} rimColor={tier.border} imageUrl={p.imagen || undefined} alt={p.nombre}>
             <span style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,.3))" }} aria-hidden="true">{r.category.emoji || "🍽️"}</span>
           </PorcelainPlate>
         </span>
         <span className="text-center leading-snug">
-          <span className="block text-[12px] transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+          <span className="block text-[clamp(12px,2vw,16px)] transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
             style={{ color: pulsingId === p.id ? THEME.gold : THEME.ink }}
             onMouseEnter={(e) => (e.currentTarget.style.color = THEME.gold)}
             onMouseLeave={(e) => (e.currentTarget.style.color = THEME.ink)}
           >
             {p.nombre}
           </span>
-          <span className="block text-[12.5px] font-bold" style={{ color: THEME.gold }}>
+          <span className="block text-[clamp(12px,2vw,16px)] font-bold" style={{ color: THEME.gold }}>
             {fmt(p.precio)}
           </span>
         </span>
