@@ -734,7 +734,7 @@ export function KaitenMenu() {
         onClick={() => openModal(p)}
         aria-label={`Ver detalles de ${p.nombre} (${fmt(p.precio)})`}
         className="kaiten-belt-item flex flex-col items-center gap-[7px] bg-none border-none cursor-pointer"
-        style={{ width: 112, flex: "0 0 auto", padding: "8px 9px 10px", borderRadius: 14, border: "1px solid transparent", background: "linear-gradient(180deg,rgba(20,13,9,.10),rgba(20,13,9,.34))", color: "inherit", fontFamily: "inherit", transition: "background .2s ease, border-color .2s ease, filter .2s ease" }}
+        style={{ width: "clamp(84px, 24vw, 112px)", flex: "0 0 auto", padding: "8px 9px 10px", borderRadius: 14, border: "1px solid transparent", background: "linear-gradient(180deg,rgba(20,13,9,.10),rgba(20,13,9,.34))", color: "inherit", fontFamily: "inherit", transition: "background .2s ease, border-color .2s ease, filter .2s ease" }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = "rgba(255,255,255,.07)";
           e.currentTarget.style.borderColor = "rgba(201,161,90,.48)";
@@ -809,7 +809,7 @@ export function KaitenMenu() {
           </span>
         </div>
         <h2
-          className="text-2xl font-bold mt-2 mb-1 tracking-wide"
+          className="text-[clamp(20px,4vw,30px)] font-bold mt-2 mb-1 tracking-wide"
           style={{ color: THEME.cream, fontFamily: "Georgia, 'Hiragino Mincho ProN', serif" }}
         >
           廻る寿司 · Menú Kaiten
@@ -868,7 +868,7 @@ export function KaitenMenu() {
               onPointerLeave={() => { wheelHoverPausedRef.current = false; }}
               className="relative mx-auto outline-none cursor-grab active:cursor-grabbing select-none"
               style={{
-                width: "clamp(280px, 86vw, 520px)",
+                width: "clamp(280px, min(88vw, 120vh), 820px)",
                 aspectRatio: "5 / 2.5",
                 touchAction: "none",
                 marginTop: 18,
@@ -893,7 +893,7 @@ export function KaitenMenu() {
               >
                 <span
                   className="leading-none"
-                  style={{ color: THEME.gold, fontFamily: "Georgia, 'Hiragino Mincho ProN', serif", fontSize: "clamp(26px,5.5vw,38px)" }}
+                  style={{ color: THEME.gold, fontFamily: "Georgia, 'Hiragino Mincho ProN', serif", fontSize: "clamp(26px, min(5.5vw, 5vh), 56px)" }}
                 >
                   鮨
                 </span>
@@ -918,8 +918,8 @@ export function KaitenMenu() {
                   title={cat.nombre}
                   className="absolute top-0 left-0 cursor-pointer will-change-transform focus-visible:outline-none"
                   style={{
-                    width: "clamp(70px,16vw,88px)",
-                    height: "clamp(70px,16vw,88px)",
+                    width: "clamp(58px, min(15vw, 13vh), 112px)",
+                    height: "clamp(58px, min(15vw, 13vh), 112px)",
                     padding: 0,
                     border: "none",
                     background: "none",
@@ -1022,7 +1022,7 @@ export function KaitenMenu() {
             </button>
             <h3
               className="m-0"
-              style={{ color: "#fff7e8", fontFamily: "var(--font-bebas, Impact, sans-serif)", fontSize: 24, textTransform: "uppercase", letterSpacing: ".03em", margin: 0 }}
+              style={{ color: "#fff7e8", fontFamily: "var(--font-bebas, Impact, sans-serif)", fontSize: "clamp(20px, 4vw, 32px)", textTransform: "uppercase", letterSpacing: ".03em", margin: 0 }}
             >
               {beltTitle}
             </h3>
