@@ -14,6 +14,7 @@ interface Producto {
   id: string;
   nombre: string;
   descripcion: string | null;
+  ingredientes: string | null;
   precio: number;
   imagen: string | null;
   categoriaId: string;
@@ -1260,6 +1261,10 @@ export function KaitenMenu() {
               <h3 id="kaiten-modal-title" className="font-bebas text-[27px] leading-[1.12] my-0 mb-[7px] uppercase" style={{ color: THEME.cream }}>{modalProduct.nombre}</h3>
               <div className="text-[19px] font-extrabold mb-4" style={{ color: "#e8cf9a" }}>{fmt(modalProduct.precio)}</div>
               <div className="grid gap-3">
+                <div className="rounded-xl border p-[11px_13px]" style={{ background: "#191d24", borderColor: "#303640" }}>
+                  <div className="text-[10px] uppercase tracking-[.1em] mb-1" style={{ color: THEME.muted }}>Ingredientes</div>
+                  <div className="text-[13px] leading-[1.55]" style={{ color: "#e7e0d2" }}>{modalProduct.ingredientes || "Sin ingredientes especificados."}</div>
+                </div>
                 <div className="rounded-xl border p-[11px_13px]" style={{ background: "#191d24", borderColor: "#303640" }}>
                   <div className="text-[10px] uppercase tracking-[.1em] mb-1" style={{ color: THEME.muted }}>Descripción</div>
                   <div className="text-[13px] leading-[1.55]" style={{ color: "#e7e0d2" }}>{modalProduct.descripcion || "Sin descripción disponible."}</div>

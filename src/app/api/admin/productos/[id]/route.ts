@@ -35,6 +35,7 @@ export async function PATCH(
       data: {
         nombre: parsed.data.nombre,
         descripcion: parsed.data.descripcion,
+        ingredientes: parsed.data.ingredientes,
         precio: parsed.data.precio,
         categoriaId: parsed.data.categoriaId,
         imagen: parsed.data.imagen,

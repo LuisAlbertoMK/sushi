@@ -37,6 +37,7 @@ model Producto {
   id          String  @id @default(cuid())
   nombre      String
   descripcion String?
+  ingredientes String?
   precio      Float
   imagen      String?
   categoriaId String

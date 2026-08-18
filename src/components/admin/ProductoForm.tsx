@@ -29,6 +29,7 @@ export function ProductoForm({ categorias }: Props) {
     const payload = {
       nombre: data.get("nombre") as string,
       descripcion: (data.get("descripcion") as string) || undefined,
+      ingredientes: (data.get("ingredientes") as string) || undefined,
       precio: parseFloat(data.get("precio") as string),
       categoriaId: data.get("categoriaId") as string,
       imagen: (data.get("imagen") as string) || undefined,
@@ -70,6 +71,9 @@ export function ProductoForm({ categorias }: Props) {
         </div>
         <div className="md:col-span-2">
           <input name="descripcion" placeholder="Descripción" className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground text-sm" />
+        </div>
+        <div className="md:col-span-2">
+          <input name="ingredientes" placeholder="Ingredientes (separados por coma)" className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground text-sm" />
         </div>
         <div>
           <select name="categoriaId" required className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground text-sm">

@@ -12,6 +12,7 @@ export const categoriaSchema = z.object({
 export const productoSchema = z.object({
   nombre: z.string().min(2, "El nombre es requerido"),
   descripcion: z.string().optional(),
+  ingredientes: z.string().optional(),
   precio: z.number().min(0.01, "El precio debe ser mayor a 0"),
   categoriaId: z.string().min(1, "Debe seleccionar una categoría"),
   imagen: z.string().url("Debe ser una URL válida").optional(),
