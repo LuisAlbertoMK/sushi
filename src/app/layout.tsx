@@ -1,7 +1,7 @@
 // src/app/layout.tsx — Root layout con metadata global + SEO
 // confidence: high
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Noto_Sans_JP } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans_JP, Bebas_Neue, Permanent_Marker } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -27,6 +27,10 @@ const notoSansJP = Noto_Sans_JP({
   weight: ["400", "500", "700", "900"],
   display: "swap",
 });
+
+// Fuentes display del demo kaiten sushictory (Bebas para titulares, Permanent Marker para acentos)
+const bebasNeue = Bebas_Neue({ variable: "--font-bebas", subsets: ["latin"], weight: "400", display: "swap" });
+const permanentMarker = Permanent_Marker({ variable: "--font-brush", subsets: ["latin"], weight: "400", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://sushi-bar.ar"),
@@ -96,7 +100,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es-AR" className={`${geistSans.variable} ${geistMono.variable} ${notoSansJP.variable} h-full antialiased`}>
+    <html lang="es-AR" className={`${geistSans.variable} ${geistMono.variable} ${notoSansJP.variable} ${bebasNeue.variable} ${permanentMarker.variable} h-full antialiased`}>
       <head>
         {/* Speculation Rules API — prerenderiza rutas clave al hover (estándar web, 0 librerías)
             confidence: high — solo rutas públicas estáticas; NO admin (auth) ni data-dinámicas */}

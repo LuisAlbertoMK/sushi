@@ -12,14 +12,13 @@ export const metadata: Metadata = {
 
 export default function KaitenPage() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 kaiten-page">
       <div className="text-center">
-        <h1 className="font-display text-4xl font-extrabold text-foreground mb-3">
+        <h1 className="font-bebas text-4xl font-extrabold text-foreground mb-3 uppercase">
           🎡 Mesa Kaiten
         </h1>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Como en un restaurante japonés: los platos giran sobre la mesa.
-          Tocá un plato para detenerlo y ver qué hay dentro.
+          Explorá por categoría · tocá un platillo para ver detalles y pedirlo.
         </p>
         <Link
           href="/menu"

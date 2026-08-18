@@ -173,12 +173,6 @@ body {
   to { background-position: 56px 0; }
 }
 
-/* Cinta transportadora del submenú: loop infinito (items duplicados x2) */
-@keyframes kaiten-belt-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
 /* Pulso al tomar un platillo (agregado al carrito) */
 @keyframes kaiten-pulse-taken {
   0% { transform: scale(1); }
@@ -194,3 +188,147 @@ body {
     animation: none !important;
   }
 }
+
+/* ── Kaiten sushictory: utilidades de fuente ── */
+.font-bebas { font-family: var(--font-bebas, Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif); }
+.font-brush { font-family: var(--font-brush, 'Comic Sans MS', 'Noto Sans JP', sans-serif); }
+
+/* H1 de la página kaiten: display sushictory (solo oscuro para no romper light) */
+.kaiten-page h1 { font-family: var(--font-bebas, Impact, sans-serif); text-transform: uppercase; letter-spacing: .04em; }
+html.dark .kaiten-page h1 { color: #fff7e8; text-shadow: 2px 2px 0 #6f1715, 0 4px 12px rgba(0,0,0,.5); }
+
+/* Entrada del modal y del toast (referencia sushictory) */
+@keyframes kaiten-modal-in {
+  from { opacity: 0; transform: translateY(12px) scale(.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes kaiten-toast-in {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ══ Kaiten sushictory: plato de porcelana 3D (mesa + cinta + búsqueda) ══
+   Variables scoped al .kaiten-stage (no contaminan el resto del sitio) */
+.kaiten-stage {
+  --porcelain-1: #fffdf8;
+  --porcelain-2: #efe6d2;
+  --porcelain-3: #cfc3a4;
+  --gold: #c9a15a;
+  --gold-light: #e8cf9a;
+  --ink: #ece5d6;
+  --muted: #9aa0ab;
+  --cream: #efe4cf;
+}
+.plate-3d { position: relative; width: 100%; height: 100%; display: block; }
+.plate-shadow {
+  position: absolute; left: 8%; right: 8%; bottom: -14%; height: 22%;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,.5), rgba(0,0,0,0) 72%);
+  filter: blur(1.5px); z-index: 1;
+}
+.plate-face {
+  position: relative; z-index: 2; width: 100%; height: 100%; border-radius: 50%;
+  background: radial-gradient(circle at 32% 26%, var(--porcelain-1), var(--porcelain-2) 55%, var(--porcelain-3) 100%);
+  border: 3px solid var(--rim, var(--gold));
+  box-shadow: inset 0 -4px 7px rgba(0,0,0,.20), inset 0 3px 4px rgba(255,255,255,.9), 0 4px 9px rgba(0,0,0,.4);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1px; color: #2c2519; overflow: hidden;
+  transition: box-shadow .28s ease, transform .28s ease, filter .28s ease;
+}
+.plate-face .emoji { font-size: 19px; line-height: 1; filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
+.plate-face .cat-name {
+  position: absolute; left: 50%; bottom: 7px; transform: translateX(-50%);
+  z-index: 2; white-space: nowrap; max-width: 92%;
+  overflow: hidden; text-overflow: ellipsis;
+  padding: 2px 5px; border-radius: 999px;
+  background: rgba(255,255,255,.82); backdrop-filter: blur(2px);
+  font-size: 9.5px; letter-spacing: .01em; font-weight: 600;
+}
+.plate-face .food-img {
+  width: 74%; height: 74%; object-fit: cover; display: block;
+  border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,.28);
+  filter: saturate(1.05) contrast(1.03);
+}
+.plate-pulse .plate-face { animation: kaiten-pulse-taken .5s ease; }
+
+/* ══ Kaiten sushictory: cinta step-snap (RAF) ══ */
+.kaiten-belt-wrap {
+  touch-action: none; cursor: grab; outline: none;
+  -webkit-user-select: none; user-select: none;
+}
+.kaiten-belt-wrap:active { cursor: grabbing; }
+.kaiten-belt-wrap:focus-visible {
+  box-shadow: 0 0 0 3px var(--gold, #c9a15a), 0 14px 28px rgba(0,0,0,.46), inset 0 3px 10px rgba(0,0,0,.5) !important;
+}
+.kaiten-belt-track {
+  display: flex; width: max-content; will-change: transform;
+  position: relative; z-index: 2;
+}
+.kaiten-belt-item { will-change: transform; }
+.kaiten-belt-item:focus-visible {
+  outline: none;
+  border-color: var(--gold-light, #e8cf9a) !important;
+  box-shadow: 0 0 0 3px rgba(201,161,90,.22) !important;
+}
+
+/* ══ Kaiten sushictory: búsqueda de platillos ══ */
+.kaiten-search { position: relative; max-width: 560px; margin: 0 auto; }
+.kaiten-search > span {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  opacity: .55; pointer-events: none; z-index: 1;
+}
+.kaiten-search input {
+  width: 100%; height: 40px; border-radius: 11px;
+  border: 1px solid #303640; background: #1a1f26;
+  color: var(--ink, #ece5d6); padding: 0 12px 0 34px; outline: none;
+  font-family: inherit; font-size: 13px;
+}
+.kaiten-search input:focus {
+  border-color: var(--gold, #c9a15a);
+  box-shadow: 0 0 0 3px rgba(201,161,90,.12);
+}
+.kaiten-search-summary {
+  font-size: 11px; color: var(--muted, #9aa0ab);
+  text-align: center; min-height: 16px; margin: 7px 0 0;
+}
+.kaiten-search-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+  gap: clamp(10px, 1.4vw, 18px);
+  justify-items: center;
+  padding: clamp(10px, 2vw, 20px) 0;
+}
+.kaiten-search-card {
+  width: 112px; padding: 8px 9px 10px; border-radius: 14px;
+  background: linear-gradient(180deg, rgba(20,13,9,.10), rgba(20,13,9,.34));
+  border: 1px solid transparent; color: inherit; font-family: inherit;
+  transition: background .2s ease, border-color .2s ease, filter .2s ease;
+}
+.kaiten-search-card:hover {
+  background: rgba(255,255,255,.07);
+  border-color: rgba(201,161,90,.48);
+  filter: brightness(1.08);
+}
+.kaiten-search-card:focus-visible {
+  outline: none;
+  border-color: var(--gold-light, #e8cf9a);
+  box-shadow: 0 0 0 3px rgba(201,161,90,.22);
+}
+.kaiten-search-empty {
+  display: flex; min-height: 140px;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 24px;
+  color: rgba(247,234,211,.72);
+}
+.kaiten-search-empty strong {
+  display: block; color: #f7ead3;
+  font-family: "Bebas Neue", Impact, sans-serif;
+  font-size: 22px; letter-spacing: .04em; margin-bottom: 4px;
+}
+
+/* Shake al agregar (feedback de validación de cantidad) */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  35% { transform: translateX(-3px); }
+  70% { transform: translateX(3px); }
+}
+.quantity-invalid { animation: shake .24s ease; }
