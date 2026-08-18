@@ -339,14 +339,19 @@ export function KaitenMenu() {
         : "";
 
   // ─── Geometría de la mesa (elipse) ───
-  // deps: [categorias.length] — debe recalcularse cuando el DOM del wheel-wrap existe
-  // (tras cargar datos). Con [] corría durante loading (ref null) y rx/ry quedaban en 0.
+  // deps: [categorias.length, view] — debe recalcularse cuando el DOM del wheel-wrap existe
+  // (tras cargar datos o al VOLVER de la cinta, donde el wrap se desmonta/remonta y la
+  // CSS var --kaiten-plate se pierde). Con [] corría durante loading (ref null) y rx/ry
+  // quedaban en 0; sin "view" el tamaño de plato volvía al fallback al regresar.
   useEffect(() => {
     const updateGeometry = () => {
       const el = wheelWrapRef.current;
       if (!el) return;
       const r = el.getBoundingClientRect();
       const first = plateElsRef.current.values().next().value as HTMLButtonElement | undefined;
+      // Plato proporcional al espacio de la mesa (~19% del ancho), con piso/techo
+      const plateSize = Math.round(Math.min(158, Math.max(52, r.width * 0.19)));
+      el.style.setProperty("--kaiten-plate", `${plateSize}px`);
       geoRef.current = {
         cx: r.width / 2,
         cy: r.height / 2,
@@ -358,7 +363,7 @@ export function KaitenMenu() {
     updateGeometry();
     window.addEventListener("resize", updateGeometry);
     return () => window.removeEventListener("resize", updateGeometry);
-  }, [categorias.length]);
+  }, [categorias.length, view]);
 
   // Posicionar platos según ángulo (profundidad simulada: escala + zIndex)
   const updatePlates = () => {
@@ -735,7 +740,7 @@ export function KaitenMenu() {
         onClick={() => openModal(p)}
         aria-label={`Ver detalles de ${p.nombre} (${fmt(p.precio)})`}
         className="kaiten-belt-item flex flex-col items-center gap-[7px] bg-none border-none cursor-pointer"
-        style={{ width: "clamp(96px, min(22vw, 20vh), 200px)", flex: "0 0 auto", padding: "8px 9px 10px", borderRadius: 14, border: "1px solid transparent", background: "linear-gradient(180deg,rgba(20,13,9,.10),rgba(20,13,9,.34))", color: "inherit", fontFamily: "inherit", transition: "background .2s ease, border-color .2s ease, filter .2s ease" }}
+        style={{ width: "clamp(96px, min(calc((100vw - 48px) / 6), 24vh), 240px)", flex: "0 0 auto", padding: "8px 9px 10px", borderRadius: 14, border: "1px solid transparent", background: "linear-gradient(180deg,rgba(20,13,9,.10),rgba(20,13,9,.34))", color: "inherit", fontFamily: "inherit", transition: "background .2s ease, border-color .2s ease, filter .2s ease" }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = "rgba(255,255,255,.07)";
           e.currentTarget.style.borderColor = "rgba(201,161,90,.48)";
@@ -919,8 +924,8 @@ export function KaitenMenu() {
                   title={cat.nombre}
                   className="absolute top-0 left-0 cursor-pointer will-change-transform focus-visible:outline-none"
                   style={{
-                    width: "clamp(58px, min(15vw, 13vh), 112px)",
-                    height: "clamp(58px, min(15vw, 13vh), 112px)",
+                    width: "var(--kaiten-plate, clamp(58px, min(15vw, 13vh), 112px))",
+                    height: "var(--kaiten-plate, clamp(58px, min(15vw, 13vh), 112px))",
                     padding: 0,
                     border: "none",
                     background: "none",
@@ -1239,7 +1244,7 @@ export function KaitenMenu() {
         >
           <div
             role="dialog" aria-modal="true" aria-labelledby="kaiten-modal-title"
-            className="w-[min(520px,100%)] max-h-[min(760px,calc(100dvh-36px))] overflow-auto rounded-[22px] border"
+            className="w-[min(560px,100%)] max-h-[calc(100dvh-36px)] overflow-auto rounded-[22px] border"
             style={{ background: "linear-gradient(180deg,#20252d,#171b21)", borderColor: "#3a414b", boxShadow: "0 28px 80px rgba(0,0,0,.65)", animation: "kaiten-modal-in .22s ease both" }}
           >
             <div className="flex justify-end p-[10px_10px_0]">
@@ -1247,7 +1252,7 @@ export function KaitenMenu() {
                 className="w-[38px] h-[38px] rounded-full border text-[20px] leading-none cursor-pointer hover:border-[var(--gold,#c9a15a)] hover:bg-[#2b3038]"
                 style={{ borderColor: "#3a414b", background: "#242a32", color: THEME.cream }}>×</button>
             </div>
-            <div className="mx-auto w-[170px] aspect-square grid place-items-center rounded-full overflow-hidden text-[70px]"
+            <div className="mx-auto w-[clamp(120px,26vw,170px)] aspect-square grid place-items-center rounded-full overflow-hidden text-[clamp(48px,9vw,70px)]"
               style={{ background: "radial-gradient(circle at 34% 26%, #fff, #efe6d2 58%, #cfc3a4 100%)", border: "7px solid " + tierFor(modalProduct.precio).border, boxShadow: "inset 0 -10px 16px rgba(0,0,0,.15), 0 18px 35px rgba(0,0,0,.4)" }}>
               {modalProduct.imagen ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -1256,30 +1261,30 @@ export function KaitenMenu() {
                 <span style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,.3))" }} aria-hidden="true">{modalCategory?.emoji}</span>
               )}
             </div>
-            <div className="p-[18px_22px_22px]">
-              <div className="uppercase tracking-[.13em] text-[10px] font-extrabold mb-1.5" style={{ color: THEME.goldLight }}>{modalCategory?.emoji} {modalCategory?.nombre}</div>
-              <h3 id="kaiten-modal-title" className="font-bebas text-[27px] leading-[1.12] my-0 mb-[7px] uppercase" style={{ color: THEME.cream }}>{modalProduct.nombre}</h3>
-              <div className="text-[19px] font-extrabold mb-4" style={{ color: "#e8cf9a" }}>{fmt(modalProduct.precio)}</div>
+            <div className="p-[clamp(14px,3vw,22px)]">
+              <div className="uppercase tracking-[.13em] text-[clamp(9px,1.6vw,10px)] font-extrabold mb-1.5" style={{ color: THEME.goldLight }}>{modalCategory?.emoji} {modalCategory?.nombre}</div>
+              <h3 id="kaiten-modal-title" className="font-bebas text-[clamp(22px,4.5vw,27px)] leading-[1.12] my-0 mb-[7px] uppercase" style={{ color: THEME.cream }}>{modalProduct.nombre}</h3>
+              <div className="text-[clamp(16px,3vw,19px)] font-extrabold mb-4" style={{ color: "#e8cf9a" }}>{fmt(modalProduct.precio)}</div>
               <div className="grid gap-3">
-                <div className="rounded-xl border p-[11px_13px]" style={{ background: "#191d24", borderColor: "#303640" }}>
-                  <div className="text-[10px] uppercase tracking-[.1em] mb-1" style={{ color: THEME.muted }}>Ingredientes</div>
-                  <div className="text-[13px] leading-[1.55]" style={{ color: "#e7e0d2" }}>{modalProduct.ingredientes || "Sin ingredientes especificados."}</div>
+                <div className="rounded-xl border p-[clamp(9px,1.8vw,13px)]" style={{ background: "#191d24", borderColor: "#303640" }}>
+                  <div className="text-[clamp(9px,1.6vw,10px)] uppercase tracking-[.1em] mb-1" style={{ color: THEME.muted }}>Ingredientes</div>
+                  <div className="text-[clamp(12px,2vw,13.5px)] leading-[1.55]" style={{ color: "#e7e0d2" }}>{modalProduct.ingredientes || "Sin ingredientes especificados."}</div>
                 </div>
-                <div className="rounded-xl border p-[11px_13px]" style={{ background: "#191d24", borderColor: "#303640" }}>
-                  <div className="text-[10px] uppercase tracking-[.1em] mb-1" style={{ color: THEME.muted }}>Descripción</div>
-                  <div className="text-[13px] leading-[1.55]" style={{ color: "#e7e0d2" }}>{modalProduct.descripcion || "Sin descripción disponible."}</div>
+                <div className="rounded-xl border p-[clamp(9px,1.8vw,13px)]" style={{ background: "#191d24", borderColor: "#303640" }}>
+                  <div className="text-[clamp(9px,1.6vw,10px)] uppercase tracking-[.1em] mb-1" style={{ color: THEME.muted }}>Descripción</div>
+                  <div className="text-[clamp(12px,2vw,13.5px)] leading-[1.55]" style={{ color: "#e7e0d2" }}>{modalProduct.descripcion || "Sin descripción disponible."}</div>
                 </div>
-                <div className="rounded-xl border p-[11px_13px]" style={{ background: "#191d24", borderColor: "#303640" }}>
-                  <div className="text-[10px] uppercase tracking-[.1em] mb-1" style={{ color: THEME.muted }}>Tier de precio</div>
-                  <div className="text-[13px] leading-[1.55]" style={{ color: "#e7e0d2" }}>Plato {tierFor(modalProduct.precio).name}</div>
+                <div className="rounded-xl border p-[clamp(9px,1.8vw,13px)]" style={{ background: "#191d24", borderColor: "#303640" }}>
+                  <div className="text-[clamp(9px,1.6vw,10px)] uppercase tracking-[.1em] mb-1" style={{ color: THEME.muted }}>Tier de precio</div>
+                  <div className="text-[clamp(12px,2vw,13.5px)] leading-[1.55]" style={{ color: "#e7e0d2" }}>Plato {tierFor(modalProduct.precio).name}</div>
                 </div>
               </div>
               <div className="flex gap-2.5 mt-4">
                 <button type="button" onClick={closeModal}
-                  className="flex-1 min-h-[44px] rounded-[11px] cursor-pointer font-semibold text-[13px] hover:border-[var(--gold,#c9a15a)]"
+                  className="flex-1 min-h-[44px] rounded-[11px] cursor-pointer font-semibold text-[clamp(12px,2vw,13px)] hover:border-[var(--gold,#c9a15a)]"
                   style={{ border: "1px solid #3a414b", background: "#242a32", color: THEME.cream }}>Seguir explorando</button>
                 <button type="button" onClick={addFromModal}
-                  className="flex-1 min-h-[44px] rounded-[11px] cursor-pointer font-semibold text-[13px] hover:brightness-[1.08]"
+                  className="flex-1 min-h-[44px] rounded-[11px] cursor-pointer font-semibold text-[clamp(12px,2vw,13px)] hover:brightness-[1.08]"
                   style={{ border: "1px solid #b68d45", background: "linear-gradient(180deg,#c9a15a,#9d7638)", color: "#17130d" }}>Agregar a la orden</button>
               </div>
             </div>
