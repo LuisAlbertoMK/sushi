@@ -63,6 +63,7 @@ export function Footer() {
           {/* Servicios */}
           <div className="space-y-3">
             <h4 className="text-white font-bold mb-3">Servicios</h4>
+            <Link href="/kaiten" className="block text-sm hover:text-primary-300 transition">Menú Kaiten</Link>
             <Link href="/menu" className="block text-sm hover:text-primary-300 transition">Menú Digital</Link>
             <Link href="/pedidos" className="block text-sm hover:text-primary-300 transition">Pedidos Online</Link>
             <Link href="/reservas" className="block text-sm hover:text-primary-300 transition">Reservas</Link>

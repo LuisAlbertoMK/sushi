@@ -31,6 +31,12 @@ export function Header() {
             🍱 Menú
           </Link>
           <Link
+            href="/kaiten"
+            className="text-foreground hover:text-primary-700 dark:hover:text-primary-400 font-medium transition-colors focus:outline-none focus:text-primary-700"
+          >
+            🍥 Kaiten
+          </Link>
+          <Link
             href="/promos"
             className="text-foreground hover:text-primary-700 dark:hover:text-primary-400 font-medium transition-colors focus:outline-none focus:text-primary-700"
           >
@@ -90,6 +96,7 @@ function MobileMenu() {
 
   const links = [
     { href: "/menu", label: "🍱 Menú" },
+    { href: "/kaiten", label: "🍥 Kaiten" },
     { href: "/promos", label: "🎁 Promos" },
     { href: "/reservas", label: "📅 Reservas" },
     { href: "/pedidos", label: "🛒 Pedir Ahora" },

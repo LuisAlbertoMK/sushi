@@ -236,8 +236,7 @@ html.dark .kaiten-page h1 { color: #fff7e8; text-shadow: 2px 2px 0 #6f1715, 0 4p
 }
 .plate-face .emoji { font-size: 19px; line-height: 1; filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
 .plate-face .cat-name {
-  position: absolute; left: 50%; bottom: 7px; transform: translateX(-50%);
-  z-index: 2; white-space: nowrap; max-width: 92%;
+  white-space: nowrap; max-width: 92%;
   overflow: hidden; text-overflow: ellipsis;
   padding: 2px 5px; border-radius: 999px;
   background: rgba(255,255,255,.82); backdrop-filter: blur(2px);
