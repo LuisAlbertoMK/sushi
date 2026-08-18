@@ -181,6 +181,7 @@ export function KaitenMenu() {
   const beltWrapWidthRef = useRef(0);
   const beltAnimationRef = useRef(0);
   const beltHoverPausedRef = useRef(false);
+  const wheelHoverPausedRef = useRef(false);
   const geoRef = useRef<Geo>({ cx: 0, cy: 0, rx: 0, ry: 0, plateHalf: 36 });
   const angleRef = useRef(0);
   const velocityRef = useRef(0);
@@ -199,10 +200,8 @@ export function KaitenMenu() {
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReducedMotion(mq.matches);
-    setPlaying(!mq.matches);
     const handler = (e: MediaQueryListEvent) => {
       setReducedMotion(e.matches);
-      setPlaying(!e.matches);
     };
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
@@ -328,6 +327,9 @@ export function KaitenMenu() {
     return [];
   }, [searchMode, searchResults, selected]);
 
+  // Búsqueda en cinta: track FINITO (1 copia, se detiene en el último item) vs loop x3 de categoría
+  const beltFinite = searchMode === "belt";
+
   const beltTitle =
     searchMode === "belt"
       ? `Resultados para "${searchQuery}"`
@@ -343,12 +345,13 @@ export function KaitenMenu() {
       const el = wheelWrapRef.current;
       if (!el) return;
       const r = el.getBoundingClientRect();
+      const first = plateElsRef.current.values().next().value as HTMLButtonElement | undefined;
       geoRef.current = {
         cx: r.width / 2,
         cy: r.height / 2,
         rx: (r.width / 2) * 0.78,
         ry: (r.height / 2) * 0.72,
-        plateHalf: 36,
+        plateHalf: first ? first.offsetWidth / 2 : 36,
       };
     };
     updateGeometry();
@@ -388,7 +391,7 @@ export function KaitenMenu() {
           velocityRef.current *= Math.pow(0.05, dt); // inercia con decaimiento
         } else {
           velocityRef.current = 0;
-          if (playing) angleRef.current += autoSpeed * dt;
+          if (playing && !wheelHoverPausedRef.current) angleRef.current += autoSpeed * dt;
         }
       }
       updatePlates();
@@ -518,19 +521,19 @@ export function KaitenMenu() {
       beltWidthsRef.current.push(w);
       left += w;
     });
-    const n = Math.max(1, els.length / 3);
+    const n = Math.max(1, els.length / (beltFinite ? 1 : 3));
     let setWidth = 0;
     for (let i = 0; i < n; i++) setWidth += beltWidthsRef.current[i] || 0;
     beltSetWidthRef.current = setWidth;
-  }, []);
+  }, [beltFinite]);
 
   const beltFrontIndex = useCallback(() => {
     const offsets = beltOffsetsRef.current;
     const widths = beltWidthsRef.current;
     if (!offsets.length || !beltSetWidthRef.current) return 0;
     const wrapCenter = beltWrapWidthRef.current / 2;
-    const shift = -mod(beltScrollPosRef.current, beltSetWidthRef.current);
-    const n = offsets.length / 3;
+    const shift = beltFinite ? -beltScrollPosRef.current : -mod(beltScrollPosRef.current, beltSetWidthRef.current);
+    const n = offsets.length / (beltFinite ? 1 : 3);
     let best = 0;
     let bestDist = Infinity;
     for (let i = 0; i < n; i++) {
@@ -542,23 +545,27 @@ export function KaitenMenu() {
       }
     }
     return best;
-  }, []);
+  }, [beltFinite]);
 
   const stepBelt = useCallback(
     (dir: number) => {
       if (!beltSetWidthRef.current) return;
       beltDraggingRef.current = false;
-      const n = Math.max(1, beltOffsetsRef.current.length / 3);
+      const n = Math.max(1, beltOffsetsRef.current.length / (beltFinite ? 1 : 3));
       const pitch = beltSetWidthRef.current / n;
       if (reducedMotion) {
         // movimiento reducido: paso instantáneo, sin animación
         beltScrollPosRef.current += dir * pitch;
+        if (beltFinite) {
+          const maxScroll = Math.max(0, beltSetWidthRef.current - beltWrapWidthRef.current);
+          beltScrollPosRef.current = Math.max(0, Math.min(beltScrollPosRef.current, maxScroll));
+        }
         beltVelocityRef.current = 0;
       } else {
         beltVelocityRef.current = dir * pitch * DECAY_K;
       }
     },
-    [reducedMotion]
+    [reducedMotion, beltFinite]
   );
 
   const onBeltPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
@@ -576,11 +583,15 @@ export function KaitenMenu() {
     const now = performance.now();
     const start = beltDragStartRef.current;
     beltScrollPosRef.current = start.pos - (e.clientX - start.x);
+    if (beltFinite) {
+      const maxScroll = Math.max(0, beltSetWidthRef.current - beltWrapWidthRef.current);
+      beltScrollPosRef.current = Math.max(0, Math.min(beltScrollPosRef.current, maxScroll));
+    }
     const dt = Math.max(1, now - beltLastRef.current.time);
     const instDx = e.clientX - beltLastRef.current.x;
     beltVelocityRef.current = -instDx / (dt / 1000);
     beltLastRef.current = { x: e.clientX, time: now };
-  }, []);
+  }, [beltFinite]);
 
   const endBeltDrag = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (!beltDraggingRef.current) return;
@@ -645,6 +656,7 @@ export function KaitenMenu() {
       const wrap = beltWrapRef.current;
       const track = beltTrackRef.current;
       if (wrap && track && beltSetWidthRef.current) {
+        const maxScroll = Math.max(0, beltSetWidthRef.current - beltWrapWidthRef.current);
         if (beltDraggingRef.current) {
           // la posición ya se setea en onBeltPointerMove
         } else if (Math.abs(beltVelocityRef.current) > 2) {
@@ -654,10 +666,15 @@ export function KaitenMenu() {
           beltVelocityRef.current = 0;
           if (playing && !beltHoverPausedRef.current && !reducedMotion) {
             const speedMult = 0.4 + speed * 0.16; // 0.4x .. 2.0x (≈1x en speed 4)
-            beltScrollPosRef.current += 46 * speedMult * dt;
+            if (!beltFinite || beltScrollPosRef.current < maxScroll) {
+              beltScrollPosRef.current += 46 * speedMult * dt;
+            }
           }
         }
-        const shift = -mod(beltScrollPosRef.current, beltSetWidthRef.current);
+        if (beltFinite) {
+          beltScrollPosRef.current = Math.max(0, Math.min(beltScrollPosRef.current, maxScroll));
+        }
+        const shift = beltFinite ? -beltScrollPosRef.current : -mod(beltScrollPosRef.current, beltSetWidthRef.current);
         track.style.transform = `translateX(${shift}px)`;
         const wrapCenter = beltWrapWidthRef.current / 2;
         const focusRadius = 150;
@@ -674,7 +691,7 @@ export function KaitenMenu() {
     };
     beltAnimationRef.current = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(beltAnimationRef.current);
-  }, [beltActive, playing, speed, reducedMotion]);
+  }, [beltActive, playing, speed, reducedMotion, beltFinite]);
 
   // ─── Agregar desde el modal (carrito real) ───
   const addFromModal = () => {
@@ -697,6 +714,57 @@ export function KaitenMenu() {
     }
     setToastMsg(`${p.nombre} agregado a tu orden`);
     closeModal();
+  };
+
+  // Render de un item de la cinta (compartido entre loop x3 y track finito de búsqueda)
+  const renderBeltItem = (
+    r: { key: string; producto: Producto; category: Categoria },
+    i: number,
+    copy: number
+  ) => {
+    const p = r.producto;
+    const tier = tierFor(p.precio);
+    return (
+      <button
+        key={`${p.id}-${copy}-${i}`}
+        data-belt-item
+        data-product-id={p.id}
+        type="button"
+        role="listitem"
+        onClick={() => openModal(p)}
+        aria-label={`Ver detalles de ${p.nombre} (${fmt(p.precio)})`}
+        className="kaiten-belt-item flex flex-col items-center gap-[7px] bg-none border-none cursor-pointer"
+        style={{ width: 112, flex: "0 0 auto", padding: "8px 9px 10px", borderRadius: 14, border: "1px solid transparent", background: "linear-gradient(180deg,rgba(20,13,9,.10),rgba(20,13,9,.34))", color: "inherit", fontFamily: "inherit", transition: "background .2s ease, border-color .2s ease, filter .2s ease" }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = "rgba(255,255,255,.07)";
+          e.currentTarget.style.borderColor = "rgba(201,161,90,.48)";
+          e.currentTarget.style.filter = "brightness(1.08)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = "";
+          e.currentTarget.style.borderColor = "";
+          e.currentTarget.style.filter = "";
+        }}
+      >
+        <span className="w-[60px] h-[60px]" style={{ filter: "drop-shadow(0 7px 5px rgba(0,0,0,.34))" }}>
+          <PorcelainPlate className={pulsingId === p.id ? "plate-pulse" : ""} rimColor={tier.border} imageUrl={p.imagen || undefined} alt={p.nombre}>
+            <span style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,.3))" }} aria-hidden="true">{r.category.emoji || "🍽️"}</span>
+          </PorcelainPlate>
+        </span>
+        <span className="text-center leading-snug">
+          <span className="block text-[12px] transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+            style={{ color: pulsingId === p.id ? THEME.gold : THEME.ink }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = THEME.gold)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = THEME.ink)}
+          >
+            {p.nombre}
+          </span>
+          <span className="block text-[12.5px] font-bold" style={{ color: THEME.gold }}>
+            {fmt(p.precio)}
+          </span>
+        </span>
+      </button>
+    );
   };
 
   if (loading) {
@@ -796,6 +864,8 @@ export function KaitenMenu() {
               onPointerUp={endDrag}
               onPointerCancel={endDrag}
               onKeyDown={onKeyDown}
+              onPointerEnter={() => { wheelHoverPausedRef.current = true; }}
+              onPointerLeave={() => { wheelHoverPausedRef.current = false; }}
               className="relative mx-auto outline-none cursor-grab active:cursor-grabbing select-none"
               style={{
                 width: "clamp(280px, 86vw, 520px)",
@@ -1020,53 +1090,11 @@ export function KaitenMenu() {
               </p>
             ) : (
               <div ref={beltTrackRef} className="kaiten-belt-track">
-                {/* Items TRIPLICADOS (x3) para loop seamless con snap */}
-                {[...beltItems, ...beltItems, ...beltItems].map((r, i) => {
+                {/* Items: loop x3 seamless (categoría normal) o track finito 1 copia (búsqueda) */}
+                {(beltFinite ? beltItems : [...beltItems, ...beltItems, ...beltItems]).map((r, i) => {
                   const n = Math.max(1, beltItems.length);
-                  const copy = i < n ? 0 : i < 2 * n ? 1 : 2;
-                  const p = r.producto;
-                  const tier = tierFor(p.precio);
-                  return (
-                    <button
-                      key={`${p.id}-${copy}-${i}`}
-                      data-belt-item
-                      data-product-id={p.id}
-                      type="button"
-                      role="listitem"
-                      onClick={() => openModal(p)}
-                      aria-label={`Ver detalles de ${p.nombre} (${fmt(p.precio)})`}
-                      className="kaiten-belt-item flex flex-col items-center gap-[7px] bg-none border-none cursor-pointer"
-                      style={{ width: 112, flex: "0 0 auto", padding: "8px 9px 10px", borderRadius: 14, border: "1px solid transparent", background: "linear-gradient(180deg,rgba(20,13,9,.10),rgba(20,13,9,.34))", color: "inherit", fontFamily: "inherit", transition: "background .2s ease, border-color .2s ease, filter .2s ease" }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = "rgba(255,255,255,.07)";
-                        e.currentTarget.style.borderColor = "rgba(201,161,90,.48)";
-                        e.currentTarget.style.filter = "brightness(1.08)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = "";
-                        e.currentTarget.style.borderColor = "";
-                        e.currentTarget.style.filter = "";
-                      }}
-                    >
-                      <span className="w-[60px] h-[60px]" style={{ filter: "drop-shadow(0 7px 5px rgba(0,0,0,.34))" }}>
-                        <PorcelainPlate className={pulsingId === p.id ? "plate-pulse" : ""} rimColor={tier.border} imageUrl={p.imagen || undefined} alt={p.nombre}>
-                          <span style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,.3))" }} aria-hidden="true">{r.category.emoji || "🍽️"}</span>
-                        </PorcelainPlate>
-                      </span>
-                      <span className="text-center leading-snug">
-                        <span className="block text-[12px] transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
-                          style={{ color: pulsingId === p.id ? THEME.gold : THEME.ink }}
-                          onMouseEnter={(e) => (e.currentTarget.style.color = THEME.gold)}
-                          onMouseLeave={(e) => (e.currentTarget.style.color = THEME.ink)}
-                        >
-                          {p.nombre}
-                        </span>
-                        <span className="block text-[12.5px] font-bold" style={{ color: THEME.gold }}>
-                          {fmt(p.precio)}
-                        </span>
-                      </span>
-                    </button>
-                  );
+                  const copy = beltFinite ? 0 : i < n ? 0 : i < 2 * n ? 1 : 2;
+                  return renderBeltItem(r, i, copy);
                 })}
               </div>
             )}
