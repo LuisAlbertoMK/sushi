@@ -38,7 +38,7 @@ export default async function PromosPage() {
           <h2 className="text-2xl font-bold text-foreground mb-4">🔥 Promociones activas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {promos.map((p) => (
-              <div key={p.id} className="bg-gradient-to-br from-primary-50 dark:from-primary-950/30 to-primary-100/60 dark:to-primary-900/20 rounded-xl shadow-md p-6 border-2 border-primary-200 dark:border-primary-800">
+              <div key={p.id} className="bg-gradient-to-br from-primary-50 dark:from-primary-900/30 to-primary-100/60 dark:to-primary-900/20 rounded-xl shadow-md p-6 border-2 border-primary-200 dark:border-primary-800">
                 <h3 className="text-xl font-bold text-primary-700 mb-2">{p.titulo}</h3>
                 {p.descripcion && <p className="text-muted-foreground mb-3">{p.descripcion}</p>}
                 {p.tipo === "PORCENTUAL" && p.valor && (

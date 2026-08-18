@@ -119,12 +119,12 @@ export default function LandingPage() {
 
       {/* CTA Reserva */}
       <Reveal delay={60}>
-      <section className="text-center py-12 bg-primary-50 dark:bg-primary-950/30 rounded-xl">
+      <section className="text-center py-12 bg-primary-50 dark:bg-primary-900/30 rounded-xl border border-border">
         <h2 className="text-3xl font-bold text-primary-700 dark:text-primary-300 mb-4">¿Listo para compartir?</h2>
         <p className="text-muted-foreground mb-6">Reservá mesa y disfrutá de una experiencia única</p>
         <Link
           href="/reservas"
-          className="bg-primary-700 text-white px-8 py-3 rounded-full font-bold hover:bg-primary-800 transition focus:outline-none focus:ring-2 focus:ring-ring"
+          className="bg-primary-700 text-white px-8 py-3 rounded-full font-bold hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-500 transition focus:outline-none focus:ring-2 focus:ring-ring"
         >
           Reservar Mesa
         </Link>

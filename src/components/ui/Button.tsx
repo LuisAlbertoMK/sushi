@@ -18,7 +18,7 @@ export function Button({
   const variants = {
     primary: "bg-primary-700 text-white hover:bg-primary-800 shadow-sm hover:shadow disabled:bg-primary-400 disabled:text-white",
     secondary: "bg-card text-foreground hover:bg-accent disabled:bg-gray-300",
-    outline: "border-2 border-primary-700 text-primary-700 hover:bg-primary-50 dark:hover:bg-primary-950/30 disabled:border-muted disabled:text-muted-foreground disabled:bg-card",
+    outline: "border-2 border-primary-700 text-primary-700 hover:bg-primary-50 dark:hover:bg-primary-900/30 disabled:border-muted disabled:text-muted-foreground disabled:bg-card",
     ghost: "text-foreground hover:bg-accent disabled:text-gray-400",
     danger: "bg-red-600 text-white hover:bg-red-700 disabled:bg-red-400 disabled:text-white",
   };

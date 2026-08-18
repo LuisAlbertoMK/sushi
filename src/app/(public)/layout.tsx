@@ -15,7 +15,7 @@ export default function PublicLayout({
       <JsonLd data={localBusinessSchema()} />
       {/* Header usa useCart() -> debe vivir DENTRO del CartProvider */}
       <Header />
-      <div className="min-h-screen flex flex-col bg-gradient-to-b from-primary-50 dark:from-primary-950/30 to-background font-sans">
+      <div className="min-h-screen flex flex-col bg-gradient-to-b from-primary-50 dark:from-primary-900/30 to-background font-sans">
         {/* pt-20: deja espacio para el header fixed. El Footer institucional vive en el root layout */}
         <div className="flex-1 container mx-auto px-4 pt-20 pb-8">
           {children}

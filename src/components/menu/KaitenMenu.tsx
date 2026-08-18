@@ -777,13 +777,13 @@ export function KaitenMenu() {
       {/* ── Vista: mesa giratoria ── */}
       {view === "wheel" && searchMode === "normal" && (
         <section className="relative px-4">
-          <div className="flex items-center justify-center gap-1">
+          <div className="relative">
             <button
               type="button"
               onClick={() => { angleRef.current -= 30; velocityRef.current = 0; }}
               aria-label="Girar mesa a la izquierda"
-              className="flex-none w-8 h-8 rounded-full border text-[15px] cursor-pointer hover:border-[var(--gold,#c9a15a)]"
-              style={{ background: "#20242c", borderColor: "#333a44", color: THEME.cream }}
+              className="absolute top-1/2 -translate-y-1/2 left-2 flex-none w-8 h-8 rounded-full border text-[15px] cursor-pointer hover:border-[var(--gold,#c9a15a)]"
+              style={{ background: "#20242c", borderColor: "#333a44", color: THEME.cream, zIndex: 110 }}
             >
               ‹
             </button>
@@ -885,8 +885,8 @@ export function KaitenMenu() {
               type="button"
               onClick={() => { angleRef.current += 30; velocityRef.current = 0; }}
               aria-label="Girar mesa a la derecha"
-              className="flex-none w-8 h-8 rounded-full border text-[15px] cursor-pointer hover:border-[var(--gold,#c9a15a)]"
-              style={{ background: "#20242c", borderColor: "#333a44", color: THEME.cream }}
+              className="absolute top-1/2 -translate-y-1/2 right-2 flex-none w-8 h-8 rounded-full border text-[15px] cursor-pointer hover:border-[var(--gold,#c9a15a)]"
+              style={{ background: "#20242c", borderColor: "#333a44", color: THEME.cream, zIndex: 110 }}
             >
               ›
             </button>
