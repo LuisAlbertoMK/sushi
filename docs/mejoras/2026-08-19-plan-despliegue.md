@@ -1,6 +1,7 @@
 # Plan de Despliegue — Sushi Digital (Next.js + Prisma)
 
-> Fecha: 2026-08-19 · Rama: `experiment/deploy-ready` · Estado: **PENDIENTE DE APROBACIÓN**
+> Fecha: 2026-08-19 · Rama: `experiment/deploy-ready` · Estado: **FASE 0 COMPLETADA — FASES 1-3 PENDIENTES (bloqueadas por credenciales del usuario)**
+> Actualización 2026-08-19: rama pusheada a origin, main actualizado en GitHub, PR #1 abierto (diff limpio +165/-8, 5 archivos). Fases 1-3 requieren: BD Postgres (Neon/Supabase), conexión del repo a Vercel, y env vars — acciones manuales del usuario.
 > Objetivo: desplegar la app completa de cabo a rabo (build → BD → auth → seed → verificación → dominio).
 > Fuente de datos: inspección real del repo (package.json, schema.prisma, next.config.ts, src/lib/auth.ts, prisma/seed.ts, API routes).
 
