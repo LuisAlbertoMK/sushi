@@ -349,14 +349,16 @@ export function KaitenMenu() {
       if (!el) return;
       const r = el.getBoundingClientRect();
       const first = plateElsRef.current.values().next().value as HTMLButtonElement | undefined;
-      // Plato proporcional al espacio de la mesa (~19% del ancho), con piso/techo
-      const plateSize = Math.round(Math.min(158, Math.max(52, r.width * 0.19)));
+      // Plato proporcional al espacio de la mesa (~15% del ancho, como el ejemplo
+      // referencia clamp(60px,14vw,78px)), con piso/techo. Antes 19% → platos
+      // colisionaban entre sí y pisaban el borde inferior de la mesa.
+      const plateSize = Math.round(Math.min(112, Math.max(52, r.width * 0.15)));
       el.style.setProperty("--kaiten-plate", `${plateSize}px`);
       geoRef.current = {
         cx: r.width / 2,
         cy: r.height / 2,
         rx: (r.width / 2) * 0.78,
-        ry: (r.height / 2) * 0.72,
+        ry: (r.height / 2) * 0.62,
         plateHalf: first ? first.offsetWidth / 2 : 36,
       };
     };
@@ -855,13 +857,13 @@ export function KaitenMenu() {
       {/* ── Vista: mesa giratoria ── */}
       {view === "wheel" && searchMode === "normal" && (
         <section className="relative px-4">
-          <div className="relative">
+          <div className="flex items-center justify-center w-full gap-1">
             <button
               type="button"
               onClick={() => { angleRef.current -= 30; velocityRef.current = 0; }}
               aria-label="Girar mesa a la izquierda"
-              className="absolute top-1/2 -translate-y-1/2 left-2 flex-none w-8 h-8 rounded-full border text-[15px] cursor-pointer hover:border-[var(--gold,#c9a15a)]"
-              style={{ background: "#20242c", borderColor: "#333a44", color: THEME.cream, zIndex: 110 }}
+              className="flex-none w-8 h-8 rounded-full border text-[15px] cursor-pointer hover:border-[var(--gold,#c9a15a)]"
+              style={{ background: "#20242c", borderColor: "#333a44", color: THEME.cream }}
             >
               ‹
             </button>
@@ -876,9 +878,9 @@ export function KaitenMenu() {
               onKeyDown={onKeyDown}
               onPointerEnter={() => { wheelHoverPausedRef.current = true; }}
               onPointerLeave={() => { wheelHoverPausedRef.current = false; }}
-              className="relative mx-auto outline-none cursor-grab active:cursor-grabbing select-none"
+              className="relative flex-none mx-auto outline-none cursor-grab active:cursor-grabbing select-none"
               style={{
-                width: "clamp(280px, min(88vw, 120vh), 820px)",
+                width: "clamp(190px, min(64vw, 120vh), 820px)",
                 aspectRatio: "5 / 2.5",
                 touchAction: "none",
                 marginTop: 18,
@@ -965,8 +967,8 @@ export function KaitenMenu() {
               type="button"
               onClick={() => { angleRef.current += 30; velocityRef.current = 0; }}
               aria-label="Girar mesa a la derecha"
-              className="absolute top-1/2 -translate-y-1/2 right-2 flex-none w-8 h-8 rounded-full border text-[15px] cursor-pointer hover:border-[var(--gold,#c9a15a)]"
-              style={{ background: "#20242c", borderColor: "#333a44", color: THEME.cream, zIndex: 110 }}
+              className="flex-none w-8 h-8 rounded-full border text-[15px] cursor-pointer hover:border-[var(--gold,#c9a15a)]"
+              style={{ background: "#20242c", borderColor: "#333a44", color: THEME.cream }}
             >
               ›
             </button>
