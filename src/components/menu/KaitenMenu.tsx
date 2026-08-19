@@ -670,7 +670,11 @@ export function KaitenMenu() {
           beltVelocityRef.current *= Math.pow(0.05, dt);
         } else {
           beltVelocityRef.current = 0;
-          if (playing && !beltHoverPausedRef.current && !reducedMotion) {
+          // Alineado con los 6 ejemplos de referencia: el auto-scroll de la cinta
+          // NO respeta reduced-motion (solo hover/drag/pausa explícita lo frenan).
+          // Con reduced-motion activo la mesa gira (line 400) pero la cinta quedaba
+          // muerta — inconsistencia reportada por el usuario.
+          if (playing && !beltHoverPausedRef.current) {
             const speedMult = 0.4 + speed * 0.16; // 0.4x .. 2.0x (≈1x en speed 4)
             if (!beltFinite || beltScrollPosRef.current < maxScroll) {
               beltScrollPosRef.current += 46 * speedMult * dt;

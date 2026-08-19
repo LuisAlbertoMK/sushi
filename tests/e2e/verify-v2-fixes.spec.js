@@ -138,4 +138,41 @@ test.describe("Fixes v2 corregido — kaiten", () => {
 
     await page.screenshot({ path: path.join(SCREENSHOTS_DIR, "v2-fix-belt-finito.png") });
   });
+
+  test("e) cinta gira AUN con prefers-reduced-motion (como los ejemplos)", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/kaiten", { waitUntil: "domcontentloaded" });
+    await page.waitForSelector("[data-cat-key]", { timeout: 10000 });
+    await page.waitForTimeout(600);
+
+    // Abrir la cinta de una categoría
+    await page.evaluate(() => {
+      const btns = document.querySelectorAll("[data-cat-key]");
+      btns[1].dispatchEvent(new MouseEvent("click", { bubbles: true, clientX: 500, clientY: 300 }));
+    });
+    await page.waitForSelector("[data-belt-item]", { timeout: 8000 });
+    await page.waitForTimeout(600);
+    // Mouse FUERA de la cinta (el hover pausa por diseño)
+    await page.mouse.move(5, 400);
+
+    const beltShift = () =>
+      page.evaluate(() => {
+        const t = document.querySelector(".kaiten-belt-track");
+        if (!t) return 0;
+        const m = getComputedStyle(t).transform;
+        return m && m !== "none" ? Math.round(new DOMMatrix(m).m41) : 0;
+      });
+
+    const s0 = await beltShift();
+    await page.waitForTimeout(1200);
+    const s1 = await beltShift();
+    const delta = Math.abs(s1 - s0);
+    console.log(`  → reduced-motion cinta: delta 1200ms = ${delta}px (debe girar > 15)`);
+    // Antes del fix: con reduce la cinta NO giraba (delta=0). Ahora debe girar.
+    expect(delta).toBeGreaterThan(15);
+    console.log(`  → Cinta gira con reduced-motion ✓`);
+
+    await page.screenshot({ path: path.join(SCREENSHOTS_DIR, "v2-fix-belt-reduced.png") });
+  });
 });
