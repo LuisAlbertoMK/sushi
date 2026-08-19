@@ -17,7 +17,7 @@ export default async function AdminPromosPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-foreground">🎁 Promociones & Publicaciones</h1>
-        <p className="text-gray-600">Administrá ofertas, cupones y publicaciones</p>
+        <p className="text-muted-foreground">Administrá ofertas, cupones y publicaciones</p>
       </div>
 
       {/* Nueva promoción */}

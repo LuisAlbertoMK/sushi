@@ -21,13 +21,13 @@ export function PublicacionList({ publicaciones }: Props) {
     window.location.reload();
   };
 
-  if (publicaciones.length === 0) return <p className="text-gray-600">No hay publicaciones.</p>;
+  if (publicaciones.length === 0) return <p className="text-muted-foreground">No hay publicaciones.</p>;
 
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-gray-600 border-b">
+          <tr className="text-left text-muted-foreground border-b">
             <th className="pb-2">Título</th>
             <th className="pb-2">Contenido</th>
             <th className="pb-2">Publicada</th>
@@ -39,13 +39,13 @@ export function PublicacionList({ publicaciones }: Props) {
           {publicaciones.map((p) => (
             <tr key={p.id} className="border-t">
               <td className="py-2 font-medium">{p.titulo}</td>
-              <td className="py-2 text-gray-600 max-w-xs truncate">{p.contenido?.slice(0, 50)}...</td>
+              <td className="py-2 text-muted-foreground max-w-xs truncate">{p.contenido?.slice(0, 50)}...</td>
               <td className="py-2">
-                <span className={p.publicada ? "text-green-600" : "text-gray-600"}>
+                <span className={p.publicada ? "text-green-600" : "text-muted-foreground"}>
                   {p.publicada ? "✓" : "✗"}
                 </span>
               </td>
-              <td className="py-2 text-gray-600 text-xs">
+              <td className="py-2 text-muted-foreground text-xs">
                 {new Date(p.fechaPublica).toLocaleDateString("es-AR")}
               </td>
               <td className="py-2 text-center">

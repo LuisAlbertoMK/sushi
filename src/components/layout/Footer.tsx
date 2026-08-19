@@ -95,10 +95,10 @@ export function Footer() {
         <hr className="border-gray-800 dark:border-gray-700 mb-4" />
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-gray-500 dark:text-gray-600">
+          <p className="text-xs text-muted-foreground">
             © {currentYear} Sushi Bar — Todos los derechos reservados
           </p>
-          <p className="text-xs text-gray-500 dark:text-gray-600">
+          <p className="text-xs text-muted-foreground">
             Pedidos y reservas online · Entrega a domicilio
           </p>
         </div>

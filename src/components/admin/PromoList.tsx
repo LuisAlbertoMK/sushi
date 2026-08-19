@@ -32,13 +32,13 @@ export function PromoList({ promos }: Props) {
     window.location.reload();
   };
 
-  if (promos.length === 0) return <p className="text-gray-600">No hay promociones.</p>;
+  if (promos.length === 0) return <p className="text-muted-foreground">No hay promociones.</p>;
 
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-gray-600 border-b">
+          <tr className="text-left text-muted-foreground border-b">
             <th className="pb-2">Título</th>
             <th className="pb-2">Tipo</th>
             <th className="pb-2">Valor</th>
@@ -57,7 +57,7 @@ export function PromoList({ promos }: Props) {
                  p.tipo === "MONTO_FIJO" ? `-$${formatearPrecio(p.valor || 0)}` :
                  p.tipo === "ENVIO_GRATIS" ? "Envío gratis" : "-"}
               </td>
-              <td className="py-2 text-gray-600 text-xs">
+              <td className="py-2 text-muted-foreground text-xs">
                 {new Date(p.fechaInicio).toLocaleDateString("es-AR")} - {new Date(p.fechaFin).toLocaleDateString("es-AR")}
               </td>
               <td className="py-2">

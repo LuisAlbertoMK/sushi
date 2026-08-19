@@ -30,6 +30,18 @@
   --color-destructive: oklch(0.571 0.312 24.5);
   --color-destructive-foreground: oklch(1 0 0);
   --color-destructive-600: oklch(0.571 0.312 24.5);
+
+  /* Estado semántico — Badge (cadena primitive→semantic→component) */
+  --status-pending-bg: oklch(0.973 0.12 83);
+  --status-pending-fg: oklch(0.416 0.125 83);
+  --status-cooking-bg: oklch(0.962 0.128 53);
+  --status-cooking-fg: oklch(0.446 0.15 53);
+  --status-ready-bg: oklch(0.968 0.034 235);
+  --status-ready-fg: oklch(0.414 0.117 235);
+  --status-delivered-bg: oklch(0.972 0.076 155);
+  --status-delivered-fg: oklch(0.428 0.13 155);
+  --status-cancelled-bg: oklch(0.959 0.085 20);
+  --status-cancelled-fg: oklch(0.496 0.16 20);
 }
 
 /* Tema oscuro */
@@ -62,6 +74,18 @@ html.dark {
   --muted-foreground: oklch(0.6 0 0);
   /* Destructive (errores) */
   --color-destructive-600: oklch(0.571 0.312 24.5);
+
+  /* Estado semántico dark — Badge (fondos translúcidos sobre surface oscura) */
+  --status-pending-bg: oklch(0.6 0.12 83 / 0.2);
+  --status-pending-fg: oklch(0.86 0.1 83);
+  --status-cooking-bg: oklch(0.6 0.13 53 / 0.2);
+  --status-cooking-fg: oklch(0.85 0.12 53);
+  --status-ready-bg: oklch(0.6 0.08 235 / 0.2);
+  --status-ready-fg: oklch(0.84 0.08 235);
+  --status-delivered-bg: oklch(0.6 0.09 155 / 0.2);
+  --status-delivered-fg: oklch(0.85 0.09 155);
+  --status-cancelled-bg: oklch(0.6 0.1 20 / 0.2);
+  --status-cancelled-fg: oklch(0.86 0.09 20);
 }
 
 @theme inline {
@@ -76,6 +100,16 @@ html.dark {
   --color-muted-foreground: var(--muted-foreground);
   --color-destructive: var(--color-destructive-600);
   --color-destructive-foreground: oklch(1 0 0);
+  --color-status-pending-bg: var(--status-pending-bg);
+  --color-status-pending-fg: var(--status-pending-fg);
+  --color-status-cooking-bg: var(--status-cooking-bg);
+  --color-status-cooking-fg: var(--status-cooking-fg);
+  --color-status-ready-bg: var(--status-ready-bg);
+  --color-status-ready-fg: var(--status-ready-fg);
+  --color-status-delivered-bg: var(--status-delivered-bg);
+  --color-status-delivered-fg: var(--status-delivered-fg);
+  --color-status-cancelled-bg: var(--status-cancelled-bg);
+  --color-status-cancelled-fg: var(--status-cancelled-fg);
   --color-primary: var(--color-primary);
   --color-primary-foreground: var(--color-primary-foreground);
   --color-primary-50: var(--color-primary-50);

@@ -66,7 +66,7 @@ export default function PedidosPage() {
                   ) : <span className="text-3xl" aria-hidden="true">🍣</span>}
                     <div>
                       <span className="font-medium">{item.nombre}</span>
-                      {item.notas && <p className="text-xs text-gray-600">Nota: {item.notas}</p>}
+                      {item.notas && <p className="text-xs text-muted-foreground">Nota: {item.notas}</p>}
                     </div>
                   </div>
                 </td>
@@ -108,7 +108,7 @@ export default function PedidosPage() {
       <div className="mt-6 flex gap-4 justify-between">
         <button
           onClick={clearCart}
-          className="text-gray-600 hover:text-primary-700"
+          className="text-muted-foreground hover:text-primary-700"
         >
           Vaciar carrito
         </button>

@@ -57,13 +57,13 @@ export function ProductoList({ categorias }: Props) {
     window.location.reload();
   };
 
-  if (allProducts.length === 0) return <p className="text-gray-600">No hay productos.</p>;
+  if (allProducts.length === 0) return <p className="text-muted-foreground">No hay productos.</p>;
 
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-gray-600 border-b">
+          <tr className="text-left text-muted-foreground border-b">
             <th className="pb-2">Nombre</th>
             <th className="pb-2">Precio</th>
             <th className="pb-2">Categoría</th>
@@ -106,7 +106,7 @@ export function ProductoList({ categorias }: Props) {
                 {editingId === p.id ? (
                   <>
                     <button onClick={() => saveEdit(p.id)} className="text-green-600 hover:underline text-xs">💾</button>
-                    <button onClick={() => setEditingId(null)} className="text-gray-600 hover:underline text-xs">✕</button>
+                    <button onClick={() => setEditingId(null)} className="text-muted-foreground hover:underline text-xs">✕</button>
                   </>
                 ) : (
                   <>

@@ -27,13 +27,13 @@ export default async function AdminReservasPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-foreground">📅 Reservas</h1>
-        <p className="text-gray-600">{reservas.length} reservas en total</p>
+        <p className="text-muted-foreground">{reservas.length} reservas en total</p>
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-left text-gray-600 border-b">
+            <tr className="text-left text-muted-foreground border-b">
               <th className="pb-2">Nombre</th>
               <th className="pb-2">Fecha</th>
               <th className="pb-2">Personas</th>

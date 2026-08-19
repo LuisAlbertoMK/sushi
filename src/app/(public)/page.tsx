@@ -59,7 +59,7 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/pedidos"
-              className="bg-amber-400 dark:bg-amber-300 text-gray-900 px-8 py-3 rounded-full font-bold hover:bg-amber-300 dark:hover:bg-amber-200 transition shadow-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-white/50 text-lg"
+              className="bg-primary-700 dark:bg-primary-600 text-white px-8 py-3 rounded-full font-bold hover:bg-primary-800 dark:hover:bg-primary-500 transition shadow-xl hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-ring text-lg"
             >
               Pedir Ahora
             </Link>

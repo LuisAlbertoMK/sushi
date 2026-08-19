@@ -44,13 +44,13 @@ export function CategoriaList({ categorias }: Props) {
     window.location.reload();
   };
 
-  if (categorias.length === 0) return <p className="text-gray-600">No hay categorías.</p>;
+  if (categorias.length === 0) return <p className="text-muted-foreground">No hay categorías.</p>;
 
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-gray-600 border-b">
+          <tr className="text-left text-muted-foreground border-b">
             <th className="pb-2">Nombre</th>
             <th className="pb-2">Orden</th>
             <th className="pb-2">Activo</th>
@@ -100,12 +100,12 @@ export function CategoriaList({ categorias }: Props) {
                   </span>
                 )}
               </td>
-              <td className="py-2 text-gray-600">{cat.productos.length}</td>
+              <td className="py-2 text-muted-foreground">{cat.productos.length}</td>
               <td className="py-2 text-center space-x-1">
                 {editingId === cat.id ? (
                   <>
                     <button onClick={() => saveEdit(cat.id)} className="text-green-600 hover:underline text-xs">💾</button>
-                    <button onClick={() => setEditingId(null)} className="text-gray-600 hover:underline text-xs">✕</button>
+                    <button onClick={() => setEditingId(null)} className="text-muted-foreground hover:underline text-xs">✕</button>
                   </>
                 ) : (
                   <>
