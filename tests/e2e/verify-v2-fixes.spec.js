@@ -72,19 +72,24 @@ test.describe("Fixes v2 corregido — kaiten", () => {
     await page.waitForTimeout(600);
 
     const wrap = page.locator('[aria-label^="Mesa giratoria"]');
-    const p0 = await wheelAngle(page);
+    // El movimiento del mouse hacia el wrap tarda ~200ms; durante ese tiempo la
+    // mesa gira ~8px. Para medir la pausa REAL, estabilizar el hover ANTES de tomar p0.
     await wrap.hover({ position: { x: 200, y: 120 } });
+    await page.waitForTimeout(400);
+    const p0 = await wheelAngle(page);
     await page.waitForTimeout(1000);
     const p1 = await wheelAngle(page);
     const deltaHover = Math.round(Math.abs(p1 - p0));
-    // Giro normal ≈ 40px/s → 1000ms serían ~40px. Pausado → <8px (inercia residual mínima).
+    // Giro normal ≈ 40px/s → 1000ms serían ~40px. Pausado → 0px (deriva nula, medido).
     console.log(`  → durante hover 1000ms: delta=${deltaHover}px (giro normal ≈40px)`);
     expect(deltaHover).toBeLessThan(8);
 
     await page.mouse.move(5, 400); // salir del hover
-    await page.waitForTimeout(1200);
+    await page.waitForTimeout(400); // dejar que el giro se reanude y estabilice
     const p2 = await wheelAngle(page);
-    const deltaOut = Math.round(Math.abs(p2 - p1));
+    await page.waitForTimeout(1200);
+    const p3 = await wheelAngle(page);
+    const deltaOut = Math.round(Math.abs(p3 - p2));
     console.log(`  → tras salir 1200ms: delta=${deltaOut}px (debe reanudar > 15)`);
     expect(deltaOut).toBeGreaterThan(15);
     console.log(`  → Hover pausa + reanuda ✓`);
