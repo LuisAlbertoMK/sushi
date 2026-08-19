@@ -9,6 +9,7 @@
     "lint": "eslint",
     "seed": "ts-node prisma/seed.ts",
     "setup": "npm install",
+    "postinstall": "prisma generate",
     "pw-setup": "npm install -D @playwright/test && npx playwright install chromium"
   },
   "dependencies": {

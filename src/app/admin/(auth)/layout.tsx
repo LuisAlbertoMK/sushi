@@ -24,15 +24,15 @@ export default async function AdminLayout({
       {/* Sidebar */}
       <aside className="w-64 bg-gray-900 text-white p-6 min-h-screen">
         <div className="flex items-center gap-2 mb-8">
-          <span className="text-2xl">🍣</span>
+          <span className="text-2xl" aria-hidden="true">🍣</span>
           <span className="font-bold text-xl">Sushi Admin</span>
         </div>
         <nav className="space-y-1">
-          <Link href="/admin/dashboard" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">📊 Dashboard</Link>
-          <Link href="/admin/menu" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">🍱 Menú</Link>
-          <Link href="/admin/pedidos" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">🛒 Pedidos</Link>
-          <Link href="/admin/reservas" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">📅 Reservas</Link>
-          <Link href="/admin/promos" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">🎁 Promos & Publicaciones</Link>
+          <Link href="/admin/dashboard" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors"><span aria-hidden="true">📊</span> Dashboard</Link>
+          <Link href="/admin/menu" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors"><span aria-hidden="true">🍱</span> Menú</Link>
+          <Link href="/admin/pedidos" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors"><span aria-hidden="true">🛒</span> Pedidos</Link>
+          <Link href="/admin/reservas" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors"><span aria-hidden="true">📅</span> Reservas</Link>
+          <Link href="/admin/promos" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors"><span aria-hidden="true">🎁</span> Promos & Publicaciones</Link>
         </nav>
         <div className="mt-8 pt-4 border-t border-gray-700">
           <AdminLogout />
