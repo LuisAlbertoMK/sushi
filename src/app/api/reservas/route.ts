@@ -46,7 +46,9 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error creando reserva:", error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error("Error creando reserva:", error);
+    }
     return NextResponse.json(
       { error: "Error interno del servidor" },
       { status: 500 }
