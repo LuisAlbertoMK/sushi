@@ -238,12 +238,17 @@ export function KaitenMenu() {
   }, [toastMsg]);
 
   // ─── Modal de producto ───
+  // Congela la rotación de la mesa mientras el detalle está abierto,
+  // para que el usuario no pierda la referencia visual de los platos.
+  const beltPausedByModalRef = useRef(false);
   const openModal = (p: Producto) => {
     lastFocusRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    beltPausedByModalRef.current = true;
     setModalProduct(p);
   };
   const closeModal = useCallback(() => {
     setModalProduct(null);
+    beltPausedByModalRef.current = false;
     lastFocusRef.current?.focus?.();
     lastFocusRef.current = null;
   }, []);
@@ -393,7 +398,7 @@ export function KaitenMenu() {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       const d = dragRef.current;
-      if (!d.isDragging) {
+      if (!d.isDragging && !beltPausedByModalRef.current) {
         if (Math.abs(velocityRef.current) > 2) {
           angleRef.current += velocityRef.current * dt;
           velocityRef.current *= Math.pow(0.05, dt); // inercia con decaimiento

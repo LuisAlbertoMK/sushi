@@ -45,3 +45,9 @@ prisma/*.db-journal
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Playwright
+node_modules/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
