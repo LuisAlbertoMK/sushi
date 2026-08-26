@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Menú Kaiten interactivo de sushi, nigiri, rolls, ramen, entradas, postres y bebidas. Explora cada platillo, ingredientes y precios.">
+<meta name="theme-color" content="#12151a">
+<meta name="robots" content="index,follow">
+<title>Menú Kaiten · Sushi, Rolls, Ramen y más</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+JP:wght@400;600;700;900&family=Permanent+Marker&display=swap');
+  :root{
+    --bg:#12151a;
+    --bg-2:#1a1e25;
+    --wood-1:#4a3222;
+    --wood-2:#6b4a30;
+    --wood-3:#2e2015;
+    --red:#b7302c;
+    --gold:#c9a15a;
+    --gold-light:#e8cf9a;
+    --cream:#efe4cf;
+    --ink:#ece5d6;
+    --muted:#9aa0ab;
+    --tier-green:#4f7c6b;
+    --tier-yellow:#c9962f;
+    --tier-red:#b7302c;
+    --tier-silver:#8892a6;
+    --tier-gold-bg:#8a6a2a;
+    --cat-entradas:#6f8f5b;
+    --cat-sushi:#2f6f6a;
+    --cat-rolls:#7a4a86;
+    --cat-ramen:#b7302c;
+    --cat-postres:#c76a8a;
+    --cat-bebidas:#3f6f9e;
+    --porcelain-1:#fffdf8;
+    --porcelain-2:#efe6d2;
+    --porcelain-3:#cfc3a4;
+    --font-display: 'Bebas Neue', Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    --font-brush: 'Permanent Marker', 'Noto Sans JP', sans-serif;
+    --font-jp: 'Noto Sans JP', sans-serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 50% -10%, #23283060 0%, transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:28px 16px 0;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001s !important; transition-duration:0.001s !important;}
+  }
+
+  /* ---------- Header ---------- */
+  header{ text-align:center; margin-bottom:6px; max-width:560px; }
+  .seal{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:46px; height:46px; border-radius:50%;
+    background:var(--red);
+    border:2px solid #7d1e1b;
+    font-family:var(--font-display);
+    font-size:22px; color:var(--cream);
+    box-shadow:0 2px 6px rgba(0,0,0,.4);
+    margin-bottom:8px;
+    position:relative;
+  }
+  .seal::after{
+    content:'SUSHI'; position:absolute; left:50%; top:54px; transform:translateX(-50%) rotate(-2deg);
+    font-family:var(--font-brush); font-size:10px; letter-spacing:.08em; color:#ff4b2e;
+    white-space:nowrap; text-shadow:1px 1px 0 #1b0907;
+  }
+  h1{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(24px,5vw,34px);
+    letter-spacing:.04em;
+    margin:0 0 4px;
+    color:#fff7e8;
+    text-transform:uppercase;
+    text-shadow:2px 2px 0 #6f1715, 0 4px 12px rgba(0,0,0,.5);
+  }
+  header p{
+    margin:0; color:var(--muted); font-size:13.5px; letter-spacing:.02em;
+  }
+
+  /* ---------- Shared controls bar (visible in both menus) ---------- */
+  .controls-bar{
+    width:100%; max-width:560px;
+    display:flex; align-items:center; justify-content:center;
+    gap:16px; flex-wrap:wrap;
+    margin:16px 0 4px;
+    padding:10px 16px;
+    background:linear-gradient(180deg,#1d2024,#0d0f12);
+    border:1px solid #4a3024;
+    border-radius:999px;
+  }
+  .icon-btn{
+    background:#20242c; color:var(--cream); border:1px solid #333a44;
+    padding:8px 14px; border-radius:999px; font-size:13px; cursor:pointer;
+    font-family:var(--font-body); white-space:nowrap;
+  }
+  .icon-btn:hover{ border-color:var(--gold); }
+  .icon-btn:active{ transform:translateY(1px); }
+  .icon-btn.ghost{ background:transparent; }
+  .speed-label{ font-size:12.5px; color:var(--muted); display:flex; align-items:center; gap:8px; flex:1 1 180px; min-width:170px; }
+  .speed-label input{ accent-color:var(--gold); flex:1; }
+  .speed-tag{ font-size:10.5px; opacity:.65; }
+  .controls-context{
+    width:100%; text-align:center; font-size:10.5px; color:var(--muted);
+    letter-spacing:.03em; margin-top:2px; order:99;
+  }
+
+  .view{ width:100%; max-width:560px; display:flex; flex-direction:column; align-items:center;
+    transition: opacity .3s ease, transform .3s ease; }
+  .view[hidden]{ display:none; }
+  .view.enter{ opacity:0; transform:translateY(10px); }
+
+  /* ---------- Wheel (rotating table) ---------- */
+  .table-stage{
+    width:100%; display:flex; flex-direction:column; align-items:center;
+    perspective:1400px; margin:18px 0 0;
+  }
+  .wheel-row{ position:relative; display:flex; align-items:center; justify-content:center; width:100%; gap:4px; }
+  .wheel-nav{
+    flex:0 0 auto; width:32px; height:32px; border-radius:50%;
+    background:#20242c; border:1px solid #333a44; color:var(--cream);
+    font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .wheel-nav:hover{ border-color:var(--gold); }
+  .wheel-wrap{
+    position:relative;
+    width:clamp(190px,64vw,440px);
+    aspect-ratio: 5 / 2.5;
+    outline:none;
+    cursor:grab;
+    touch-action:none;
+    -webkit-user-select:none; user-select:none;
+  }
+  .wheel-wrap:active{ cursor:grabbing; }
+  .wheel-wrap.is-hover-paused::after{
+    content:'PAUSA · SELECCIONA UNA CATEGORÍA'; position:absolute; left:50%; top:-13px;
+    transform:translateX(-50%); z-index:90; white-space:nowrap;
+    font:10px var(--font-brush); letter-spacing:.04em; color:#fff7e8;
+    background:rgba(183,48,44,.94); border:1px solid #ff755e; border-radius:4px;
+    padding:5px 9px; box-shadow:0 6px 18px rgba(0,0,0,.35);
+  }
+  .table-shadow{
+    position:absolute; left:6%; right:6%; bottom:-22px; height:26px;
+    background:radial-gradient(ellipse at center, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 72%);
+    filter:blur(2px); z-index:0;
+  }
+  .wheel-wrap:focus-visible .wheel-disc{
+    box-shadow:0 0 0 3px var(--gold), 0 18px 34px rgba(0,0,0,.6), inset 0 0 44px rgba(0,0,0,.55);
+  }
+  .wheel-disc{
+    position:absolute; inset:0; border-radius:50%;
+    background:
+      radial-gradient(ellipse at 48% 36%, rgba(255,255,255,.08), transparent 34%),
+      repeating-linear-gradient(96deg, rgba(255,255,255,.018) 0 2px, rgba(0,0,0,.025) 2px 6px, transparent 6px 13px),
+      repeating-radial-gradient(ellipse at 40% 48%, rgba(0,0,0,.045) 0 2px, transparent 2px 13px),
+      radial-gradient(circle at 36% 30%, #7a452d, #5a3020 55%, #25150f 100%);
+    border:5px solid #2a1d14;
+    box-shadow:
+      0 18px 34px rgba(0,0,0,.6),
+      inset 0 0 0 2px rgba(255,255,255,.055),
+      inset 0 0 28px rgba(0,0,0,.58),
+      inset 0 10px 20px rgba(255,255,255,.035);
+  }
+  .disc-gloss{
+    position:absolute; inset:7px; border-radius:50%; pointer-events:none; z-index:40;
+    background:radial-gradient(ellipse 55% 30% at 32% 20%, rgba(255,255,255,.30), rgba(255,255,255,0) 60%);
+    mix-blend-mode:screen;
+  }
+  .wheel-hub{
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center;
+    pointer-events:none; z-index:50;
+  }
+  .hub-kanji{
+    font-family:var(--font-display); font-size:clamp(22px,5vw,32px);
+    color:var(--gold); line-height:1; text-shadow:0 2px 3px rgba(0,0,0,.5);
+  }
+  .hub-text{
+    font-size:10.5px; color:var(--cream); opacity:.75; margin-top:5px;
+    letter-spacing:.03em;
+  }
+  .category-plate{
+    position:absolute; top:0; left:0;
+    width:clamp(60px,14vw,78px); height:clamp(60px,14vw,78px);
+    border-radius:50%; border:none; background:none; padding:0;
+    cursor:pointer; will-change:transform;
+  }
+  .category-plate:focus-visible .plate-face{ box-shadow:0 0 0 3px var(--gold), inset 0 -3px 6px rgba(0,0,0,.2), inset 0 2px 3px rgba(255,255,255,.85); }
+  .category-plate{
+    transition:transform .22s cubic-bezier(.2,.8,.2,1), filter .22s ease;
+  }
+  .category-plate:hover{
+    filter:brightness(1.06) saturate(1.06);
+  }
+  .category-plate:hover .plate-face{
+    box-shadow:
+      0 0 0 2px rgba(232,207,154,.42),
+      0 10px 18px rgba(0,0,0,.36),
+      inset 0 -3px 6px rgba(0,0,0,.2),
+      inset 0 2px 3px rgba(255,255,255,.85);
+  }
+  .category-plate:active .plate-face{ transform:scale(.96); }
+
+  /* generic 3D porcelain plate, used by both the wheel and the belt */
+  .plate-3d{ position:relative; width:100%; height:100%; display:block; }
+  .plate-shadow{
+    position:absolute; left:8%; right:8%; bottom:-14%; height:22%;
+    background:radial-gradient(ellipse at center, rgba(0,0,0,.5), rgba(0,0,0,0) 72%);
+    filter:blur(1.5px); z-index:1;
+  }
+  .plate-face{
+    position:relative; z-index:2; width:100%; height:100%; border-radius:50%;
+    background:radial-gradient(circle at 32% 26%, var(--porcelain-1), var(--porcelain-2) 55%, var(--porcelain-3) 100%);
+    border:3px solid var(--rim, var(--gold));
+    box-shadow:
+      inset 0 -4px 7px rgba(0,0,0,.20),
+      inset 0 3px 4px rgba(255,255,255,.9),
+      0 4px 9px rgba(0,0,0,.4);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:1px; color:#2c2519; font-family:var(--font-body); font-weight:600;
+  }
+  .plate-face .emoji{ font-size:19px; filter:drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
+  .plate-face .cat-name{ font-size:9.5px; letter-spacing:.01em; }
+
+  /* ---------- Belt view ---------- */
+  .belt-header{
+    width:100%; display:flex; align-items:center; gap:10px;
+    margin:18px 0 14px; flex-wrap:wrap;
+  }
+  .belt-header h2{
+    font-family:var(--font-display); font-size:24px; margin:0; color:#fff7e8; flex:1; text-transform:uppercase; letter-spacing:.03em;
+  }
+  .belt-step-group{ display:flex; gap:6px; }
+  .belt-header::after{ content:'BUEN SUSHI · SIEMPRE'; flex-basis:100%; font:11px var(--font-brush); color:#ff4b2e; letter-spacing:.04em; margin-top:-7px; text-shadow:1px 1px 0 #210b08; }
+  .belt-track-wrap{
+    position:relative; width:100%; overflow:hidden; border-radius:18px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.12), transparent 10%, transparent 90%, rgba(0,0,0,.32)),
+      repeating-linear-gradient(93deg, rgba(255,255,255,.025) 0 3px, rgba(0,0,0,.035) 3px 8px, transparent 8px 16px),
+      linear-gradient(180deg,#6e472e,#3d2418 48%,#5b3925);
+    border:1px solid #1d120c;
+    padding:34px 0 30px;
+    box-shadow:0 14px 28px rgba(0,0,0,.46), inset 0 2px 0 rgba(255,255,255,.08), inset 0 -7px 14px rgba(0,0,0,.36);
+    touch-action:none; cursor:grab; outline:none;
+    -webkit-user-select:none; user-select:none;
+  }
+  .belt-track-wrap::before,
+  .belt-track-wrap::after{
+    content:''; position:absolute; left:8px; right:8px; height:13px; z-index:1;
+    border-radius:7px;
+    background:
+      repeating-linear-gradient(90deg, rgba(255,255,255,.08) 0 4px, transparent 4px 18px),
+      linear-gradient(180deg,#24160f,#4b2d1c 48%,#21130d);
+    border:1px solid rgba(201,161,90,.35);
+    box-shadow:inset 0 2px 2px rgba(255,255,255,.08), inset 0 -3px 5px rgba(0,0,0,.45);
+  }
+  .belt-track-wrap::before{ top:9px; }
+  .belt-track-wrap::after{ bottom:8px; }
+  .belt-track-wrap:active{ cursor:grabbing; }
+  .belt-track-wrap:focus-visible{ box-shadow:0 0 0 3px var(--gold), 0 14px 28px rgba(0,0,0,.46), inset 0 3px 10px rgba(0,0,0,.5); }
+  .belt-rail-bolts{
+    position:absolute; left:18px; right:18px; top:10px; height:11px; z-index:5; pointer-events:none;
+    background-image:radial-gradient(circle, #9a7448 0 1.4px, #2a170d 1.7px 2.5px, transparent 2.7px);
+    background-size:24px 11px;
+  }
+  .belt-focus-zone{
+    position:absolute; top:25px; bottom:25px; left:50%; width:76px; transform:translateX(-50%); z-index:1; pointer-events:none;
+    border-left:1px solid rgba(255,221,159,.16); border-right:1px solid rgba(255,221,159,.16);
+    background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.12));
+  }
+  .belt-edge-fade{
+    position:absolute; top:0; bottom:0; width:14%; z-index:6; pointer-events:none;
+  }
+  .belt-edge-fade.left{ left:0; background:linear-gradient(90deg,#1b100b 0%,rgba(27,16,11,.86) 16%,transparent 100%); }
+  .belt-edge-fade.right{ right:0; background:linear-gradient(-90deg,#1b100b 0%,rgba(27,16,11,.86) 16%,transparent 100%); }
+  .belt-track{
+    display:flex; width:max-content; will-change:transform; position:relative; z-index:2;
+  }
+  .belt-item{
+    display:flex; flex-direction:column; align-items:center; gap:7px;
+    width:112px; flex:0 0 auto; padding:8px 9px 10px; cursor:pointer;
+    background:linear-gradient(180deg,rgba(20,13,9,.10),rgba(20,13,9,.34)); border:1px solid transparent;
+    border-radius:14px; color:inherit; font-family:inherit; will-change:transform;
+    transition:background .2s ease, border-color .2s ease, filter .2s ease;
+  }
+  .belt-item:hover{
+    background:rgba(255,255,255,.07);
+    border-color:rgba(201,161,90,.48);
+    filter:brightness(1.08);
+  }
+  .belt-item:focus-visible{
+    outline:none;
+    border-color:var(--gold-light);
+    box-shadow:0 0 0 3px rgba(201,161,90,.22);
+  }
+  .belt-item:hover .plate-face{
+    box-shadow:
+      0 0 0 2px rgba(232,207,154,.35),
+      0 8px 16px rgba(0,0,0,.42),
+      inset 0 -4px 7px rgba(0,0,0,.2),
+      inset 0 3px 4px rgba(255,255,255,.9);
+  }
+  .plate-circle-wrap{ width:60px; height:60px; filter:drop-shadow(0 7px 5px rgba(0,0,0,.34)); }
+  .belt-item .plate-face{ border-width:3px; }
+  .belt-item .plate-shadow{ bottom:-11%; }
+  .item-label{ text-align:center; line-height:1.25; }
+  .item-name{ font-size:11.5px; color:var(--ink); }
+  .item-price{ font-size:12.5px; font-weight:700; color:var(--gold); }
+  .belt-item.taken .plate-face{ animation: pulseTaken .5s ease; }
+  @keyframes pulseTaken{
+    0%{ box-shadow:inset 0 -4px 7px rgba(0,0,0,.20), inset 0 3px 4px rgba(255,255,255,.9), 0 4px 9px rgba(0,0,0,.4); }
+    40%{ box-shadow:0 0 0 7px rgba(201,161,90,.4), inset 0 -4px 7px rgba(0,0,0,.20), inset 0 3px 4px rgba(255,255,255,.9), 0 4px 9px rgba(0,0,0,.4); }
+    100%{ box-shadow:inset 0 -4px 7px rgba(0,0,0,.20), inset 0 3px 4px rgba(255,255,255,.9), 0 4px 9px rgba(0,0,0,.4); }
+  }
+  .belt-hint{
+    text-align:center; font-size:10.5px; color:var(--muted); margin-top:8px; opacity:.75;
+  }
+
+  /* ---------- Tray ---------- */
+  .tray{
+    width:100%; max-width:560px; margin:22px 0 24px;
+    background:var(--bg-2); border:1px solid #30343c; border-radius:14px;
+    position:sticky; bottom:12px; overflow:hidden;
+  }
+  .tray-summary{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 16px; cursor:pointer; font-size:14px; font-weight:600;
+  }
+  .tray-summary .hint{ font-size:11px; color:var(--muted); font-weight:400; }
+  .tray-details{ border-top:1px solid #30343c; padding:10px 16px 14px; }
+  .tray-row{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:13px; padding:5px 0; border-bottom:1px dashed #2a2e35;
+  }
+  .tray-row:last-of-type{ border-bottom:none; }
+  .tier-dot{ width:9px; height:9px; border-radius:50%; display:inline-block; margin-right:7px; }
+  .tray-total{
+    display:flex; justify-content:space-between; font-weight:700;
+    margin-top:10px; padding-top:8px; border-top:1px solid #30343c; font-size:14.5px;
+  }
+  .clear-btn{
+    margin-top:10px; width:100%; background:transparent; border:1px solid #3a3f48;
+    color:var(--muted); padding:7px; border-radius:8px; font-size:12px; cursor:pointer;
+  }
+  .clear-btn:hover{ color:var(--ink); border-color:var(--gold); }
+  .empty-msg{ font-size:12.5px; color:var(--muted); padding:4px 0; }
+
+  /* ---------- Product quick view ---------- */
+  .product-modal[hidden], .toast[hidden]{display:none;}
+  .product-modal{
+    position:fixed; inset:0; z-index:200;
+    display:grid; place-items:center; padding:18px;
+    background:rgba(5,7,10,.76);
+    backdrop-filter:blur(8px);
+  }
+  .modal-card{
+    width:min(520px, 100%);
+    max-height:min(760px, calc(100dvh - 36px));
+    overflow:auto;
+    background:linear-gradient(180deg,#20252d,#171b21);
+    border:1px solid #3a414b;
+    border-radius:22px;
+    box-shadow:0 28px 80px rgba(0,0,0,.65);
+    animation:modalIn .22s ease both;
+  }
+  @keyframes modalIn{
+    from{opacity:0; transform:translateY(12px) scale(.98)}
+    to{opacity:1; transform:none}
+  }
+  .modal-top{
+    display:flex; justify-content:flex-end; padding:10px 10px 0;
+  }
+  .modal-close{
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid #3a414b; background:#242a32; color:var(--cream);
+    cursor:pointer; font-size:20px; line-height:1;
+  }
+  .modal-close:hover{border-color:var(--gold); background:#2b3038;}
+  .product-visual{
+    margin:0 auto; width:170px; aspect-ratio:1;
+    display:grid; place-items:center; border-radius:50%;
+    background:
+      radial-gradient(circle at 34% 26%, #fff, #efe6d2 58%, #cfc3a4 100%);
+    border:7px solid var(--product-rim, var(--gold));
+    box-shadow:inset 0 -10px 16px rgba(0,0,0,.15), 0 18px 35px rgba(0,0,0,.4);
+    font-size:70px;
+  }
+  .modal-content{padding:18px 22px 22px;}
+  .modal-kicker{
+    color:var(--gold-light); text-transform:uppercase; letter-spacing:.13em;
+    font-size:10px; font-weight:800; margin-bottom:6px;
+  }
+  .modal-content h3{
+    font-family:var(--font-display); font-size:27px; line-height:1.12;
+    margin:0 0 7px; color:var(--cream);
+  }
+  .modal-price{font-size:19px; font-weight:800; color:var(--gold-light); margin-bottom:16px;}
+  .detail-grid{display:grid; gap:12px;}
+  .detail-block{
+    background:#191d24; border:1px solid #303640; border-radius:12px; padding:11px 13px;
+  }
+  .detail-label{font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; margin-bottom:5px;}
+  .detail-text{font-size:13px; line-height:1.55; color:#e7e0d2;}
+  .modal-actions{display:flex; gap:9px; margin-top:16px;}
+  .primary-action,.secondary-action{
+    flex:1; min-height:44px; border-radius:11px; cursor:pointer;
+    font:600 13px var(--font-body);
+  }
+  .primary-action{border:1px solid #b68d45; background:linear-gradient(180deg,#c9a15a,#9d7638); color:#17130d;}
+  .primary-action:hover{filter:brightness(1.08);}
+  .secondary-action{border:1px solid #3a414b; background:#242a32; color:var(--cream);}
+  .secondary-action:hover{border-color:var(--gold);}
+
+  /* ---------- Search / discover controls ---------- */
+  .discover-bar{
+    width:100%; max-width:560px; display:flex; gap:8px; margin:9px 0 0;
+  }
+  .search-wrap{position:relative; flex:1;}
+  .search-wrap span{position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:.55;}
+  #menuSearch{
+    width:100%; height:40px; border-radius:11px; border:1px solid #303640;
+    background:#1a1f26; color:var(--ink); padding:0 12px 0 34px; outline:none;
+  }
+  #menuSearch:focus{border-color:var(--gold); box-shadow:0 0 0 3px rgba(201,161,90,.12);}
+  .results-count{font-size:11px; color:var(--muted); text-align:center; min-height:16px; margin:7px 0 0;}
+  .no-results{padding:18px; text-align:center; color:var(--muted); font-size:13px;}
+
+  /* ---------- Micro feedback ---------- */
+  .toast{
+    position:fixed; left:50%; bottom:22px; z-index:300;
+    transform:translateX(-50%);
+    background:#242a32; border:1px solid #454d58; color:var(--cream);
+    border-radius:999px; padding:10px 15px; font-size:12px;
+    box-shadow:0 12px 30px rgba(0,0,0,.4);
+    animation:toastIn .2s ease both;
+  }
+  @keyframes toastIn{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+
+  @media (max-width:620px){
+    .wheel-wrap.is-hover-paused::after{font-size:8px; top:-9px;}
+    body{padding:18px 10px 0;}
+    .controls-bar{border-radius:16px; gap:9px; padding:9px 10px;}
+    .speed-label{flex-basis:100%; order:3;}
+    .wheel-row{gap:2px;}
+    .wheel-nav{width:30px;height:30px;}
+    .tray{bottom:8px; margin-bottom:12px;}
+    .modal-card{border-radius:18px;}
+    .product-visual{width:140px; font-size:58px;}
+    .modal-content{padding:15px 16px 18px;}
+    .modal-content h3{font-size:23px;}
+  }
+  @media (max-width:390px){
+    .wheel-wrap{width:clamp(170px,61vw,300px);}
+    .category-plate{width:58px;height:58px;}
+    .plate-face .emoji{font-size:17px;}
+    .plate-face .cat-name{font-size:8.5px;}
+  }
+
+
+  .food-img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    border-radius:50%; filter:saturate(1.05) contrast(1.03);
+  }
+  .plate-face .food-img{
+    width:74%; height:74%; border-radius:50%;
+    box-shadow:0 2px 6px rgba(0,0,0,.28);
+  }
+  .category-plate .plate-face{
+    overflow:hidden;
+  }
+  .category-plate .plate-face .cat-name{
+    position:absolute; left:50%; bottom:7px; transform:translateX(-50%);
+    z-index:2; white-space:nowrap;
+    padding:2px 5px; border-radius:999px;
+    background:rgba(255,255,255,.82); backdrop-filter:blur(2px);
+  }
+  .modal-photo{
+    margin:0 auto; width:min(360px,82vw); aspect-ratio:4/3;
+    border-radius:18px; overflow:hidden; position:relative;
+    background:#211a14; border:1px solid #3b342b;
+    box-shadow:0 18px 40px rgba(0,0,0,.42);
+  }
+  .modal-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .modal-photo::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(180deg,rgba(255,255,255,.10),transparent 35%,rgba(0,0,0,.18));
+  }
+  #threeTableCanvas{
+    position:absolute; inset:0; width:100%; height:100%;
+    border-radius:50%; pointer-events:none; z-index:1;
+    opacity:.98;
+  }
+  .wheel-items{z-index:4;}
+  .wheel-hub{z-index:5;}
+  .disc-gloss{z-index:6;}
+  .table-stage{position:relative;}
+  .three-badge{
+    margin:7px auto 0; font-size:10px; color:var(--muted);
+    opacity:.7; letter-spacing:.04em;
+  }
+
+
+  /* Compact controls: deliberately secondary so the Kaiten remains the hero */
+  .compact-controls{
+    width:max-content;
+    margin:6px auto 2px;
+    min-height:32px;
+    padding:3px 6px;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:999px;
+    background:rgba(15,12,10,.48);
+    backdrop-filter:blur(9px);
+    box-shadow:0 5px 16px rgba(0,0,0,.16);
+    opacity:.48;
+    transition:opacity .18s ease, background .18s ease;
+  }
+  .compact-controls:hover,
+  .compact-controls:focus-within{
+    opacity:.92;
+    background:rgba(15,12,10,.72);
+  }
+  .compact-play{
+    width:25px;height:25px;
+    padding:0;border:0;border-radius:50%;
+    display:grid;place-items:center;
+    background:transparent;
+    color:#f7ead3;
+    cursor:pointer;
+    font-size:10px;
+    line-height:1;
+  }
+  .compact-play:hover{
+    background:rgba(219,49,34,.8);
+    color:#fff;
+  }
+  .speed-icon{
+    font-size:11px;
+    color:rgba(247,234,211,.52);
+    line-height:1;
+  }
+  #speedSlider{
+    width:62px;
+    height:3px;
+    margin:0;
+    cursor:pointer;
+    accent-color:#d93625;
+  }
+  .controls-context{display:none!important;}
+  @media(max-width:620px){
+    .compact-controls{
+      min-height:29px;
+      padding:2px 5px;
+      opacity:.58;
+    }
+    .compact-play{width:23px;height:23px;}
+    #speedSlider{width:52px;}
+  }
+
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.min.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Restaurant",
+  "name":"Menú Kaiten",
+  "servesCuisine":["Japanese","Sushi"],
+  "hasMenu":{
+    "@type":"Menu",
+    "name":"Menú Kaiten",
+    "hasMenuSection":[
+      {"@type":"MenuSection","name":"Entradas"},
+      {"@type":"MenuSection","name":"Sushi"},
+      {"@type":"MenuSection","name":"Rolls"},
+      {"@type":"MenuSection","name":"Ramen"},
+      {"@type":"MenuSection","name":"Postres"},
+      {"@type":"MenuSection","name":"Bebidas"}
+    ]
+  }
+}
+</script>
+
+</head>
+<body>
+
+<header>
+  <div class="seal">鮨</div>
+  <h1>Menú Kaiten</h1>
+  <p>Explora por categoría · toca un platillo para ver ingredientes y detalles</p>
+</header>
+
+<div class="controls-bar compact-controls" aria-label="Controles de animación">
+  <button class="compact-play" id="playPauseBtn" type="button"
+          aria-label="Pausar giro" title="Pausar giro">⏸</button>
+  <span class="speed-icon" aria-hidden="true">◔</span>
+  <input type="range" id="speedSlider" min="0" max="10" value="4" step="1"
+         aria-label="Velocidad de la mesa" title="Velocidad de la mesa">
+  <span class="controls-context" id="controlsContext" aria-hidden="true"></span>
+</div>
+
+<div class="discover-bar" role="search">
+  <div class="search-wrap">
+    <span aria-hidden="true">⌕</span>
+    <input id="menuSearch" type="search" placeholder="Buscar sushi, ramen, ingredientes..." autocomplete="off" aria-label="Buscar en el menú">
+  </div>
+</div>
+<div class="results-count" id="resultsCount" aria-live="polite"></div>
+
+<section class="view" id="view-wheel">
+  <div class="table-stage">
+    <div class="wheel-row">
+      <button class="wheel-nav" id="wheelPrevBtn" type="button" aria-label="Categoría anterior">‹</button>
+      <div class="wheel-wrap" id="wheelWrap" tabindex="0"
+           aria-label="Mesa giratoria de categorías. Flechas para girar, Enter para elegir el platillo al frente.">
+        <div class="table-shadow"></div>
+        <div class="wheel-disc"></div>
+        <canvas id="threeTableCanvas" aria-hidden="true"></canvas>
+        <div class="disc-gloss"></div>
+        <div class="wheel-hub">
+          <span class="hub-kanji">鮨</span>
+          <span class="hub-text">Gira la mesa<br>para elegir</span>
+        </div>
+        <div class="wheel-items" id="wheelItems"></div>
+      </div>
+      <button class="wheel-nav" id="wheelNextBtn" type="button" aria-label="Categoría siguiente">›</button>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="view-belt" hidden>
+  <div class="belt-header">
+    <button class="icon-btn" id="backBtn" type="button">← Volver a la mesa</button>
+    <h2 id="beltTitle"></h2>
+    <div class="belt-step-group">
+      <button class="icon-btn ghost" id="beltPrevBtn" type="button" aria-label="Platillo anterior">‹</button>
+      <button class="icon-btn ghost" id="beltNextBtn" type="button" aria-label="Platillo siguiente">›</button>
+    </div>
+  </div>
+  <div class="belt-track-wrap" id="beltWrap" tabindex="0"
+       aria-label="Cinta de platillos. Arrastra, usa las flechas, o Enter para pedir el platillo al frente.">
+    <div class="belt-rail-bolts"></div>
+    <div class="belt-focus-zone"></div>
+    <div class="belt-track" id="beltTrack"></div>
+    <div class="belt-edge-fade left"></div>
+    <div class="belt-edge-fade right"></div>
+  </div>
+  <p class="belt-hint">arrastra para mover · pasa el cursor para pausar</p>
+  <div class="three-badge">Kaiten · madera · movimiento suave</div>
+</section>
+
+<div class="tray" id="tray">
+  <div class="tray-summary" id="traySummary" role="button" tabindex="0" aria-controls="trayDetails" aria-expanded="false">
+    <span id="traySummaryText">🧾 0 platos · $0</span>
+    <span class="hint" id="trayHint">ver orden ▾</span>
+  </div>
+  <div class="tray-details" id="trayDetails" hidden>
+    <div id="trayRows"><p class="empty-msg">Aún no has tomado ningún platillo.</p></div>
+    <button class="clear-btn" id="clearBtn" type="button">Vaciar orden</button>
+  </div>
+</div>
+
+
+<div class="product-modal" id="productModal" hidden aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-top">
+      <button class="modal-close" id="modalClose" type="button" aria-label="Cerrar detalles">×</button>
+    </div>
+    <div class="modal-photo"><img id="modalImage" src="" alt="" decoding="async"></div>
+    <div class="modal-content">
+      <div class="modal-kicker" id="modalCategory">Sushi</div>
+      <h3 id="modalTitle">Nigiri de salmón</h3>
+      <div class="modal-price" id="modalPrice">$28</div>
+      <div class="detail-grid">
+        <div class="detail-block">
+          <div class="detail-label">Ingredientes</div>
+          <div class="detail-text" id="modalIngredients">Salmón, arroz de sushi, vinagre de arroz y wasabi.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">Descripción</div>
+          <div class="detail-text" id="modalDescription">Corte de salmón sobre arroz sazonado, preparado al momento.</div>
+        </div>
+        <div class="detail-block">
+          <div class="detail-label">Nivel de precio</div>
+          <div class="detail-text" id="modalTier">Plato verde</div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary-action" id="modalBack" type="button">Seguir explorando</button>
+        <button class="primary-action" id="modalAdd" type="button">Agregar a la orden</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- Data ---------------- */
+  var DATA = {
+    entradas: { label:"Entradas", emoji:"🥟", color:"var(--cat-entradas)", items:[
+      ["Edamame",60,"Edamame al vapor con sal marina.","Edamame, sal marina.","Ligero y fresco para comenzar."],
+      ["Gyoza de cerdo (6pz)",85,"Gyoza dorada rellena de cerdo y vegetales.","Cerdo, col, cebollín, ajo, jengibre y masa de gyoza.","Crujiente por fuera y jugosa por dentro."],
+      ["Sopa miso",45,"Sopa japonesa reconfortante de sabor umami.","Pasta miso, dashi, tofu, wakame y cebollín.","Caldo suave y aromático."],
+      ["Ensalada wakame",55,"Ensalada fresca de algas con aderezo japonés.","Wakame, pepino, sésamo y aderezo de soya.","Fresca, ligera y ligeramente dulce."],
+      ["Age-dashi tofu",70,"Tofu dorado servido con caldo dashi.","Tofu, fécula, dashi, soya, jengibre y cebollín.","Textura crujiente por fuera y suave por dentro."]
+    ]},
+    sushi: { label:"Sushi", emoji:"🍣", color:"var(--cat-sushi)", items:[
+      ["Nigiri de salmón",28,"Salmón fresco sobre arroz de sushi.","Salmón, arroz de sushi, vinagre de arroz y wasabi.","Corte suave, fresco y equilibrado."],
+      ["Nigiri de atún",34,"Atún fresco sobre arroz sazonado.","Atún, arroz de sushi, vinagre de arroz y wasabi.","Sabor limpio y textura firme."],
+      ["Nigiri de camarón",26,"Camarón cocido sobre arroz de sushi.","Camarón, arroz de sushi, vinagre de arroz y wasabi.","Dulce y delicado."],
+      ["Nigiri de tamago",22,"Omelette japonés dulce sobre arroz.","Huevo, dashi, azúcar, soya y arroz de sushi.","Suave, dulce y reconfortante."],
+      ["Nigiri de anguila",48,"Anguila glaseada con salsa dulce japonesa.","Anguila, arroz de sushi, salsa tare y sésamo.","Intenso, dulce y ahumado."],
+      ["Nigiri de pulpo",38,"Pulpo preparado sobre arroz de sushi.","Pulpo, arroz de sushi, vinagre de arroz y wasabi.","Firme, fresco y aromático."],
+      ["Nigiri de toro",68,"Corte premium de ventresca de atún.","Toro, arroz de sushi, vinagre de arroz y wasabi.","Muy suave, graso y de sabor profundo."],
+      ["Nigiri de erizo (uni)",62,"Uni cremoso sobre arroz de sushi.","Erizo de mar, arroz de sushi y nori.","Cremoso, marino y delicado."]
+    ]},
+    rolls: { label:"Rolls", emoji:"🍱", color:"var(--cat-rolls)", items:[
+      ["California roll",85,"Roll clásico con camarón y aguacate.","Camarón, aguacate, pepino, arroz y nori.","Fresco y fácil de disfrutar."],
+      ["Roll Philadelphia",92,"Roll cremoso con salmón y queso crema.","Salmón, queso crema, pepino, arroz y nori.","Cremoso, fresco y suave."],
+      ["Spicy tuna roll",98,"Atún con un toque picante y cremoso.","Atún, mayonesa picante, cebollín, arroz y nori.","Intenso, picante y umami."],
+      ["Roll tempura camarón",115,"Camarón en tempura con vegetales.","Camarón, tempura, aguacate, pepino, arroz y nori.","Crujiente y abundante."],
+      ["Roll dragón",128,"Roll especial con camarón y aguacate.","Camarón, aguacate, pepino, salsa tare, arroz y nori.","Sabor dulce-salado y textura cremosa."],
+      ["Roll rainbow",145,"Roll colorido con variedad de pescados.","Atún, salmón, camarón, aguacate, arroz y nori.","Variado, fresco y visualmente llamativo."],
+      ["Roll oro (uni y toro)",175,"Roll premium con uni y toro.","Uni, toro, arroz, nori y toppings de temporada.","La opción más exclusiva del menú."]
+    ]},
+    ramen: { label:"Ramen", emoji:"🍜", color:"var(--cat-ramen)", items:[
+      ["Ramen shoyu",130,"Caldo de soya con fideos y toppings.","Caldo dashi, soya, fideos, chashu, huevo y cebollín.","Umami profundo y equilibrado."],
+      ["Ramen miso",140,"Ramen de caldo miso, intenso y reconfortante.","Miso, dashi, fideos, maíz, chashu y cebollín.","Cremoso, salado y aromático."],
+      ["Ramen tonkotsu",155,"Caldo de cerdo cocido lentamente.","Tonkotsu, fideos, chashu, huevo, nori y cebollín.","Cuerpo intenso y textura sedosa."],
+      ["Ramen vegetariano",118,"Ramen vegetal con caldo aromático.","Caldo vegetal, fideos, tofu, hongos, maíz y cebollín.","Ligero, sabroso y vegetal."],
+      ["Ramen tantanmen",148,"Ramen picante inspirado en tantanmen japonés.","Caldo de sésamo, soya, chile, carne, fideos y cebollín.","Cremoso, picante y profundo."]
+    ]},
+    postres: { label:"Postres", emoji:"🍡", color:"var(--cat-postres)", items:[
+      ["Mochi surtido (3pz)",70,"Tres piezas de mochi de sabores variados.","Arroz glutinoso, relleno de temporada y azúcar.","Suave, elástico y dulce."],
+      ["Dorayaki",65,"Panqueques japoneses rellenos de anko.","Harina, huevo, miel y pasta dulce de frijol rojo.","Esponjoso y delicadamente dulce."],
+      ["Cheesecake matcha",90,"Cheesecake cremoso con matcha japonés.","Queso crema, matcha, huevo, azúcar y base de galleta.","Cremoso con un final ligeramente amargo."],
+      ["Mochi de sésamo negro",78,"Mochi con relleno de sésamo negro.","Arroz glutinoso, sésamo negro, azúcar y crema.","Aromático, tostado y dulce."]
+    ]},
+    bebidas: { label:"Bebidas", emoji:"🍵", color:"var(--cat-bebidas)", items:[
+      ["Té verde",35,"Té verde japonés servido caliente.","Té verde japonés y agua.","Limpio, vegetal y refrescante."],
+      ["Ramune",50,"Refresco japonés con su característica botella.","Agua carbonatada, azúcar y saborizante.","Dulce, frío y divertido."],
+      ["Cerveza japonesa",80,"Cerveza japonesa lager servida fría.","Malta, lúpulo, levadura y agua.","Ligera y refrescante."],
+      ["Sake copa",95,"Sake servido en copa para acompañar sushi.","Arroz, koji, levadura y agua.","Suave, aromático y ligeramente dulce."],
+      ["Sake botella",260,"Botella de sake para compartir.","Arroz, koji, levadura y agua.","Ideal para compartir durante la comida."]
+    ]}
+  };
+
+  function tierFor(price){
+    if(price<=40)  return {name:"verde",   color:"var(--tier-green)"};
+    if(price<=80)  return {name:"amarillo",color:"var(--tier-yellow)"};
+    if(price<=120) return {name:"rojo",    color:"var(--tier-red)"};
+    if(price<=160) return {name:"plata",   color:"var(--tier-silver)"};
+    return {name:"oro", color:"var(--tier-gold-bg)"};
+  }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];
+    });
+  }
+  function itemData(catKey, entry){
+    return {name:entry[0], price:entry[1], description:entry[2], ingredients:entry[3], notes:entry[4], category:DATA[catKey]};
+  }
+  function fmt(n){ return "$" + n.toLocaleString("es-MX"); }
+  
+  var FOOD_IMAGES = {
+    sushi: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=900&q=82",
+    ramen: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=82",
+    rolls: "https://images.unsplash.com/photo-1617196034183-421b4917c92d?auto=format&fit=crop&w=900&q=82",
+    entradas: "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=900&q=82",
+    postres: "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=900&q=82",
+    bebidas: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=900&q=82"
+  };
+
+  var ITEM_IMAGES = {
+    "Nigiri de salmón": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=900&q=82",
+    "Nigiri de atún": "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?auto=format&fit=crop&w=900&q=82",
+    "Nigiri de camarón": "https://images.unsplash.com/photo-1563612116625-3012372fccce?auto=format&fit=crop&w=900&q=82",
+    "California roll": "https://images.unsplash.com/photo-1617196034183-421b4917c92d?auto=format&fit=crop&w=900&q=82",
+    "Roll Philadelphia": "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=900&q=82",
+    "Spicy tuna roll": "https://images.unsplash.com/photo-1559410547-e4c3e316fe9f?auto=format&fit=crop&w=900&q=82",
+    "Roll tempura camarón": "https://images.unsplash.com/photo-1558985250-27a406d64cb3?auto=format&fit=crop&w=900&q=82",
+    "Ramen shoyu": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=82",
+    "Ramen miso": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=82",
+    "Ramen tonkotsu": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=82",
+    "Gyoza de cerdo (6pz)": "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=900&q=82",
+    "Cheesecake matcha": "https://images.unsplash.com/photo-1515823064-d6e0c04616a7?auto=format&fit=crop&w=900&q=82",
+    "Té verde": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=900&q=82"
+  };
+
+  function imageFor(catKey, name){
+    return ITEM_IMAGES[name] || FOOD_IMAGES[catKey] || FOOD_IMAGES.sushi;
+  }
+
+function plateSvg(rimColor, content, extraClass, imageUrl, alt){
+    var media = imageUrl
+      ? '<img class="food-img" src="'+imageUrl+'" alt="'+(alt||"")+'" loading="lazy" decoding="async">'
+      : content;
+    return '<span class="plate-3d'+(extraClass?(' '+extraClass):'')+'">' +
+             '<span class="plate-shadow"></span>' +
+             '<span class="plate-face" style="--rim:'+rimColor+'">'+media+'</span>' +
+           '</span>';
+  }
+
+  /* ---------------- Shared speed / play state ---------------- */
+  var reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var isPlaying = true;
+  var wheelHoverPaused = false;
+  window.isPlayingForThree = isPlaying;
+  var speedSlider = document.getElementById("speedSlider");
+  var playPauseBtn = document.getElementById("playPauseBtn");
+  var controlsContext = document.getElementById("controlsContext");
+  var wheelAutoSpeed = 20;   // deg/sec
+  var beltAutoSpeed = 46;    // px/sec
+
+  function applySpeed(){
+    var v = Number(speedSlider.value);
+    var mult = 0.35 + v*0.165; // ~0.35x lento .. ~2.0x rápido (≈1x en v=4)
+    wheelAutoSpeed = 20 * mult;
+    beltAutoSpeed = 46 * mult;
+  }
+  speedSlider.addEventListener("input", applySpeed);
+
+  function isBeltActive(){ return !viewBelt.hidden; }
+  function syncControlsUI(){
+    var belt = isBeltActive();
+    var label = isPlaying
+      ? (belt ? "Pausar cinta" : "Pausar giro")
+      : (belt ? "Reanudar cinta" : "Reanudar giro");
+    controlsContext.textContent = label;
+    playPauseBtn.textContent = isPlaying ? "⏸" : "▶";
+    playPauseBtn.setAttribute("aria-label", label);
+    playPauseBtn.setAttribute("title", label);
+  }
+  playPauseBtn.addEventListener("click", function(){ isPlaying = !isPlaying; window.isPlayingForThree = isPlaying; syncControlsUI(); });
+
+  /* ---------------- Wheel (rotating table) ---------------- */
+  var wheelWrap = document.getElementById("wheelWrap");
+  var wheelItemsEl = document.getElementById("wheelItems");
+  var viewWheel = document.getElementById("view-wheel");
+  var viewBelt = document.getElementById("view-belt");
+  var keys = Object.keys(DATA);
+  var baseAngle = keys.map(function(_,i){ return -90 + (360/keys.length)*i; });
+  var plateEls = [];
+
+  keys.forEach(function(key){
+    var cat = DATA[key];
+    var b = document.createElement("button");
+    b.className = "category-plate";
+    b.type = "button";
+    b.dataset.key = key;
+    b.setAttribute("aria-label", cat.label);
+    b.innerHTML = plateSvg(cat.color, '<span class="emoji">'+cat.emoji+'</span><span class="cat-name">'+cat.label+'</span>', '', imageFor(key, cat.label), cat.label);
+    b.addEventListener("click", function(){ selectCategory(key); });
+    wheelItemsEl.appendChild(b);
+    plateEls.push(b);
+  });
+
+  var geo = {cx:0,cy:0,rx:0,ry:0,plateHalf:30};
+  function updateGeometry(){
+    var r = wheelWrap.getBoundingClientRect();
+    geo.cx = r.width/2; geo.cy = r.height/2;
+    geo.rx = r.width/2*0.80; geo.ry = r.height/2*0.62;
+    if(plateEls[0]) geo.plateHalf = plateEls[0].offsetWidth/2;
+  }
+  window.addEventListener("resize", updateGeometry);
+
+  var currentAngle = 0, velocity = 0, isDragging = false;
+  var dragStartAngle = 0, dragStartCurrentAngle = 0;
+  var lastPointerAngle = 0, lastPointerTime = 0;
+  var pStartX=0,pStartY=0,pStartTime=0;
+  var DECAY_K = 2.996; // -ln(0.05), used to size velocity bursts for stepping
+
+  function pointerAngleDeg(clientX, clientY){
+    var r = wheelWrap.getBoundingClientRect();
+    var lx = clientX - r.left - geo.cx;
+    var ly = clientY - r.top - geo.cy;
+    var aspect = (geo.ry||1)/(geo.rx||1);
+    var ny = aspect ? ly/aspect : ly;
+    return Math.atan2(ny, lx) * 180/Math.PI;
+  }
+
+  wheelWrap.addEventListener("pointerenter", function(){
+    wheelHoverPaused = true;
+    wheelWrap.classList.add("is-hover-paused");
+  });
+  wheelWrap.addEventListener("pointerleave", function(){
+    wheelHoverPaused = false;
+    wheelWrap.classList.remove("is-hover-paused");
+  });
+
+  wheelWrap.addEventListener("pointerdown", function(e){
+    updateGeometry();
+    isDragging = true;
+    velocity = 0;
+    wheelWrap.setPointerCapture(e.pointerId);
+    dragStartAngle = pointerAngleDeg(e.clientX, e.clientY);
+    dragStartCurrentAngle = currentAngle;
+    lastPointerAngle = dragStartAngle;
+    lastPointerTime = performance.now();
+    pStartX = e.clientX; pStartY = e.clientY; pStartTime = Date.now();
+  });
+
+  wheelWrap.addEventListener("pointermove", function(e){
+    if(!isDragging) return;
+    var now = performance.now();
+    var ang = pointerAngleDeg(e.clientX, e.clientY);
+    var delta = ang - dragStartAngle;
+    while(delta > 180) delta -= 360;
+    while(delta < -180) delta += 360;
+    currentAngle = dragStartCurrentAngle + delta;
+    var dt = Math.max(1, now - lastPointerTime);
+    var instDelta = ang - lastPointerAngle;
+    while(instDelta > 180) instDelta -= 360;
+    while(instDelta < -180) instDelta += 360;
+    velocity = instDelta / (dt/1000);
+    lastPointerAngle = ang;
+    lastPointerTime = now;
+  });
+
+  function frontCategoryIndex(){
+    var frontIdx = 0, best = 1e9;
+    keys.forEach(function(k,i){
+      var a = ((baseAngle[i]+currentAngle) % 360 + 360) % 360;
+      var d = Math.abs(a - 90); d = Math.min(d, 360-d);
+      if(d < best){ best = d; frontIdx = i; }
+    });
+    return frontIdx;
+  }
+
+  function endDrag(e){
+    if(!isDragging) return;
+    isDragging = false;
+    var dist = Math.hypot(e.clientX-pStartX, e.clientY-pStartY);
+    var dur = Date.now() - pStartTime;
+    if(dist < 6 && dur < 350){
+      var el = document.elementFromPoint(e.clientX, e.clientY);
+      var plate = el && el.closest ? el.closest(".category-plate") : null;
+      if(plate){ velocity = 0; selectCategory(plate.dataset.key); }
+    }
+  }
+  wheelWrap.addEventListener("pointerup", endDrag);
+  wheelWrap.addEventListener("pointercancel", endDrag);
+
+  function stepWheel(dir){
+    isDragging = false;
+    var slot = 360/keys.length;
+    velocity = dir * slot * DECAY_K;
+  }
+  document.getElementById("wheelPrevBtn").addEventListener("click", function(){ stepWheel(-1); });
+  document.getElementById("wheelNextBtn").addEventListener("click", function(){ stepWheel(1); });
+
+  wheelWrap.addEventListener("keydown", function(e){
+    if(e.key === "ArrowLeft"){ stepWheel(-1); e.preventDefault(); }
+    else if(e.key === "ArrowRight"){ stepWheel(1); e.preventDefault(); }
+    else if(e.key === "Enter" || e.key === " "){
+      selectCategory(keys[frontCategoryIndex()]);
+      e.preventDefault();
+    }
+  });
+
+  var lastFrame = performance.now();
+  function frame(now){
+    var dt = Math.min(0.05, (now-lastFrame)/1000);
+    lastFrame = now;
+    if(isDragging){ /* angle already set on move */ }
+    else if(Math.abs(velocity) > 2){
+      currentAngle += velocity*dt;
+      velocity *= Math.pow(0.05, dt);
+    } else {
+      velocity = 0;
+      if(isPlaying && !wheelHoverPaused && !isBeltActive()) currentAngle += wheelAutoSpeed*dt;
+    }
+    plateEls.forEach(function(el,i){
+      var a = (baseAngle[i]+currentAngle) * Math.PI/180;
+      var x = geo.cx + geo.rx*Math.cos(a) - geo.plateHalf;
+      var y = geo.cy + geo.ry*Math.sin(a) - geo.plateHalf;
+      var depth = (Math.sin(a)+1)/2; // 0 back .. 1 front
+      var scale = 0.80 + 0.30*depth;
+      el.style.transform = "translate("+x+"px,"+y+"px) scale("+scale+")";
+      el.style.zIndex = Math.round(depth*100)+1;
+      el.style.opacity = String(0.72 + 0.28*depth);
+    });
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(function(t){ lastFrame=t; updateGeometry(); applySpeed(); syncControlsUI(); requestAnimationFrame(frame); });
+
+  /* ---------------- Belt (conveyor) ---------------- */
+  var beltTrack = document.getElementById("beltTrack");
+  var beltTitle = document.getElementById("beltTitle");
+  var backBtn = document.getElementById("backBtn");
+  var beltWrap = document.getElementById("beltWrap");
+  var hoverPaused = false;
+
+  var beltScrollPos = 0, beltVelocity = 0, beltDragging = false;
+  var beltDragStartX = 0, beltDragStartPos = 0;
+  var beltLastX = 0, beltLastTime = 0;
+  var beltEls = [];        // every rendered .belt-item (all repeated copies)
+  var beltOffsets = [];    // static left offset (px, before transform) of each el
+  var beltWidths = [];     // measured width of each el
+  var beltSetWidth = 0;    // width of a single copy (one full pass through the category)
+  var beltWrapWidth = 0;
+
+  beltWrap.addEventListener("pointerenter", function(){ hoverPaused = true; });
+  beltWrap.addEventListener("pointerleave", function(){ hoverPaused = false; });
+
+  function showView(el){
+    el.hidden = false;
+    el.classList.add("enter");
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.classList.remove("enter"); }); });
+  }
+
+  function measureBelt(){
+    beltWrapWidth = beltWrap.getBoundingClientRect().width;
+    beltOffsets = []; beltWidths = [];
+    var left = 0;
+    beltEls.forEach(function(el){
+      var w = el.getBoundingClientRect().width;
+      beltOffsets.push(left);
+      beltWidths.push(w);
+      left += w;
+    });
+    var n = beltEls.length / 3; // three copies were rendered
+    beltSetWidth = 0;
+    for(var i=0;i<n;i++){ beltSetWidth += beltWidths[i]; }
+  }
+
+  var currentBeltKey = null;
+
+  function renderBeltEntries(entries, title){
+    beltTitle.textContent = title;
+    beltTrack.innerHTML = "";
+    beltEls = [];
+    beltScrollPos = 0; beltVelocity = 0;
+
+    var frag = document.createDocumentFragment();
+    for(var copy=0; copy<3; copy++){
+      entries.forEach(function(item){
+        var key = item.key, entry = item.entry, cat = DATA[key];
+        var name = entry[0], price = entry[1];
+        var tier = tierFor(price);
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "belt-item";
+        b.dataset.name = name; b.dataset.price = price; b.dataset.category = key;
+        b.innerHTML =
+          '<span class="plate-circle-wrap">'+ plateSvg(tier.color, cat.emoji, '', imageFor(key, name), name) +'</span>' +
+          '<span class="item-label"><span class="item-name">'+name+'</span><br>' +
+          '<span class="item-price">'+fmt(price)+'</span></span>';
+        b.setAttribute("aria-label", name + ", " + fmt(price) + ". Ver detalles");
+        b.addEventListener("click", function(){
+          openProduct(key, entry, b);
+          b.classList.remove("taken");
+          void b.offsetWidth;
+          b.classList.add("taken");
+        });
+        frag.appendChild(b);
+        beltEls.push(b);
+      });
+    }
+    beltTrack.appendChild(frag);
+
+    viewWheel.hidden = true;
+    showView(viewBelt);
+    requestAnimationFrame(function(){ measureBelt(); syncControlsUI(); });
+  }
+
+  function selectCategory(key){
+    var cat = DATA[key];
+    if(!cat) return;
+    currentBeltKey = key;
+    renderBeltEntries(cat.items.map(function(entry){ return {key:key, entry:entry}; }), cat.emoji + " " + cat.label);
+  }
+
+  function showSearchResults(found, query){
+    currentBeltKey = null;
+    renderBeltEntries(found, 'Resultados para "' + query + '"');
+  }
+
+  backBtn.addEventListener("click", function(){
+    viewBelt.hidden = true;
+    showView(viewWheel);
+    syncControlsUI();
+  });
+
+  function beltFrontIndex(){
+    // index (within the first copy) whose current on-screen center is closest to the wrap's center
+    if(!beltEls.length || !beltSetWidth) return 0;
+    var wrapCenter = beltWrapWidth/2;
+    var shift = -mod(beltScrollPos, beltSetWidth);
+    var n = beltEls.length/3;
+    var best = 0, bestDist = Infinity;
+    for(var i=0;i<n;i++){
+      var center = beltOffsets[i] + beltWidths[i]/2 + shift;
+      var d = Math.abs(center - wrapCenter);
+      if(d < bestDist){ bestDist = d; best = i; }
+    }
+    return best;
+  }
+
+  function mod(a,b){ return ((a%b)+b)%b; }
+
+  beltWrap.addEventListener("pointerdown", function(e){
+    beltDragging = true;
+    beltVelocity = 0;
+    beltWrap.setPointerCapture(e.pointerId);
+    beltDragStartX = e.clientX;
+    beltDragStartPos = beltScrollPos;
+    beltLastX = e.clientX;
+    beltLastTime = performance.now();
+    pStartX = e.clientX; pStartY = e.clientY; pStartTime = Date.now();
+  });
+
+  beltWrap.addEventListener("pointermove", function(e){
+    if(!beltDragging) return;
+    var now = performance.now();
+    var dx = e.clientX - beltDragStartX;
+    beltScrollPos = beltDragStartPos - dx;
+    var dt = Math.max(1, now - beltLastTime);
+    var instDx = e.clientX - beltLastX;
+    beltVelocity = -instDx / (dt/1000);
+    beltLastX = e.clientX;
+    beltLastTime = now;
+  });
+
+  function endBeltDrag(e){
+    if(!beltDragging) return;
+    beltDragging = false;
+    var dist = Math.hypot(e.clientX-pStartX, e.clientY-pStartY);
+    var dur = Date.now() - pStartTime;
+    if(dist < 6 && dur < 350){
+      var el = document.elementFromPoint(e.clientX, e.clientY);
+      var item = el && el.closest ? el.closest(".belt-item") : null;
+      if(item){ beltVelocity = 0; item.click(); }
+    }
+  }
+  beltWrap.addEventListener("pointerup", endBeltDrag);
+  beltWrap.addEventListener("pointercancel", endBeltDrag);
+
+  function stepBelt(dir){
+    if(!beltSetWidth) return;
+    beltDragging = false;
+    var n = beltEls.length/3;
+    var pitch = beltSetWidth / Math.max(1,n);
+    beltVelocity = dir * pitch * DECAY_K;
+  }
+  document.getElementById("beltPrevBtn").addEventListener("click", function(){ stepBelt(-1); });
+  document.getElementById("beltNextBtn").addEventListener("click", function(){ stepBelt(1); });
+
+  beltWrap.addEventListener("keydown", function(e){
+    if(e.key === "ArrowLeft"){ stepBelt(-1); e.preventDefault(); }
+    else if(e.key === "ArrowRight"){ stepBelt(1); e.preventDefault(); }
+    else if(e.key === "Enter" || e.key === " "){
+      var idx = beltFrontIndex();
+      if(beltEls[idx]) beltEls[idx].click();
+      e.preventDefault();
+    }
+  });
+
+  window.addEventListener("resize", function(){ if(!viewBelt.hidden) measureBelt(); });
+
+  var beltLastFrame = performance.now();
+  function beltFrame(now){
+    var dt = Math.min(0.05, (now-beltLastFrame)/1000);
+    beltLastFrame = now;
+    if(isBeltActive() && beltSetWidth){
+      if(beltDragging){ /* position already set on pointermove */ }
+      else if(Math.abs(beltVelocity) > 2){
+        beltScrollPos += beltVelocity*dt;
+        beltVelocity *= Math.pow(0.05, dt);
+      } else {
+        beltVelocity = 0;
+        if(isPlaying && !hoverPaused) beltScrollPos += beltAutoSpeed*dt;
+      }
+      var shift = -mod(beltScrollPos, beltSetWidth);
+      beltTrack.style.transform = "translateX("+shift+"px)";
+
+      var wrapCenter = beltWrapWidth/2;
+      var focusRadius = 150;
+      for(var i=0;i<beltEls.length;i++){
+        var center = beltOffsets[i] + beltWidths[i]/2 + shift;
+        var d = Math.abs(center - wrapCenter);
+        var t = Math.max(0, 1 - d/focusRadius);
+        var scale = 0.86 + 0.18*t;
+        beltEls[i].style.transform = "scale("+scale+")";
+        beltEls[i].style.opacity = String(0.75 + 0.25*t);
+      }
+    }
+    requestAnimationFrame(beltFrame);
+  }
+  requestAnimationFrame(function(t){ beltLastFrame=t; requestAnimationFrame(beltFrame); });
+
+
+  /* ---------------- Search ---------------- */
+  var menuSearch = document.getElementById("menuSearch");
+  var resultsCount = document.getElementById("resultsCount");
+
+  function allSearchItems(){
+    var out = [];
+    keys.forEach(function(key){
+      DATA[key].items.forEach(function(entry){ out.push({key:key, entry:entry}); });
+    });
+    return out;
+  }
+
+  function runSearch(query){
+    query = query.trim().toLocaleLowerCase("es-MX");
+    if(!query){
+      resultsCount.textContent = "";
+      if(!viewBelt.hidden && currentBeltKey){ selectCategory(currentBeltKey); }
+      return;
+    }
+    var found = allSearchItems().filter(function(x){
+      var text = [x.entry[0], x.entry[2], x.entry[3], x.entry[4], DATA[x.key].label].join(" ").toLocaleLowerCase("es-MX");
+      return text.indexOf(query) !== -1;
+    });
+    resultsCount.textContent = found.length + (found.length === 1 ? " resultado" : " resultados");
+    if(found.length === 0){
+      resultsCount.textContent = "No encontramos ese platillo";
+      return;
+    }
+    // El submenú muestra EXCLUSIVAMENTE los elementos que coinciden.
+    showSearchResults(found, menuSearch.value.trim());
+    requestAnimationFrame(function(){
+      var first = beltEls[0];
+      if(first) first.scrollIntoView({behavior:"smooth", inline:"center", block:"nearest"});
+    });
+  }
+  menuSearch.addEventListener("input", function(){ runSearch(menuSearch.value); });
+
+
+  /* ---------------- Three.js realistic table layer ---------------- */
+  (function initThreeTable(){
+    if(!window.THREE) return;
+    var canvas = document.getElementById("threeTableCanvas");
+    var host = document.getElementById("wheelWrap");
+    if(!canvas || !host) return;
+
+    var renderer = new THREE.WebGLRenderer({
+      canvas:canvas, alpha:true, antialias:true, powerPreference:"high-performance"
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.8));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(30, 1, .1, 20);
+    camera.position.set(0, 4.5, 6.6);
+    camera.lookAt(0,0,0);
+
+    var group = new THREE.Group();
+    scene.add(group);
+
+    var ambient = new THREE.HemisphereLight(0xfff5df, 0x17120e, 2.0);
+    scene.add(ambient);
+
+    var keyLight = new THREE.DirectionalLight(0xffead0, 3.1);
+    keyLight.position.set(-3,5,4);
+    scene.add(keyLight);
+
+    var fillLight = new THREE.PointLight(0xc5d9ff, 1.1, 10);
+    fillLight.position.set(3,2,-2);
+    scene.add(fillLight);
+
+    var wood = new THREE.MeshStandardMaterial({
+      color:0x5b3d28, roughness:.48, metalness:.02
+    });
+    var darkWood = new THREE.MeshStandardMaterial({
+      color:0x24180f, roughness:.55, metalness:.02
+    });
+    var metal = new THREE.MeshStandardMaterial({
+      color:0x4a4037, roughness:.28, metalness:.72
+    });
+
+    var table = new THREE.Mesh(
+      new THREE.CylinderGeometry(2.86, 2.98, .26, 96),
+      wood
+    );
+    table.position.y = -.18;
+    group.add(table);
+
+    var lower = new THREE.Mesh(
+      new THREE.CylinderGeometry(2.74, 2.88, .16, 96),
+      darkWood
+    );
+    lower.position.y = -.36;
+    group.add(lower);
+
+    var innerRing = new THREE.Mesh(
+      new THREE.TorusGeometry(2.35,.075,16,96),
+      metal
+    );
+    innerRing.rotation.x = Math.PI/2;
+    innerRing.position.y = -.01;
+    group.add(innerRing);
+
+    for(var i=0;i<18;i++){
+      var groove = new THREE.Mesh(
+        new THREE.TorusGeometry(2.48 + (i%3)*.06, .012, 8, 96),
+        new THREE.MeshStandardMaterial({color:0x382417, roughness:.72})
+      );
+      groove.rotation.x = Math.PI/2;
+      groove.position.y = .02 + i*.0007;
+      group.add(groove);
+    }
+
+    function resize(){
+      var r = host.getBoundingClientRect();
+      var w = Math.max(1, r.width), h = Math.max(1, r.height);
+      renderer.setSize(w,h,false);
+      camera.aspect = w/h;
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    var last = performance.now();
+    function render(now){
+      var dt = Math.min(.05,(now-last)/1000);
+      last = now;
+      // Very subtle physical-looking motion; the DOM carousel remains the main interaction.
+      if(window.isPlayingForThree !== false && !wheelHoverPaused){
+        group.rotation.y += dt * 0.035;
+      }
+      renderer.render(scene,camera);
+      requestAnimationFrame(render);
+    }
+    requestAnimationFrame(render);
+  })();
+
+  /* ---------------- Order tray ---------------- */
+  var cart = {}; // name -> {name, price, tier, qty}
+  var activeProduct = null;
+  var lastFocusedElement = null;
+  var productModal = document.getElementById("productModal");
+  var modalClose = document.getElementById("modalClose");
+  var modalBack = document.getElementById("modalBack");
+  var modalAdd = document.getElementById("modalAdd");
+  var modalImage = document.getElementById("modalImage");
+  var modalCategory = document.getElementById("modalCategory");
+  var modalTitle = document.getElementById("modalTitle");
+  var modalPrice = document.getElementById("modalPrice");
+  var modalIngredients = document.getElementById("modalIngredients");
+  var modalDescription = document.getElementById("modalDescription");
+  var modalTier = document.getElementById("modalTier");
+  var toast = document.getElementById("toast");
+
+  function showToast(message){
+    toast.textContent = message;
+    toast.hidden = false;
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(function(){ toast.hidden = true; }, 1800);
+  }
+
+  function openProduct(catKey, entry, sourceEl){
+    var d = itemData(catKey, entry);
+    var tier = tierFor(d.price);
+    activeProduct = {catKey:catKey, entry:entry, tier:tier};
+    lastFocusedElement = sourceEl || document.activeElement;
+    modalCategory.textContent = d.category.emoji + " " + d.category.label;
+    modalTitle.textContent = d.name;
+    modalPrice.textContent = fmt(d.price);
+    modalIngredients.textContent = d.ingredients;
+    modalDescription.textContent = d.description + " " + d.notes;
+    modalTier.textContent = "Plato " + tier.name;
+    modalImage.src = imageFor(catKey, d.name);
+    modalImage.alt = d.name + " · " + d.category.label;
+    productModal.hidden = false;
+    productModal.setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+    requestAnimationFrame(function(){ modalClose.focus(); });
+  }
+
+  function closeProduct(){
+    productModal.hidden = true;
+    productModal.setAttribute("aria-hidden","true");
+    modalImage.removeAttribute("src");
+    document.body.style.overflow = "";
+    if(lastFocusedElement && typeof lastFocusedElement.focus === "function") lastFocusedElement.focus();
+    activeProduct = null;
+  }
+
+  modalClose.addEventListener("click", closeProduct);
+  modalBack.addEventListener("click", closeProduct);
+  productModal.addEventListener("click", function(e){
+    if(e.target === productModal) closeProduct();
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && !productModal.hidden) closeProduct();
+  });
+  modalAdd.addEventListener("click", function(){
+    if(!activeProduct) return;
+    var d = itemData(activeProduct.catKey, activeProduct.entry);
+    addToCart(d.name, d.price, activeProduct.tier);
+    showToast(d.name + " agregado a tu orden");
+    closeProduct();
+  });
+
+  var traySummaryText = document.getElementById("traySummaryText");
+  var trayHint = document.getElementById("trayHint");
+  var trayDetails = document.getElementById("trayDetails");
+  var trayRows = document.getElementById("trayRows");
+  var traySummary = document.getElementById("traySummary");
+
+  function addToCart(name, price, tier){
+    if(!cart[name]) cart[name] = {name:name, price:price, tier:tier, qty:0};
+    cart[name].qty += 1;
+    renderTray();
+  }
+
+  function renderTray(){
+    var totalQty = 0, totalPrice = 0;
+    var names = Object.keys(cart);
+    names.forEach(function(n){ totalQty += cart[n].qty; totalPrice += cart[n].qty*cart[n].price; });
+    traySummaryText.textContent = "🧾 " + totalQty + (totalQty===1?" plato · ":" platos · ") + fmt(totalPrice);
+
+    if(names.length === 0){
+      trayRows.innerHTML = '<p class="empty-msg">Aún no has tomado ningún platillo.</p>';
+      return;
+    }
+    var html = "";
+    names.forEach(function(n){
+      var it = cart[n];
+      html += '<div class="tray-row"><span><span class="tier-dot" style="background:'+it.tier.color+'"></span>' +
+              it.name + ' × ' + it.qty + '</span><span>' + fmt(it.price*it.qty) + '</span></div>';
+    });
+    html += '<div class="tray-total"><span>Total</span><span>' + fmt(totalPrice) + '</span></div>';
+    trayRows.innerHTML = html;
+  }
+
+  function toggleTray(){
+    var open = !trayDetails.hidden;
+    trayDetails.hidden = open;
+    traySummary.setAttribute("aria-expanded", String(!open));
+    trayHint.textContent = open ? "ver orden ▾" : "ocultar ▴";
+  }
+  traySummary.addEventListener("click", toggleTray);
+  traySummary.addEventListener("keydown", function(e){
+    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); toggleTray(); }
+  });
+
+  document.getElementById("clearBtn").addEventListener("click", function(e){
+    e.stopPropagation();
+    cart = {};
+    renderTray();
+  });
+
+  renderTray();
+})();
+</script>
+</body>
+</html>
