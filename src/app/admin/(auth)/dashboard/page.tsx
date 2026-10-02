@@ -107,7 +107,8 @@ export default async function DashboardPage() {
         {data.ultimosPedidos.length === 0 ? (
           <p className="text-muted-foreground py-4">No hay pedidos todavía</p>
         ) : (
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
             <thead>
               <tr className="text-left text-muted-foreground border-b border-border">
                 <th className="pb-2">Número</th>
@@ -140,7 +141,8 @@ export default async function DashboardPage() {
                 </tr>
               ))}
             </tbody>
-          </table>
+            </table>
+          </div>
         )}
       </div>
     </div>
