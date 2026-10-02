@@ -1,6 +1,9 @@
 "use client";
 // src/components/admin/PublicacionList.tsx
 // confidence: high
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { adminMutate } from "@/lib/admin-api";
 
 interface Publicacion {
   id: string;
@@ -15,10 +18,24 @@ interface Props {
 }
 
 export function PublicacionList({ publicaciones }: Props) {
+  const router = useRouter();
+  const [pendingId, setPendingId] = useState<string | null>(null);
+  const [errorId, setErrorId] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
   const handleDelete = async (id: string) => {
     if (!confirm("¿Eliminar publicación?")) return;
-    await fetch(`/api/admin/publicaciones/${id}`, { method: "DELETE" });
-    window.location.reload();
+    setPendingId(id);
+    setErrorId(null);
+    setErrorMsg(null);
+    const result = await adminMutate(`/api/admin/publicaciones/${id}`, { method: "DELETE" });
+    setPendingId(null);
+    if (!result.ok) {
+      setErrorId(id);
+      setErrorMsg(result.error);
+      return;
+    }
+    router.refresh();
   };
 
   if (publicaciones.length === 0) return <p className="text-muted-foreground">No hay publicaciones.</p>;
@@ -49,7 +66,10 @@ export function PublicacionList({ publicaciones }: Props) {
                 {new Date(p.fechaPublica).toLocaleDateString("es-AR")}
               </td>
               <td className="py-2 text-center">
-                <button onClick={() => handleDelete(p.id)} className="text-red-600 hover:text-red-800 text-xs">🗑️</button>
+                <button onClick={() => handleDelete(p.id)} disabled={pendingId === p.id} className="text-red-600 hover:text-red-800 text-xs">🗑️</button>
+                {errorId === p.id && errorMsg && (
+                  <span role="alert" className="block text-xs text-destructive-600 dark:text-destructive-foreground">{errorMsg}</span>
+                )}
               </td>
             </tr>
           ))}

@@ -2,12 +2,23 @@
 // src/components/admin/ProductoList.tsx
 // confidence: high
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { formatearPrecio } from "@/lib/utils";
+import { adminMutate } from "@/lib/admin-api";
 
 interface Categoria {
   id: string;
   nombre: string;
-  productos: { id: string; nombre: string; precio: number; disponible: boolean; orden: number }[];
+  productos: {
+    id: string;
+    nombre: string;
+    precio: number;
+    disponible: boolean;
+    orden: number;
+    descripcion: string | null;
+    imagen: string | null;
+    ingredientes: string | null;
+  }[];
 }
 
 interface Props {
@@ -15,11 +26,18 @@ interface Props {
 }
 
 export function ProductoList({ categorias }: Props) {
+  const router = useRouter();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editNombre, setEditNombre] = useState("");
   const [editPrecio, setEditPrecio] = useState(0);
   const [editCatId, setEditCatId] = useState("");
   const [editDisp, setEditDisp] = useState(true);
+  const [editDescripcion, setEditDescripcion] = useState<string | null>(null);
+  const [editImagen, setEditImagen] = useState<string | null>(null);
+  const [editIngredientes, setEditIngredientes] = useState<string | null>(null);
+  const [pendingId, setPendingId] = useState<string | null>(null);
+  const [errorId, setErrorId] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const allProducts = categorias.flatMap((c) =>
     c.productos.map((p) => ({ ...p, categoria: c.nombre, categoriaId: c.id }))
@@ -31,30 +49,58 @@ export function ProductoList({ categorias }: Props) {
     setEditPrecio(p.precio);
     setEditCatId(p.categoriaId);
     setEditDisp(p.disponible);
+    setEditDescripcion(p.descripcion);
+    setEditImagen(p.imagen);
+    setEditIngredientes(p.ingredientes);
+    setErrorId(null);
+    setErrorMsg(null);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setErrorId(null);
+    setErrorMsg(null);
   };
 
   const saveEdit = async (id: string) => {
-    // Necesitamos buscar la categoría del producto actual para mandar categoriaId
-    await fetch(`/api/admin/productos/${id}`, {
+    setPendingId(id);
+    setErrorId(null);
+    setErrorMsg(null);
+    const result = await adminMutate(`/api/admin/productos/${id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+      body: {
         nombre: editNombre,
         precio: editPrecio,
         categoriaId: editCatId,
         disponible: editDisp,
-        descripcion: "",
-        imagen: "",
-      }),
+        ...(editDescripcion ? { descripcion: editDescripcion } : {}),
+        ...(editIngredientes ? { ingredientes: editIngredientes } : {}),
+        ...(editImagen ? { imagen: editImagen } : {}),
+      },
     });
+    setPendingId(null);
+    if (!result.ok) {
+      setErrorId(id);
+      setErrorMsg(result.error);
+      return;
+    }
     setEditingId(null);
-    window.location.reload();
+    router.refresh();
   };
 
   const deleteProd = async (id: string) => {
     if (!confirm("¿Eliminar producto?")) return;
-    await fetch(`/api/admin/productos/${id}`, { method: "DELETE" });
-    window.location.reload();
+    setPendingId(id);
+    setErrorId(null);
+    setErrorMsg(null);
+    const result = await adminMutate(`/api/admin/productos/${id}`, { method: "DELETE" });
+    setPendingId(null);
+    if (!result.ok) {
+      setErrorId(id);
+      setErrorMsg(result.error);
+      return;
+    }
+    router.refresh();
   };
 
   if (allProducts.length === 0) return <p className="text-muted-foreground">No hay productos.</p>;
@@ -105,14 +151,17 @@ export function ProductoList({ categorias }: Props) {
               <td className="py-2 text-center space-x-1">
                 {editingId === p.id ? (
                   <>
-                    <button onClick={() => saveEdit(p.id)} aria-label="Guardar" title="Guardar" className="p-1.5 rounded-lg text-green-600 dark:text-green-400 hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base">💾</button>
-                    <button onClick={() => setEditingId(null)} aria-label="Cancelar" title="Cancelar" className="p-1.5 rounded-lg text-muted-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base">✕</button>
+                    <button onClick={() => saveEdit(p.id)} disabled={pendingId === p.id} aria-label="Guardar" title="Guardar" className="p-1.5 rounded-lg text-green-600 dark:text-green-400 hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base">💾</button>
+                    <button onClick={cancelEdit} aria-label="Cancelar" title="Cancelar" className="p-1.5 rounded-lg text-muted-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base">✕</button>
                   </>
                 ) : (
                   <>
                     <button onClick={() => startEdit(p)} aria-label="Editar" title="Editar" className="p-1.5 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base">✏️</button>
-                    <button onClick={() => deleteProd(p.id)} aria-label="Eliminar" title="Eliminar" className="p-1.5 rounded-lg text-red-600 dark:text-red-400 hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base">🗑️</button>
+                    <button onClick={() => deleteProd(p.id)} disabled={pendingId === p.id} aria-label="Eliminar" title="Eliminar" className="p-1.5 rounded-lg text-red-600 dark:text-red-400 hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base">🗑️</button>
                   </>
+                )}
+                {errorId === p.id && errorMsg && (
+                  <span role="alert" className="block text-xs text-destructive-600 dark:text-destructive-foreground">{errorMsg}</span>
                 )}
               </td>
             </tr>

@@ -1,7 +1,10 @@
 "use client";
 // src/components/admin/PromoList.tsx
 // confidence: high
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { formatearPrecio } from "@/lib/utils";
+import { adminMutate } from "@/lib/admin-api";
 
 interface Promo {
   id: string;
@@ -19,10 +22,24 @@ interface Props {
 }
 
 export function PromoList({ promos }: Props) {
+  const router = useRouter();
+  const [pendingId, setPendingId] = useState<string | null>(null);
+  const [errorId, setErrorId] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
   const handleDelete = async (id: string) => {
     if (!confirm("¿Eliminar promoción?")) return;
-    await fetch(`/api/admin/promos/${id}`, { method: "DELETE" });
-    window.location.reload();
+    setPendingId(id);
+    setErrorId(null);
+    setErrorMsg(null);
+    const result = await adminMutate(`/api/admin/promos/${id}`, { method: "DELETE" });
+    setPendingId(null);
+    if (!result.ok) {
+      setErrorId(id);
+      setErrorMsg(result.error);
+      return;
+    }
+    router.refresh();
   };
 
   if (promos.length === 0) return <p className="text-muted-foreground">No hay promociones.</p>;
@@ -59,7 +76,10 @@ export function PromoList({ promos }: Props) {
                 </span>
               </td>
               <td className="py-2 text-center">
-                <button onClick={() => handleDelete(p.id)} aria-label={`Eliminar promoción ${p.titulo}`} title="Eliminar" className="p-1.5 rounded-lg text-red-600 dark:text-red-400 hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base">🗑️</button>
+                <button onClick={() => handleDelete(p.id)} disabled={pendingId === p.id} aria-label={`Eliminar promoción ${p.titulo}`} title="Eliminar" className="p-1.5 rounded-lg text-red-600 dark:text-red-400 hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base">🗑️</button>
+                {errorId === p.id && errorMsg && (
+                  <span role="alert" className="block text-xs text-destructive-600 dark:text-destructive-foreground">{errorMsg}</span>
+                )}
               </td>
             </tr>
           ))}

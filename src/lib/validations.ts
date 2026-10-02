@@ -3,6 +3,17 @@
 
 import { z } from "zod";
 
+// Imagen: URL absoluta o ruta servida por el sitio. El catálogo de este repo guarda
+// rutas como "/images/products/01_sushi_variedad.jpg", así que exigir .url()
+// rechazaba los propios datos del proyecto en cada escritura.
+const imagenSchema = z
+  .string()
+  .refine(
+    (v) => /^https?:\/\//i.test(v) || v.startsWith("/"),
+    "Debe ser una URL válida o una ruta que empiece con /"
+  )
+  .optional();
+
 export const categoriaSchema = z.object({
   nombre: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
   orden: z.number().int().min(0).default(0),
@@ -15,7 +26,7 @@ export const productoSchema = z.object({
   ingredientes: z.string().optional(),
   precio: z.number().min(0.01, "El precio debe ser mayor a 0"),
   categoriaId: z.string().min(1, "Debe seleccionar una categoría"),
-  imagen: z.string().url("Debe ser una URL válida").optional(),
+  imagen: imagenSchema,
   disponible: z.boolean().default(true),
 });
 
@@ -45,7 +56,7 @@ export const reservaSchema = z.object({
 export const promocionSchema = z.object({
   titulo: z.string().min(2),
   descripcion: z.string().optional(),
-  imagen: z.string().url("URL inválida").optional(),
+  imagen: imagenSchema,
   tipo: z.enum(["PORCENTUAL", "MONTO_FIJO", "ENVIO_GRATIS"]),
   valor: z.number().min(0).optional(),
   codigo: z.string().optional(),
@@ -57,7 +68,7 @@ export const promocionSchema = z.object({
 export const publicacionSchema = z.object({
   titulo: z.string().min(2),
   contenido: z.string().optional(),
-  imagen: z.string().url("URL inválida").optional(),
+  imagen: imagenSchema,
   publicada: z.boolean().default(false),
   fechaPublica: z.string().min(1),
 });
