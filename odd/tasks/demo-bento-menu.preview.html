@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es-AR" class="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Demo 2 — Bento menú (revisión visual)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config = { darkMode: "class" };</script>
+<style>
+  body { font-family: ui-sans-serif, system-ui, sans-serif; }
+  .font-display { font-family: "Noto Sans JP", ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.02em; }
+  .card { transition: transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s, border-color .35s; }
+  .card:hover { transform: translateY(-4px); }
+  @media (prefers-reduced-motion: reduce) { .card { transition: none; } .card:hover { transform: none; } }
+</style>
+</head>
+<body class="min-h-screen bg-zinc-100 p-4 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-100 sm:p-8">
+  <button id="theme-toggle" class="fixed right-4 top-4 z-50 rounded-full border border-zinc-300 bg-white/90 px-4 py-2 text-xs font-bold text-zinc-800 shadow-lg backdrop-blur-md dark:border-white/20 dark:bg-zinc-900/90 dark:text-zinc-100">
+    <span id="theme-label">☀️ Claro</span>
+  </button>
+  <p class="mx-auto mb-4 max-w-6xl text-center text-xs uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+    Demo 2 · Bento menú — claro / oscuro · sin commit
+  </p>
+
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-amber-600 dark:text-amber-400">Menú · temporada</p>
+        <h2 class="font-display text-3xl font-black tracking-tight sm:text-4xl">Elegí tu antojo</h2>
+      </div>
+      <div class="flex gap-2 text-sm">
+        <span class="rounded-full border border-zinc-950 bg-zinc-950 px-4 py-1.5 font-semibold text-white dark:border-white/15 dark:bg-white/10 dark:text-white">Rolls</span>
+        <span class="rounded-full border border-transparent px-4 py-1.5 text-zinc-500 dark:text-zinc-400">Nigiris</span>
+        <span class="rounded-full border border-transparent px-4 py-1.5 text-zinc-500 dark:text-zinc-400">Combos</span>
+      </div>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-3">
+      <a href="#" class="card group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white hover:border-amber-500/50 hover:shadow-xl dark:border-white/10 dark:bg-zinc-900 dark:hover:border-amber-300/40 dark:hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)] md:col-span-2 md:row-span-2">
+        <img src="../../public/images/products/01_sushi_variedad.jpg" alt="Omakase 30 piezas" class="h-72 w-full object-cover md:h-[26rem]" />
+        <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/90 via-zinc-950/20 to-transparent"></div>
+        <span class="absolute left-4 top-4 rounded-full bg-amber-300 px-3 py-1 text-xs font-extrabold text-zinc-950">Más pedido</span>
+        <span class="absolute right-4 top-4 rounded-full border border-white/20 bg-black/50 px-3 py-1 text-sm font-extrabold text-white backdrop-blur-md">$24.900</span>
+        <div class="absolute inset-x-0 bottom-0 p-6">
+          <h3 class="font-display text-2xl font-extrabold text-white md:text-3xl">Omakase 30 piezas</h3>
+          <p class="mt-1 text-sm text-zinc-300">Selección del chef · rolls, nigiris y sashimi</p>
+        </div>
+      </a>
+      <a href="#" class="card group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white hover:shadow-lg dark:border-white/10 dark:bg-zinc-900 dark:hover:border-white/25 dark:hover:shadow-xl">
+        <img src="../../public/images/products/02_nigiri_salmon.jpg" alt="Nigiri de salmón" class="h-36 w-full object-cover" />
+        <div class="flex items-center justify-between gap-2 p-4">
+          <div><h3 class="font-bold">Nigiri salmón ×6</h3><p class="text-xs text-zinc-500 dark:text-zinc-400">Fresco del día</p></div>
+          <span class="rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-sm font-extrabold dark:border-white/15 dark:bg-white/10">$9.800</span>
+        </div>
+      </a>
+      <a href="#" class="card group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white hover:shadow-lg dark:border-white/10 dark:bg-zinc-900 dark:hover:border-white/25 dark:hover:shadow-xl">
+        <img src="../../public/images/products/03_rollos_especiales.jpg" alt="Rolls especiales" class="h-36 w-full object-cover" />
+        <div class="flex items-center justify-between gap-2 p-4">
+          <div><h3 class="font-bold">Rolls especiales ×8</h3><p class="text-xs text-zinc-500 dark:text-zinc-400">Palta · salmón · philadelphia</p></div>
+          <span class="rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-sm font-extrabold dark:border-white/15 dark:bg-white/10">$12.500</span>
+        </div>
+      </a>
+      <a href="#" class="card group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white hover:shadow-lg dark:border-white/10 dark:bg-zinc-900 dark:hover:border-white/25 dark:hover:shadow-xl">
+        <img src="../../public/images/products/04_sashimi.jpg" alt="Sashimi" class="h-36 w-full object-cover" />
+        <div class="flex items-center justify-between gap-2 p-4">
+          <div><h3 class="font-bold">Sashimi ×10</h3><p class="text-xs text-zinc-500 dark:text-zinc-400">Corte del chef</p></div>
+          <span class="rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-sm font-extrabold dark:border-white/15 dark:bg-white/10">$14.200</span>
+        </div>
+      </a>
+      <a href="#" class="card group relative overflow-hidden rounded-3xl border border-zinc-200 bg-white hover:shadow-lg dark:border-white/10 dark:bg-zinc-900 dark:hover:border-white/25 dark:hover:shadow-xl">
+        <img src="../../public/images/products/05_temaki.jpg" alt="Temaki" class="h-36 w-full object-cover" />
+        <div class="flex items-center justify-between gap-2 p-4">
+          <div><h3 class="font-bold">Temaki ×2</h3><p class="text-xs text-zinc-500 dark:text-zinc-400">Cono crocante</p></div>
+          <span class="rounded-full border border-zinc-200 bg-zinc-100 px-3 py-1 text-sm font-extrabold dark:border-white/15 dark:bg-white/10">$7.400</span>
+        </div>
+      </a>
+    </div>
+    <p class="mx-auto mt-6 max-w-3xl text-center text-sm text-zinc-500 dark:text-zinc-400">Mismo bento en ambos temas. En claro: cards blancas con borde suave. En oscuro: cards zinc-900 con glow.</p>
+  </div>
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById("theme-toggle");
+    var label = document.getElementById("theme-label");
+    function apply(t) {
+      root.classList.toggle("dark", t === "dark");
+      label.textContent = t === "dark" ? "☀️ Claro" : "🌙 Oscuro";
+      try { localStorage.setItem("demo-theme", t); } catch (e) {}
+    }
+    var initial = "dark";
+    try {
+      initial = localStorage.getItem("demo-theme") ||
+        (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+    } catch (e) {}
+    apply(initial);
+    btn.addEventListener("click", function () {
+      apply(root.classList.contains("dark") ? "light" : "dark");
+    });
+  })();
+</script>
+</body>
+</html>

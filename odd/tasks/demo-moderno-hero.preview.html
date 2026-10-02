@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es-AR" class="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Demo — Hero premium (revisión visual)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config = { darkMode: "class" };</script>
+<style>
+  body { font-family: ui-sans-serif, system-ui, sans-serif; }
+  .font-display { font-family: "Noto Sans JP", ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.02em; }
+  .bg-grid-dark {
+    background-image: linear-gradient(rgba(255,255,255,.35) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.35) 1px, transparent 1px);
+    background-size: 44px 44px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 30%, transparent 75%);
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 30%, transparent 75%);
+  }
+  .bg-grid-light {
+    background-image: linear-gradient(rgba(0,0,0,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.18) 1px, transparent 1px);
+    background-size: 44px 44px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 30%, transparent 75%);
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 30%, transparent 75%);
+  }
+</style>
+</head>
+<body class="min-h-screen bg-zinc-200 p-4 dark:bg-black sm:p-8">
+  <button id="theme-toggle" class="fixed right-4 top-4 z-50 rounded-full border border-zinc-300 bg-white/90 px-4 py-2 text-xs font-bold text-zinc-800 shadow-lg backdrop-blur-md dark:border-white/20 dark:bg-zinc-900/90 dark:text-zinc-100">
+    <span id="theme-label">☀️ Claro</span>
+  </button>
+  <p class="mx-auto mb-4 max-w-6xl text-center text-xs uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+    Preview visual — claro / oscuro · sin commit · <a class="underline" href="#">Volver</a>
+  </p>
+
+  <section class="relative mx-auto max-w-6xl overflow-hidden rounded-3xl border border-zinc-200 bg-white text-zinc-950 shadow-xl dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-100 dark:shadow-2xl">
+    <div class="absolute inset-0" aria-hidden="true">
+      <div class="absolute -top-32 left-1/2 h-96 w-[42rem] -translate-x-1/2 rounded-full bg-red-200/60 blur-[120px] dark:bg-red-700/30"></div>
+      <div class="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-zinc-300/50 to-transparent dark:from-black/60"></div>
+      <div class="bg-grid-light absolute inset-0 opacity-[0.12] dark:hidden"></div>
+      <div class="bg-grid-dark absolute inset-0 hidden opacity-[0.14] dark:block"></div>
+    </div>
+
+    <div class="relative z-10 grid items-center gap-10 p-8 sm:p-12 lg:grid-cols-[1.05fr_0.95fr] lg:p-16">
+      <div>
+        <span class="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-zinc-100 px-4 py-1.5 text-xs font-semibold tracking-wide text-zinc-700 dark:border-white/15 dark:bg-white/10 dark:text-zinc-200">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+          Nuevo · Omakase de temporada
+        </span>
+        <h1 class="font-display mt-6 text-5xl font-black leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+          Sushi fresco,
+          <span class="block bg-gradient-to-r from-amber-600 via-orange-500 to-red-500 bg-clip-text text-transparent dark:from-amber-200 dark:via-amber-400 dark:to-red-400">nivel omakase.</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-lg">
+          Pedí online o reservá mesa en segundos. Rolls, nigiris y sashimi hechos al momento, con delivery en 30 minutos.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href="#" class="inline-flex items-center justify-center rounded-full bg-zinc-950 px-8 py-3.5 text-base font-bold text-white dark:bg-zinc-100 dark:text-zinc-950">Ver menú</a>
+          <a href="#" class="inline-flex items-center justify-center rounded-full border border-zinc-300 bg-white/60 px-8 py-3.5 text-base font-bold text-zinc-900 dark:border-white/20 dark:bg-white/10 dark:text-white">Reservar mesa</a>
+        </div>
+        <dl class="mt-10 grid max-w-md grid-cols-3 gap-6 border-t border-zinc-200 pt-6 dark:border-white/10">
+          <div><dd class="text-xl font-extrabold">4.9</dd><dt class="mt-1 text-xs text-zinc-500">Rating delivery</dt></div>
+          <div><dd class="text-xl font-extrabold">30 min</dd><dt class="mt-1 text-xs text-zinc-500">Promedio entrega</dt></div>
+          <div><dd class="text-xl font-extrabold">+12k</dd><dt class="mt-1 text-xs text-zinc-500">Rolls por mes</dt></div>
+        </dl>
+      </div>
+
+      <div class="relative">
+        <div class="relative overflow-hidden rounded-2xl border border-zinc-200 shadow-xl dark:border-white/15 dark:shadow-[0_24px_80px_rgba(0,0,0,0.55)]">
+          <img src="../../public/images/products/01_sushi_variedad.jpg" alt="Selección premium de sushi" class="aspect-square w-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/60 via-transparent to-transparent"></div>
+        </div>
+        <div class="absolute -left-3 top-6 rounded-2xl border border-zinc-200 bg-white/85 px-4 py-3 shadow-xl backdrop-blur-xl dark:border-white/20 dark:bg-zinc-900/70 sm:-left-6">
+          <p class="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">Combo del día</p>
+          <p class="text-sm font-bold text-zinc-900 dark:text-white">Omakase 30 piezas · $24.900</p>
+        </div>
+        <div class="absolute -bottom-4 right-4 flex items-center gap-3 rounded-2xl border border-zinc-200 bg-white/85 px-4 py-3 shadow-xl backdrop-blur-xl dark:border-white/20 dark:bg-zinc-900/70">
+          <span class="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500/20">●</span>
+          <div><p class="text-sm font-bold text-zinc-900 dark:text-white">Delivery en camino</p><p class="text-xs text-zinc-500 dark:text-zinc-400">Llega en ~18 min</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="mx-auto mt-6 max-w-3xl text-center text-sm text-zinc-500 dark:text-zinc-400">
+    Probalo en ambos temas con el botón de arriba. En claro: superficies blancas, mismo layout y jerarquía. En oscuro: versión premium nocturna.
+  </p>
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById("theme-toggle");
+    var label = document.getElementById("theme-label");
+    function apply(t) {
+      root.classList.toggle("dark", t === "dark");
+      label.textContent = t === "dark" ? "☀️ Claro" : "🌙 Oscuro";
+      try { localStorage.setItem("demo-theme", t); } catch (e) {}
+    }
+    var initial = "dark";
+    try {
+      initial = localStorage.getItem("demo-theme") ||
+        (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+    } catch (e) {}
+    apply(initial);
+    btn.addEventListener("click", function () {
+      apply(root.classList.contains("dark") ? "light" : "dark");
+    });
+  })();
+</script>
+</body>
+</html>
