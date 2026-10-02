@@ -42,6 +42,9 @@ prisma/*.db-journal
 # vercel
 .vercel
 
+# local agent tooling state
+.atl/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
