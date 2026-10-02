@@ -4,14 +4,7 @@ import { db } from "@/lib/db";
 import { formatearPrecio } from "@/lib/utils";
 import { PedidoWithItems } from "@/lib/types";
 import { Badge } from "@/components/ui/Badge";
-
-const estadoOptions = [
-  { value: "PENDIENTE", label: "⏳ En espera" },
-  { value: "EN_COCINA", label: "👨‍🍳 En cocina" },
-  { value: "LISTO", label: "✅ Listo" },
-  { value: "ENTREGADO", label: "🏠 Entregado" },
-  { value: "CANCELADO", label: "❌ Cancelado" },
-];
+import { EstadoSelector } from "@/components/admin/EstadoSelector";
 
 const estadoLabels: Record<string, string> = {
   PENDIENTE: "⏳ En espera",
@@ -73,7 +66,8 @@ function PedidoCard({ pedido }: { pedido: PedidoWithItems }) {
         </Badge>
       </div>
 
-      <table className="w-full text-sm">
+      <div className="mb-4 overflow-x-auto">
+        <table className="w-full text-sm">
         <thead>
           <tr className="text-left text-muted-foreground border-b border-border">
             <th className="pb-1">Producto</th>
@@ -94,39 +88,12 @@ function PedidoCard({ pedido }: { pedido: PedidoWithItems }) {
             <td className="py-2 text-right text-primary-700 dark:text-primary-400">{formatearPrecio(pedido.total)}</td>
           </tr>
         </tbody>
-      </table>
+        </table>
+      </div>
 
       {pedido.notas && (
         <p className="text-sm text-muted-foreground mt-2">📝 Nota: {pedido.notas}</p>
       )}
     </div>
-  );
-}
-
-function EstadoSelector({ pedidoId, currentEstado }: {
-  pedidoId: string;
-  currentEstado: string;
-}) {
-  const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const nuevoEstado = e.target.value;
-    await fetch(`/api/admin/pedidos/${pedidoId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ estado: nuevoEstado }),
-    });
-    window.location.reload();
-  };
-
-  return (
-      <select
-      defaultValue={currentEstado}
-      onChange={handleChange}
-      aria-label="Cambiar estado del pedido"
-      className="text-sm border border-border rounded-lg px-2 py-1 bg-input text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-    >
-      {estadoOptions.map((opt) => (
-        <option key={opt.value} value={opt.value}>{opt.label}</option>
-      ))}
-    </select>
   );
 }
