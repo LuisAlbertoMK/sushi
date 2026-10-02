@@ -191,16 +191,21 @@ function mod(a: number, b: number): number {
 const DECAY_K = 2.996; // -ln(0.05): tamaño del burst de velocidad para el snap de 1 item
 
 // Plato de porcelana 3D compartido (mesa + cinta + grid de búsqueda)
-function PorcelainPlate({ rimColor, children, className = "", imageUrl, alt }: {
-  rimColor: string; children: React.ReactNode; className?: string; imageUrl?: string; alt?: string;
+// Experiment kaiten-realista: `overlay` muestra una etiqueta sobre la foto
+// (rueda de categorías); sin foto se renderizan los `children` como antes.
+function PorcelainPlate({ rimColor, children, className = "", imageUrl, alt, overlay }: {
+  rimColor: string; children: React.ReactNode; className?: string; imageUrl?: string; alt?: string; overlay?: React.ReactNode;
 }) {
   return (
     <span className={`plate-3d ${className}`}>
       <span className="plate-shadow" aria-hidden="true" />
       <span className="plate-face" style={{ "--rim": rimColor } as React.CSSProperties}>
         {imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img className="food-img" src={imageUrl} alt={alt} loading="lazy" decoding="async" />
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="food-img" src={imageUrl} alt={alt} loading="lazy" decoding="async" />
+            {overlay}
+          </>
         ) : (
           children
         )}
@@ -838,7 +843,7 @@ export function KaitenMenu() {
           e.currentTarget.style.filter = "";
         }}
       >
-        <span className="w-[64%] aspect-square" style={{ filter: "drop-shadow(0 7px 5px rgba(0,0,0,.34))" }}>
+        <span className="w-[72%] aspect-square" style={{ filter: "drop-shadow(0 7px 5px rgba(0,0,0,.34))" }}>
           <PorcelainPlate className={pulsingId === p.id ? "plate-pulse" : ""} rimColor={tier.border} imageUrl={p.imagen || undefined} alt={p.nombre}>
             <span style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,.3))" }} aria-hidden="true">{r.category.emoji || "🍽️"}</span>
           </PorcelainPlate>
@@ -889,8 +894,15 @@ export function KaitenMenu() {
         aria-hidden="true"
       />
 
-      {/* ── Header ── */}
+      {/* ── Header (experiment kaiten-hero-moderno T2: solo jerarquía visual) ── */}
       <header className="relative text-center pt-7 pb-1 px-4 max-w-[560px] mx-auto">
+        <p
+          className="mb-3 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em]"
+          style={{ borderColor: THEME.gold, color: THEME.muted, background: "rgba(201,161,90,.08)" }}
+        >
+          <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full" style={{ background: THEME.gold }} />
+          La cinta · en vivo
+        </p>
         <div
           className="inline-flex items-center justify-center w-11 h-11 rounded-full border-2"
           style={{ background: THEME.red, borderColor: "#7d1e1b", color: THEME.cream, boxShadow: "0 2px 6px rgba(0,0,0,.4)" }}
@@ -1036,7 +1048,12 @@ export function KaitenMenu() {
                     if (f) f.style.boxShadow = "";
                   }}
                 >
-                  <PorcelainPlate rimColor={cat.color || THEME.gold}>
+                  <PorcelainPlate
+                    rimColor={cat.color || THEME.gold}
+                    imageUrl={cat.productos[0]?.imagen || undefined}
+                    alt={cat.nombre}
+                    overlay={<span className="cat-name plate-label">{cat.nombre}</span>}
+                  >
                     <span className="emoji" aria-hidden="true">{cat.emoji}</span>
                     <span className="cat-name">{cat.nombre}</span>
                   </PorcelainPlate>
@@ -1241,7 +1258,7 @@ export function KaitenMenu() {
       {/* ── Bandeja de pedido (carrito real) ── */}
       <div
         className="relative sticky bottom-3 mx-4 mb-4 rounded-2xl border overflow-hidden"
-        style={{ background: THEME.bg2, borderColor: "#30343c", zIndex: 60 }}
+        style={{ background: THEME.bg2, borderColor: "#30343c", zIndex: 30 }}
       >
         <button
           type="button"
