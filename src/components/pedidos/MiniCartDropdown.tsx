@@ -3,6 +3,7 @@
 // src/components/pedidos/MiniCartDropdown.tsx — Mini carrito dropdown
 // confidence: high
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { useCart } from "@/lib/cart-context";
 import { formatearPrecio } from "@/lib/utils";
 import Image from "next/image";
@@ -14,11 +15,33 @@ interface Props {
 
 export function MiniCartDropdown({ open, onClose }: Props) {
   const { items, total, removeItem } = useCart();
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // El dropdown también se cierra con teclado (Escape) y con click afuera;
+  // antes solo cerraba con onMouseLeave y dejaba atrapados a usuarios de teclado.
+  useEffect(() => {
+    if (!open) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    const onPointerDown = (e: MouseEvent) => {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) onClose();
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("mousedown", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("mousedown", onPointerDown);
+    };
+  }, [open, onClose]);
 
   if (!open) return null;
 
   return (
     <div
+      ref={panelRef}
       className="absolute top-full right-0 mt-2 w-80 bg-card border border-border rounded-xl shadow-2xl z-50 animate-in slide-in-from-top-2"
       onMouseLeave={onClose}
     >

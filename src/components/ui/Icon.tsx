@@ -2,8 +2,8 @@
 // confidence: high
 //
 // Reemplaza los emoji raw (🍣🛒📅🎁) con un component accesible:
-// - aria-hidden en el emoji visual
-// - texto visible con sr-only para screen readers
+// - el contenedor expone el nombre accesible (role="img" + aria-label)
+// - el emoji visual queda oculto para screen readers
 // - fallback visual consistente
 import { cn } from "@/lib/utils";
 
@@ -23,12 +23,11 @@ const sizeMap = {
 export function Icon({ emoji, label, className, size = "md" }: IconProps) {
   return (
     <span
-      aria-hidden="true"
-      className={cn("inline-block", sizeMap[size], className)}
       role="img"
+      aria-label={label}
+      className={cn("inline-block", sizeMap[size], className)}
     >
-      {emoji}
-      <span className="sr-only">{label}</span>
+      <span aria-hidden="true">{emoji}</span>
     </span>
   );
 }
