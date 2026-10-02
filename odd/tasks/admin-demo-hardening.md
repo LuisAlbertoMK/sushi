@@ -79,4 +79,14 @@ disposable Playwright + HTTP probes run outside the repo (in `D:/tmp-ui-review`)
 
 ## Commit evidence
 
-- Pending explicit commit authorization from the user. Working tree holds 11 modified + 5 new files (~276 insertions).
+Work-unit commits on `experiment/kaiten-hero-moderno` (pushed to origin):
+
+- T1 `d3b731b` fix(admin): render /admin/pedidos with orders present
+- T2 `afe3ac0` fix(kaiten): keep dark surfaces readable in light theme
+- T3 `06c5b63` fix(admin): surface failed mutations and send valid product payloads
+- T4 `8df49ec` fix(a11y): expose Icon labels and allow keyboard dismissal of the mini cart
+- T5 `41af030` feat(admin): add loading and error boundaries for the admin segment
+- T6 `1e79165` fix(admin): prevent table overflow on narrow viewports
+- Docs `581ba6e` docs(odd): record admin demo hardening tasks and verification evidence
+
+Baseline before this feature: `7f2c63f`.
