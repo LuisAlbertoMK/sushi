@@ -28,9 +28,9 @@ export default async function AdminPedidosPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-6xl">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">🛒 Pedidos</h1>
+        <h1 className="text-3xl font-bold text-foreground">Pedidos</h1>
         <p className="text-muted-foreground">{pedidos.length} pedidos en total</p>
       </div>
 
@@ -45,8 +45,8 @@ export default async function AdminPedidosPage() {
 
 function PedidoCard({ pedido }: { pedido: PedidoWithItems }) {
   return (
-    <div className="bg-card rounded-xl shadow-md p-6">
-      <div className="flex justify-between items-start mb-4">
+    <div className="bg-card rounded-xl shadow-md border border-border p-6 overflow-hidden">
+      <div className="flex flex-col sm:flex-row gap-3 justify-between sm:items-start mb-4">
         <div>
           <h2 className="text-xl font-bold text-foreground">{pedido.numero}</h2>
           <p className="text-sm text-muted-foreground">
@@ -121,7 +121,8 @@ function EstadoSelector({ pedidoId, currentEstado }: {
       <select
       defaultValue={currentEstado}
       onChange={handleChange}
-      className="text-sm border border-border rounded-lg px-2 py-1 bg-input"
+      aria-label="Cambiar estado del pedido"
+      className="text-sm border border-border rounded-lg px-2 py-1 bg-input text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
     >
       {estadoOptions.map((opt) => (
         <option key={opt.value} value={opt.value}>{opt.label}</option>

@@ -34,27 +34,28 @@ export function ReservaRow({ reserva, estadoOptions }: ReservaRowProps) {
   };
 
   return (
-    <tr className="border-t">
-      <td className="py-2 font-medium">{reserva.nombre}</td>
-      <td className="py-2">{new Date(reserva.fecha).toLocaleString("es-AR")}</td>
-      <td className="py-2">{reserva.personas}</td>
-      <td className="py-2">
+    <tr className="border-t border-border hover:bg-muted/40 transition-colors">
+      <td className="py-2 pr-2 font-medium text-foreground">{reserva.nombre}</td>
+      <td className="py-2 pr-2 text-foreground">{new Date(reserva.fecha).toLocaleString("es-AR")}</td>
+      <td className="py-2 pr-2 text-foreground">{reserva.personas}</td>
+      <td className="py-2 pr-2">
         <select
           defaultValue={reserva.estado}
           onChange={handleChange}
-          className="text-xs border border-border rounded px-1 py-0.5 bg-input text-foreground"
+          aria-label={`Estado de la reserva de ${reserva.nombre}`}
+          className="text-sm border border-border rounded-lg px-2 py-1 bg-input text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         >
           {estadoOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
           ))}
         </select>
       </td>
-      <td className="py-2 text-muted-foreground">
+      <td className="py-2 pr-2 text-muted-foreground">
         {reserva.email}
         {reserva.telefono && <span className="block text-xs">{reserva.telefono}</span>}
       </td>
       <td className="py-2 text-center">
-        <button onClick={handleDelete} className="text-red-600 hover:text-red-800 text-xs focus-visible:ring-2 focus-visible:ring-ring rounded px-1" aria-label={`Eliminar reserva de ${reserva.nombre}`}>🗑️</button>
+        <button onClick={handleDelete} className="p-1.5 rounded-lg text-red-600 dark:text-red-400 hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base" aria-label={`Eliminar reserva de ${reserva.nombre}`} title="Eliminar">🗑️</button>
       </td>
     </tr>
   );

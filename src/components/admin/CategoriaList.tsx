@@ -50,17 +50,17 @@ export function CategoriaList({ categorias }: Props) {
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-muted-foreground border-b">
-            <th className="pb-2">Nombre</th>
-            <th className="pb-2">Orden</th>
-            <th className="pb-2">Activo</th>
-            <th className="pb-2">Productos</th>
-            <th className="pb-2 text-center">Acciones</th>
+          <tr className="text-left text-muted-foreground border-b border-border bg-muted/50">
+            <th className="pb-2 pr-2 font-semibold">Nombre</th>
+            <th className="pb-2 pr-2 font-semibold">Orden</th>
+            <th className="pb-2 pr-2 font-semibold">Activo</th>
+            <th className="pb-2 pr-2 font-semibold">Productos</th>
+            <th className="pb-2 text-center font-semibold">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {categorias.map((cat) => (
-            <tr key={cat.id} className="border-t">
+            <tr key={cat.id} className="border-t border-border hover:bg-muted/40 transition-colors">
               <td className="py-2">
                 {editingId === cat.id ? (
                   <input
@@ -95,7 +95,7 @@ export function CategoriaList({ categorias }: Props) {
                     <option value="false">No</option>
                   </select>
                 ) : (
-                  <span className={cat.activo ? "text-green-600" : "text-red-600"}>
+                  <span className={cat.activo ? "text-green-600 dark:text-green-400 font-semibold" : "text-red-600 dark:text-red-400 font-semibold"}>
                     {cat.activo ? "✓" : "✗"}
                   </span>
                 )}
@@ -104,13 +104,13 @@ export function CategoriaList({ categorias }: Props) {
               <td className="py-2 text-center space-x-1">
                 {editingId === cat.id ? (
                   <>
-                    <button onClick={() => saveEdit(cat.id)} className="text-green-600 hover:underline text-xs">💾</button>
-                    <button onClick={() => setEditingId(null)} className="text-muted-foreground hover:underline text-xs">✕</button>
+                    <button onClick={() => saveEdit(cat.id)} aria-label="Guardar" title="Guardar" className="p-1.5 rounded-lg text-green-600 dark:text-green-400 hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base">💾</button>
+                    <button onClick={() => setEditingId(null)} aria-label="Cancelar" title="Cancelar" className="p-1.5 rounded-lg text-muted-foreground hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base">✕</button>
                   </>
                 ) : (
                   <>
-                    <button onClick={() => startEdit(cat)} className="text-blue-600 hover:underline text-xs">✏️</button>
-                    <button onClick={() => deleteCat(cat.id)} className="text-red-600 hover:underline text-xs">🗑️</button>
+                    <button onClick={() => startEdit(cat)} aria-label="Editar" title="Editar" className="p-1.5 rounded-lg text-blue-600 dark:text-blue-400 hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base">✏️</button>
+                    <button onClick={() => deleteCat(cat.id)} aria-label="Eliminar" title="Eliminar" className="p-1.5 rounded-lg text-red-600 dark:text-red-400 hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base">🗑️</button>
                   </>
                 )}
               </td>

@@ -19,13 +19,6 @@ interface Props {
 }
 
 export function PromoList({ promos }: Props) {
-  const handleToggleActiva = async (id: string, activa: boolean) => {
-    // Para toggle, necesitamos el resto de los datos — pero aquí solo toggleamos activo
-    // Usamos PATCH... pero el PATCH requiere todos los campos. Simplificado: solo delete + recrear
-    // Mejor: usar un endpoint solo para toggle. Por simplicidad, recargamos.
-    window.location.reload();
-  };
-
   const handleDelete = async (id: string) => {
     if (!confirm("¿Eliminar promoción?")) return;
     await fetch(`/api/admin/promos/${id}`, { method: "DELETE" });
@@ -38,21 +31,21 @@ export function PromoList({ promos }: Props) {
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="text-left text-muted-foreground border-b">
-            <th className="pb-2">Título</th>
-            <th className="pb-2">Tipo</th>
-            <th className="pb-2">Valor</th>
-            <th className="pb-2">Vigencia</th>
-            <th className="pb-2">Activa</th>
-            <th className="pb-2 text-center">Acciones</th>
+          <tr className="text-left text-muted-foreground border-b border-border bg-muted/50">
+            <th className="pb-2 pr-2 font-semibold">Título</th>
+            <th className="pb-2 pr-2 font-semibold">Tipo</th>
+            <th className="pb-2 pr-2 font-semibold">Valor</th>
+            <th className="pb-2 pr-2 font-semibold">Vigencia</th>
+            <th className="pb-2 pr-2 font-semibold">Activa</th>
+            <th className="pb-2 text-center font-semibold">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {promos.map((p) => (
-            <tr key={p.id} className="border-t">
-              <td className="py-2 font-medium">{p.titulo}</td>
-              <td className="py-2">{p.tipo}</td>
-              <td className="py-2">
+            <tr key={p.id} className="border-t border-border hover:bg-muted/40 transition-colors">
+              <td className="py-2 pr-2 font-medium text-foreground">{p.titulo}</td>
+              <td className="py-2 pr-2 text-foreground">{p.tipo}</td>
+              <td className="py-2 pr-2 text-foreground">
                 {p.tipo === "PORCENTUAL" ? `${p.valor}% OFF` :
                  p.tipo === "MONTO_FIJO" ? `-$${formatearPrecio(p.valor || 0)}` :
                  p.tipo === "ENVIO_GRATIS" ? "Envío gratis" : "-"}
@@ -60,13 +53,13 @@ export function PromoList({ promos }: Props) {
               <td className="py-2 text-muted-foreground text-xs">
                 {new Date(p.fechaInicio).toLocaleDateString("es-AR")} - {new Date(p.fechaFin).toLocaleDateString("es-AR")}
               </td>
-              <td className="py-2">
-                <span className={p.activa ? "text-green-600" : "text-red-600"}>
+              <td className="py-2 pr-2">
+                <span className={p.activa ? "text-green-600 dark:text-green-400 font-semibold" : "text-red-600 dark:text-red-400 font-semibold"}>
                   {p.activa ? "✓" : "✗"}
                 </span>
               </td>
               <td className="py-2 text-center">
-                <button onClick={() => handleDelete(p.id)} className="text-red-600 hover:text-red-800 text-xs">🗑️</button>
+                <button onClick={() => handleDelete(p.id)} aria-label={`Eliminar promoción ${p.titulo}`} title="Eliminar" className="p-1.5 rounded-lg text-red-600 dark:text-red-400 hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring text-base">🗑️</button>
               </td>
             </tr>
           ))}

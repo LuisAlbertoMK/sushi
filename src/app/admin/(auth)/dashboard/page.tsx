@@ -2,7 +2,6 @@
 // confidence: high
 import { db } from "@/lib/db";
 import { formatearPrecio } from "@/lib/utils";
-import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 
 async function getDatosDashboard() {
@@ -63,39 +62,39 @@ export default async function DashboardPage() {
   const data = await getDatosDashboard();
 
    return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-6xl">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">📊 Dashboard</h1>
+        <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
         <p className="text-muted-foreground">Resumen de Sushi Bar</p>
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-        <div className="bg-card p-6 rounded-xl shadow-md text-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        <div className="bg-card p-6 rounded-xl shadow-md border border-border text-center">
           <div className="text-3xl mb-2">🛒</div>
           <p className="text-2xl font-bold text-foreground">{data.pedidosHoy}</p>
           <p className="text-sm text-muted-foreground">Pedidos hoy</p>
         </div>
 
-        <div className="bg-card p-6 rounded-xl shadow-md text-center">
+        <div className="bg-card p-6 rounded-xl shadow-md border border-border text-center">
           <div className="text-3xl mb-2">💰</div>
-          <p className="text-2xl font-bold text-green-600">{formatearPrecio(data.ventasHoy)}</p>
+          <p className="text-2xl font-bold text-green-600 dark:text-green-400">{formatearPrecio(data.ventasHoy)}</p>
           <p className="text-sm text-muted-foreground">Ventas hoy</p>
         </div>
 
-        <div className="bg-card p-6 rounded-xl shadow-md text-center">
+        <div className="bg-card p-6 rounded-xl shadow-md border border-border text-center">
           <div className="text-3xl mb-2">📅</div>
           <p className="text-2xl font-bold text-primary-700 dark:text-primary-400">{data.reservasPendientes}</p>
           <p className="text-sm text-muted-foreground">Reservas hoy</p>
         </div>
 
-        <div className="bg-card p-6 rounded-xl shadow-md text-center">
+        <div className="bg-card p-6 rounded-xl shadow-md border border-border text-center">
           <div className="text-3xl mb-2">🍣</div>
           <p className="text-2xl font-bold text-foreground">{data.productosTotal}</p>
           <p className="text-sm text-muted-foreground">Productos</p>
         </div>
 
-        <div className="bg-card p-6 rounded-xl shadow-md text-center">
+        <div className="bg-card p-6 rounded-xl shadow-md border border-border text-center">
           <div className="text-3xl mb-2">📋</div>
           <p className="text-2xl font-bold text-foreground">{data.categoriasTotal}</p>
           <p className="text-sm text-muted-foreground">Categorías</p>
@@ -103,8 +102,8 @@ export default async function DashboardPage() {
       </div>
 
       {/* Últimos pedidos */}
-      <div className="bg-card rounded-xl shadow-md p-6">
-        <h2 className="text-xl font-bold text-foreground mb-4">📝 Últimos pedidos</h2>
+      <div className="bg-card rounded-xl shadow-md border border-border p-6 overflow-hidden">
+        <h2 className="text-xl font-bold text-foreground mb-4">Últimos pedidos</h2>
         {data.ultimosPedidos.length === 0 ? (
           <p className="text-muted-foreground py-4">No hay pedidos todavía</p>
         ) : (

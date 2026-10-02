@@ -20,29 +20,29 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-muted font-sans flex">
+    <div className="min-h-screen bg-muted font-sans flex flex-col md:flex-row">
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-900 text-white p-6 min-h-screen">
+      <aside className="w-full md:w-64 bg-gray-900 text-white p-6 md:min-h-screen">
         <div className="flex items-center gap-2 mb-8">
           <span className="text-2xl">🍣</span>
           <span className="font-bold text-xl">Sushi Admin</span>
         </div>
         <nav className="space-y-1">
-          <Link href="/admin/dashboard" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">📊 Dashboard</Link>
-          <Link href="/admin/menu" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">🍱 Menú</Link>
-          <Link href="/admin/pedidos" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">🛒 Pedidos</Link>
-          <Link href="/admin/reservas" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">📅 Reservas</Link>
-          <Link href="/admin/promos" className="block py-2 px-3 rounded hover:bg-primary-700/20 dark:hover:bg-primary-700/30 transition-colors">🎁 Promos & Publicaciones</Link>
+          <Link href="/admin/dashboard" className="block py-2 px-3 rounded hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white transition-colors">📊 Dashboard</Link>
+          <Link href="/admin/menu" className="block py-2 px-3 rounded hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white transition-colors">🍱 Menú</Link>
+          <Link href="/admin/pedidos" className="block py-2 px-3 rounded hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white transition-colors">🛒 Pedidos</Link>
+          <Link href="/admin/reservas" className="block py-2 px-3 rounded hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white transition-colors">📅 Reservas</Link>
+          <Link href="/admin/promos" className="block py-2 px-3 rounded hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white transition-colors">🎁 Promos & Publicaciones</Link>
         </nav>
-        <div className="mt-8 pt-4 border-t border-gray-700">
+        <div className="mt-8 pt-4 border-t border-white/10">
           <AdminLogout />
         </div>
       </aside>
 
       {/* Main */}
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 p-4 md:p-8 overflow-y-auto min-w-0">
         <header className="mb-6 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-foreground">Panel de Administración</h1>
+          <p className="text-2xl font-bold text-foreground">Panel de Administración</p>
         </header>
         {children}
       </main>

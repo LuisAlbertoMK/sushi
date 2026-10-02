@@ -1,7 +1,6 @@
 // src/app/(admin)/reservas/page.tsx — Lista de reservas
 // confidence: high
 import { db } from "@/lib/db";
-import { Reservacion } from "@prisma/client";
 import { ReservaRow } from "@/components/admin/ReservaRow";
 
 const estadoOptions = [
@@ -11,35 +10,29 @@ const estadoOptions = [
   { value: "COMPLETADA", label: "🏁 Completada" },
 ];
 
-const estadoLabels: Record<string, string> = {
-  PENDIENTE: "⏳ Pendiente",
-  CONFIRMADA: "✅ Confirmada",
-  CANCELADA: "❌ Cancelada",
-  COMPLETADA: "🏁 Completada",
-};
-
 export default async function AdminReservasPage() {
   const reservas = await db.reservacion.findMany({
     orderBy: { fecha: "desc" },
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-6xl">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">📅 Reservas</h1>
+        <h1 className="text-3xl font-bold text-foreground">Reservas</h1>
         <p className="text-muted-foreground">{reservas.length} reservas en total</p>
       </div>
 
+      <div className="bg-card border border-border rounded-xl shadow-md p-4 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-left text-muted-foreground border-b">
-              <th className="pb-2">Nombre</th>
-              <th className="pb-2">Fecha</th>
-              <th className="pb-2">Personas</th>
-              <th className="pb-2">Estado</th>
-              <th className="pb-2">Contacto</th>
-              <th className="pb-2 text-center">Acciones</th>
+            <tr className="text-left text-muted-foreground border-b border-border bg-muted/50">
+              <th className="pb-2 pr-2 font-semibold">Nombre</th>
+              <th className="pb-2 pr-2 font-semibold">Fecha</th>
+              <th className="pb-2 pr-2 font-semibold">Personas</th>
+              <th className="pb-2 pr-2 font-semibold">Estado</th>
+              <th className="pb-2 pr-2 font-semibold">Contacto</th>
+              <th className="pb-2 text-center font-semibold">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -48,6 +41,7 @@ export default async function AdminReservasPage() {
             ))}
           </tbody>
         </table>
+      </div>
       </div>
     </div>
   );
