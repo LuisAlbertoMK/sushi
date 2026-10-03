@@ -3,6 +3,7 @@
 import { CartProvider } from "@/lib/cart-context";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Header } from "@/components/layout/Header";
+import { ChatBot } from "@/components/ui/ChatBot";
 import { localBusinessSchema } from "@/lib/seo";
 
 export default function PublicLayout({
@@ -21,6 +22,8 @@ export default function PublicLayout({
           {children}
         </div>
       </div>
+      {/* Chat de clientes: solo superficies públicas (no /admin, no /demos) */}
+      <ChatBot />
     </CartProvider>
   );
 }

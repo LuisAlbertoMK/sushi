@@ -5,7 +5,6 @@ import { Geist, Geist_Mono, Noto_Sans_JP, Bebas_Neue, Permanent_Marker } from "n
 import "./globals.css";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import { ChatBot } from "@/components/ui/ChatBot";
 import { Footer } from "@/components/layout/Footer";
 
 const geistSans = Geist({
@@ -117,7 +116,10 @@ export default function RootLayout({
               prefetch: [
                 {
                   source: "document",
-                  where: { href_matches: "/*" },
+                  // Excluye /admin/*: el panel tiene auth y datos dinámicos
+                  where: {
+                    and: [{ href_matches: "/*" }, { not: { href_matches: "/admin/*" } }],
+                  },
                   eagerness: "moderate",
                 },
               ],
@@ -136,7 +138,6 @@ export default function RootLayout({
           </main>
           <Footer />
           <ThemeToggle />
-          <ChatBot />
         </ThemeProvider>
       </body>
     </html>

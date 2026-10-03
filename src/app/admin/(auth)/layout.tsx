@@ -39,13 +39,15 @@ export default async function AdminLayout({
         </div>
       </aside>
 
-      {/* Main */}
-      <main className="flex-1 p-4 md:p-8 overflow-y-auto min-w-0">
+      {/* Main — div, no <main>: el landmark <main> ya lo aporta el root layout
+          (dos <main> anidados era HTML inválido). pb-24 deja libre la zona del
+          toggle de tema flotante. */}
+      <div className="flex-1 p-4 md:p-8 pb-24 overflow-y-auto min-w-0">
         <header className="mb-6 flex justify-between items-center">
           <p className="text-2xl font-bold text-foreground">Panel de Administración</p>
         </header>
         {children}
-      </main>
+      </div>
     </div>
   );
 }
