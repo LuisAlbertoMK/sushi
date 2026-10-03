@@ -2,7 +2,7 @@
 // confidence: high
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { verifyPassword, encodeSession, setAuthCookie } from "@/lib/auth";
+import { verifyPassword, encodeSession, setAuthCookie, isAuthSecretConfigured } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -47,6 +47,14 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error) {
+    console.error("Login error:", error);
+    // Configuración ausente en producción: mensaje explícito en vez de un 500 opaco
+    if (!isAuthSecretConfigured()) {
+      return NextResponse.json(
+        { error: "El servidor no tiene NEXTAUTH_SECRET configurado: el login está deshabilitado." },
+        { status: 500 }
+      );
+    }
     return NextResponse.json(
       { error: "Error interno del servidor" },
       { status: 500 }

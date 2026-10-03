@@ -13,7 +13,25 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 
-const SECRET = process.env.NEXTAUTH_SECRET || "sushi-dev-secret-change-in-production-1234567890";
+const DEV_SECRET = "sushi-dev-secret-change-in-production-1234567890";
+
+// El secreto NO puede caer a un valor público del repo en producción: la cookie de admin
+// es un HMAC del payload (que incluye role ADMIN), así que con el fallback cualquiera
+// podría forjar una sesión de administrador en una URL pública.
+export function isAuthSecretConfigured(): boolean {
+  const fromEnv = process.env.NEXTAUTH_SECRET;
+  return !!fromEnv && fromEnv.length >= 16;
+}
+
+function getSecret(): string {
+  if (isAuthSecretConfigured()) return process.env.NEXTAUTH_SECRET as string;
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "NEXTAUTH_SECRET ausente o demasiado corto (mínimo 16 caracteres): el login del admin queda deshabilitado para no firmar sesiones con un secreto público."
+    );
+  }
+  return DEV_SECRET;
+}
 
 export interface SessionUser {
   id: string;
@@ -37,7 +55,7 @@ export async function verifyPassword(
 
 // Firmar un payload → string base64.signature
 function sign(payload: string): string {
-  const sig = crypto.createHmac("sha256", SECRET).update(payload).digest("hex");
+  const sig = crypto.createHmac("sha256", getSecret()).update(payload).digest("hex");
   return `${payload}.${sig}`;
 }
 
@@ -46,7 +64,7 @@ function verify(signed: string): string | null {
   const [payload, sig] = signed.split(".");
   if (!payload || !sig) return null;
   const expected = crypto
-    .createHmac("sha256", SECRET)
+    .createHmac("sha256", getSecret())
     .update(payload)
     .digest("hex");
   // timing-safe comparison
@@ -127,5 +145,3 @@ export async function requireAdmin(
 
   return { redirect: false };
 }
-
-export { SECRET };
