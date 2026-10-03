@@ -2,8 +2,11 @@
 // src/components/admin/CategoriaForm.tsx
 // confidence: high
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { adminMutate } from "@/lib/admin-api";
 
 export function CategoriaForm() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -23,32 +26,24 @@ export function CategoriaForm() {
       activo: data.get("activo") === "true",
     };
 
-    try {
-      const res = await fetch("/api/admin/categorias", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const result = await res.json();
-
-      if (result.error) {
-        setError(result.error);
-      } else {
-        setSuccess("Categoría creada!");
-        form.reset();
-        // Refrescar la página para ver la nueva categoría
-        setTimeout(() => window.location.reload(), 1000);
-      }
-    } catch {
-      setError("Error de red");
-    } finally {
+    const result = await adminMutate("/api/admin/categorias", {
+      method: "POST",
+      body: payload,
+    });
+    if (!result.ok) {
+      setError(result.error);
       setLoading(false);
+      return;
     }
+    setSuccess("Categoría creada!");
+    form.reset();
+    router.refresh();
+    setLoading(false);
   };
 
   return (
     <form onSubmit={handleSubmit} className="bg-card p-4 rounded-xl shadow-md border border-border">
-      {error && <p className="text-red-600 dark:text-red-400 text-sm mb-2">{error}</p>}
+      {error && <p role="alert" aria-live="polite" className="text-destructive-600 dark:text-destructive-foreground text-sm mb-2">{error}</p>}
       {success && <p className="text-green-600 dark:text-green-400 text-sm mb-2">{success}</p>}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
         <div>

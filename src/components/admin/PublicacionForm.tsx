@@ -2,8 +2,11 @@
 // src/components/admin/PublicacionForm.tsx
 // confidence: high
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { adminMutate } from "@/lib/admin-api";
 
 export function PublicacionForm() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -25,31 +28,24 @@ export function PublicacionForm() {
       fechaPublica: data.get("fechaPublica") as string || new Date().toISOString().split("T")[0],
     };
 
-    try {
-      const res = await fetch("/api/admin/publicaciones", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const result = await res.json();
-
-      if (result.error) {
-        setError(result.error);
-      } else {
-        setSuccess("Publicación creada!");
-        form.reset();
-        setTimeout(() => window.location.reload(), 1000);
-      }
-    } catch {
-      setError("Error de red");
-    } finally {
+    const result = await adminMutate("/api/admin/publicaciones", {
+      method: "POST",
+      body: payload,
+    });
+    if (!result.ok) {
+      setError(result.error);
       setLoading(false);
+      return;
     }
+    setSuccess("Publicación creada!");
+    form.reset();
+    router.refresh();
+    setLoading(false);
   };
 
   return (
     <form onSubmit={handleSubmit} className="bg-card p-4 rounded-xl shadow-md border border-border">
-      {error && <p className="text-red-600 text-sm mb-2">{error}</p>}
+      {error && <p role="alert" aria-live="polite" className="text-destructive-600 dark:text-destructive-foreground text-sm mb-2">{error}</p>}
       {success && <p className="text-green-600 text-sm mb-2">{success}</p>}
       <div className="grid grid-cols-1 gap-3">
         <input name="titulo" placeholder="Título de la publicación" required className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground text-sm" />
