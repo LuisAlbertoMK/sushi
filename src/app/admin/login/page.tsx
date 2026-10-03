@@ -106,6 +106,14 @@ export default function AdminLoginPage() {
             {loading ? "Ingresando..." : "Ingresar"}
           </button>
         </form>
+
+        {process.env.NODE_ENV !== "production" && (
+          <p className="mt-4 text-xs text-muted-foreground">
+            Entorno de desarrollo — credenciales del seed:{" "}
+            <code className="rounded bg-muted px-1 py-0.5">admin@sushi.local</code>{" "}
+            <code className="rounded bg-muted px-1 py-0.5">admin123</code>
+          </p>
+        )}
       </div>
     </div>
   );
