@@ -74,4 +74,8 @@ T1 is verified with a `ts-node` script that simulates production without the var
 
 ## Commit evidence
 
-- Pending explicit commit authorization from the user.
+- `9cf86a2` fix(auth): fail closed when NEXTAUTH_SECRET is missing in production
+- `f1a1707` feat(admin): show the seed credentials only in development
+- `83adc76` docs(odd): record the postgres deploy plan and its security finding
+
+Baseline before this feature: `af8edf6`.
