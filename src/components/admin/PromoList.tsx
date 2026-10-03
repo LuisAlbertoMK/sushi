@@ -64,7 +64,7 @@ export function PromoList({ promos }: Props) {
               <td className="py-2 pr-2 text-foreground">{p.tipo}</td>
               <td className="py-2 pr-2 text-foreground">
                 {p.tipo === "PORCENTUAL" ? `${p.valor}% OFF` :
-                 p.tipo === "MONTO_FIJO" ? `-$${formatearPrecio(p.valor || 0)}` :
+                 p.tipo === "MONTO_FIJO" ? `-${formatearPrecio(p.valor || 0)}` :
                  p.tipo === "ENVIO_GRATIS" ? "Envío gratis" : "-"}
               </td>
               <td className="py-2 text-muted-foreground text-xs">

@@ -1,14 +1,24 @@
 // src/app/admin/login/page.tsx — Login de administrador
 // confidence: high
 "use client";
-import { useState, useId } from "react";
+import { useState, useId, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
+
+// Suscripción vacía para useSyncExternalStore: el valor nunca cambia, solo distingue
+// render en servidor (false) de cliente hidratado (true).
+const subscribeNoop = () => () => {};
 
 export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const formId = useId();
+
+  // El submit queda deshabilitado hasta hidratar: sin esto, un click previo a la
+  // hidratación dispara el submit nativo del form y las credenciales viajan por GET
+  // en la URL (historial, logs del server). useSyncExternalStore da el flag de
+  // hidratación sin setState dentro de un efecto.
+  const mounted = useSyncExternalStore(subscribeNoop, () => true, () => false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,7 +40,10 @@ export default function AdminLoginPage() {
       if (data.error) {
         setError(data.error);
       } else {
-        const callbackUrl = new URLSearchParams(window.location.search).get("callbackUrl") || "/admin/dashboard";
+        // Solo rutas internas: "//evil.com" o "https://evil.com" serían open redirect
+        const raw = new URLSearchParams(window.location.search).get("callbackUrl");
+        const callbackUrl =
+          raw && raw.startsWith("/") && !raw.startsWith("//") ? raw : "/admin/dashboard";
         router.push(callbackUrl);
         router.refresh();
       }
@@ -67,7 +80,6 @@ export default function AdminLoginPage() {
               type="email"
               required
               autoComplete="username"
-              defaultValue="admin@sushi.local"
               className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground"
             />
           </div>
@@ -82,14 +94,13 @@ export default function AdminLoginPage() {
               type="password"
               required
               autoComplete="current-password"
-              defaultValue="admin123"
               className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring bg-input text-foreground"
             />
           </div>
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !mounted}
             className="w-full bg-primary-700 text-white py-3 rounded-lg font-bold hover:bg-primary-800 transition disabled:cursor-not-allowed disabled:bg-primary-400 disabled:text-white focus:outline-none focus:ring-2 focus:ring-ring"
           >
             {loading ? "Ingresando..." : "Ingresar"}

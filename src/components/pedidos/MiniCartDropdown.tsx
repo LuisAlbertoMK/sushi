@@ -16,6 +16,8 @@ interface Props {
 export function MiniCartDropdown({ open, onClose }: Props) {
   const { items, total, removeItem } = useCart();
   const panelRef = useRef<HTMLDivElement>(null);
+  // Mismo criterio que el badge del header: suma de cantidades, no cantidad de líneas
+  const itemCount = items.reduce((sum, item) => sum + item.cantidad, 0);
 
   // El dropdown también se cierra con teclado (Escape) y con click afuera;
   // antes solo cerraba con onMouseLeave y dejaba atrapados a usuarios de teclado.
@@ -46,7 +48,7 @@ export function MiniCartDropdown({ open, onClose }: Props) {
       onMouseLeave={onClose}
     >
       <div className="p-4 border-b border-border">
-        <h3 className="font-bold text-lg text-foreground">Tu Carrito ({items.length})</h3>
+        <h3 className="font-bold text-lg text-foreground">Tu Carrito ({itemCount})</h3>
       </div>
 
       {items.length === 0 ? (
