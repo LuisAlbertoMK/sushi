@@ -67,4 +67,13 @@ repo (`D:/tmp-ui-review`), `tsc`, `eslint`, `next build`.
 
 ## Commit evidence
 
-- Pending explicit commit authorization from the user.
+Work-unit commits on `experiment/kaiten-hero-moderno` (pushed to origin):
+
+- T1 `9837e72` fix(ui): keep floating controls clear of content
+- T2 `4b29249` fix(theme): stop the system dark tokens leaking into a forced light theme
+- T3 `74f36a3` fix(admin): scope customer chrome and remove the nested main landmark
+- T4 `d6d72ac` fix(ui): correct the promo discount, the cart counter and the login form
+- T5 `e6092a8` fix(admin): surface failed creates in the admin forms
+- Docs `5151140` docs(odd): record the demo polish tasks and verification evidence
+
+Baseline before this feature: `fe7fcea`.
