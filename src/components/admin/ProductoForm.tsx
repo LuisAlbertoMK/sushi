@@ -12,9 +12,10 @@ interface Categoria {
 
 interface Props {
   categorias: Categoria[];
+  onSuccess?: () => void;
 }
 
-export function ProductoForm({ categorias }: Props) {
+export function ProductoForm({ categorias, onSuccess }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -52,6 +53,7 @@ export function ProductoForm({ categorias }: Props) {
     form.reset();
     router.refresh();
     setLoading(false);
+    onSuccess?.();
   };
 
   return (

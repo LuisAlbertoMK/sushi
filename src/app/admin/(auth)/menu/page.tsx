@@ -1,8 +1,8 @@
 // src/app/(admin)/menu/page.tsx — CRUD de categorías y productos
 // confidence: high
 import { db } from "@/lib/db";
-import { CategoriaForm } from "@/components/admin/CategoriaForm";
-import { ProductoForm } from "@/components/admin/ProductoForm";
+import { NuevaCategoriaModal } from "@/components/admin/NuevaCategoriaModal";
+import { NuevoProductoModal } from "@/components/admin/NuevoProductoModal";
 import { CategoriaList } from "@/components/admin/CategoriaList";
 import { ProductoList } from "@/components/admin/ProductoList";
 
@@ -25,11 +25,10 @@ export default async function AdminMenuPage() {
         <p className="text-muted-foreground">Administrá categorías y productos</p>
       </div>
 
-      {/* Nueva categoría */}
-      <section>
-        <h2 className="text-xl font-bold text-foreground mb-3">Nueva categoría</h2>
-        <CategoriaForm />
-      </section>
+      <div className="flex flex-wrap gap-3">
+        <NuevaCategoriaModal />
+        <NuevoProductoModal categorias={categorias} />
+      </div>
 
       {/* Lista de categorías */}
       <section>
@@ -37,12 +36,6 @@ export default async function AdminMenuPage() {
         <div className="bg-card border border-border rounded-xl shadow-md p-4 overflow-hidden">
           <CategoriaList categorias={categorias} />
         </div>
-      </section>
-
-      {/* Nuevo producto */}
-      <section className="mt-8">
-        <h2 className="text-xl font-bold text-foreground mb-3">Nuevo producto</h2>
-        <ProductoForm categorias={categorias} />
       </section>
 
       {/* Lista de productos */}

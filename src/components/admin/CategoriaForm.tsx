@@ -5,7 +5,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { adminMutate } from "@/lib/admin-api";
 
-export function CategoriaForm() {
+interface Props {
+  onSuccess?: () => void;
+}
+
+export function CategoriaForm({ onSuccess }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,6 +43,7 @@ export function CategoriaForm() {
     form.reset();
     router.refresh();
     setLoading(false);
+    onSuccess?.();
   };
 
   return (
