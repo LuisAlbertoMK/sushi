@@ -82,4 +82,7 @@ Functional: a product created through the dialog landed in the database and the 
 
 ## Commit evidence
 
-- Pending explicit commit authorization from the user.
+- `9241d3b` feat(admin): move create forms into accessible dialogs
+- `c2a5170` docs(odd): record the admin menu search and forms features
+
+Baseline before this feature: `9c6f460`.

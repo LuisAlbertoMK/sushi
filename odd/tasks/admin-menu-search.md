@@ -70,4 +70,7 @@ Browser probe against the running dev server, with expectations cross-checked ag
 
 ## Commit evidence
 
-- Pending explicit commit authorization from the user.
+- `7ab6aa2` feat(admin): add product search and category filter
+- `c2a5170` docs(odd): record the admin menu search and forms features
+
+Baseline before this feature: `9c6f460`.
