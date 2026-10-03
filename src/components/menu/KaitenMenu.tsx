@@ -1271,9 +1271,11 @@ export function KaitenMenu() {
       )}
 
       {/* ── Bandeja de pedido (carrito real) ── */}
+      {/* Sticky elevada sobre la columna flotante (chat + tema): el offset real
+          lo da `bottom` del style; `bottom-3` se conserva en el className. */}
       <div
         className="relative sticky bottom-3 mx-4 mb-4 rounded-2xl border overflow-hidden"
-        style={{ background: THEME.bg2, borderColor: "#30343c", zIndex: 30 }}
+        style={{ background: THEME.bg2, borderColor: "#30343c", zIndex: 30, bottom: "9rem" }}
       >
         <button
           type="button"

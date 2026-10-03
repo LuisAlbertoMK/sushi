@@ -15,7 +15,7 @@ export function ThemeToggle() {
         onClick={toggleColorMode}
         aria-label="Cambiar color del tema"
         title="Cambiar color primario"
-        className="bg-card border border-border text-foreground hover:bg-primary hover:text-primary-foreground transition-all rounded-full p-2.5 shadow-md hover:shadow-lg"
+        className="hidden bg-card border border-border text-foreground hover:bg-primary hover:text-primary-foreground transition-all rounded-full p-2.5 shadow-md hover:shadow-lg sm:block"
       >
         <Icon emoji="🎨" label="Cambiar color" className="text-xl" />
       </button>
@@ -35,7 +35,7 @@ export function ThemeToggle() {
       </button>
 
       {/* Indicador del tema actual */}
-      <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">
+      <span className="hidden text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full sm:inline-block">
         {resolvedTheme === "dark" ? "dark" : "light"}
       </span>
     </div>
