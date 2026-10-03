@@ -44,9 +44,11 @@
   --status-cancelled-fg: oklch(0.496 0.16 20);
 }
 
-/* Tema oscuro */
+/* Tema oscuro del sistema — se anula cuando el usuario fuerza un tema explícito
+   (ThemeProvider añade .light/.dark al html). Sin esta condición, forzar "claro"
+   sobre un SO oscuro dejaba --muted/--muted-foreground en valores oscuros. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
     --background: oklch(0.13 0 0);
     --foreground: oklch(0.92 0 0);
     --card: oklch(0.17 0 0);

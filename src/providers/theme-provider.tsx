@@ -49,14 +49,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   }, [theme, getSystemTheme]);
 
-  // Aplicar clase .dark al html para override manual
+  // Clases explícitas en <html>: .dark activa el tema oscuro y .light anula el
+  // bloque @media (prefers-color-scheme: dark), para que forzar un tema no deje
+  // tokens a medio camino (p. ej. --muted oscuro bajo tarjetas claras).
   useEffect(() => {
     const root = document.documentElement;
-    if (resolvedTheme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
+    root.classList.toggle("dark", resolvedTheme === "dark");
+    root.classList.toggle("light", resolvedTheme === "light");
   }, [resolvedTheme]);
 
   // Aplicar tokens CSS al documento
