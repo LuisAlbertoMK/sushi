@@ -13,7 +13,6 @@ export function localBusinessSchema() {
     name: "Sushi Bar",
     image: `${BASE_URL}/images/sushi-og-placeholder.svg`,
     url: BASE_URL,
-    telephone: "+54-11-XXXX-XXXX",
     address: {
       "@type": "PostalAddress",
       streetAddress: "Av. Corrientes 1234",
@@ -89,7 +88,7 @@ export function productSchema(producto: {
     offers: {
       "@type": "Offer",
       url: `${BASE_URL}${producto.url}`,
-      priceCurrency: "USD",
+      priceCurrency: "ARS",
       price: producto.precio.toString(),
       availability: "https://schema.org/InStock",
       seller: {

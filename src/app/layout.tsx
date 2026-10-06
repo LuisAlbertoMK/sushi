@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     "sashimi",
     "menú sushi",
     "promociones sushi",
-    "sushi [ciudad]",
+    "sushi argentina",
   ],
   openGraph: {
     type: "website",
@@ -111,13 +111,15 @@ export default function RootLayout({
               prerender: [
                 {
                   source: "list",
-                  urls: ["/menu", "/pedidos", "/reservas", "/promos"],
+                  urls: ["/menu", "/kaiten", "/reservas", "/promos"],
                 },
               ],
               prefetch: [
                 {
                   source: "document",
-                  where: { href_matches: "/*" },
+                  where: {
+                    and: [{ href_matches: "/*" }, { not: { href_matches: "/admin/*" } }],
+                  },
                   eagerness: "moderate",
                 },
               ],
