@@ -150,7 +150,11 @@ export function KaitenMenu() {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
   const [view, setView] = useState<"wheel" | "belt">("wheel");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [playing, setPlaying] = useState(true);
@@ -200,7 +204,6 @@ export function KaitenMenu() {
   // Detectar prefers-reduced-motion
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mq.matches);
     const handler = (e: MediaQueryListEvent) => {
       setReducedMotion(e.matches);
     };
@@ -435,7 +438,7 @@ export function KaitenMenu() {
     d.lastTime = performance.now();
     d.pStartX = e.clientX;
     d.pStartY = e.clientY;
-    d.pStartTime = Date.now();
+    d.pStartTime = e.timeStamp;
   };
 
   const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -461,7 +464,7 @@ export function KaitenMenu() {
     if (!d.isDragging) return;
     d.isDragging = false;
     const dist = Math.hypot(e.clientX - d.pStartX, e.clientY - d.pStartY);
-    const dur = Date.now() - d.pStartTime;
+    const dur = e.timeStamp - d.pStartTime;
     if (dist < 6 && dur < 350) {
       // fue un tap (no arrastre): elegir el plato tocado
       const el = document.elementFromPoint(e.clientX, e.clientY);
@@ -582,7 +585,7 @@ export function KaitenMenu() {
     wrap.setPointerCapture(e.pointerId);
     beltDraggingRef.current = true;
     beltVelocityRef.current = 0;
-    beltDragStartRef.current = { x: e.clientX, y: e.clientY, pos: beltScrollPosRef.current, time: Date.now() };
+    beltDragStartRef.current = { x: e.clientX, y: e.clientY, pos: beltScrollPosRef.current, time: e.timeStamp };
     beltLastRef.current = { x: e.clientX, time: performance.now() };
   }, []);
 
@@ -606,7 +609,7 @@ export function KaitenMenu() {
     beltDraggingRef.current = false;
     const start = beltDragStartRef.current;
     const dist = Math.hypot(e.clientX - start.x, e.clientY - start.y);
-    const dur = Date.now() - start.time;
+    const dur = e.timeStamp - start.time;
     if (dist < 6 && dur < 350) {
       // fue un tap (no arrastre): elegir el item tocado
       const el = document.elementFromPoint(e.clientX, e.clientY);
