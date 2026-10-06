@@ -1160,8 +1160,8 @@ export function KaitenMenu() {
 
       {/* ── Bandeja de pedido (carrito real) ── */}
       <div
-        className="relative sticky bottom-3 mx-4 mb-4 rounded-2xl border overflow-hidden"
-        style={{ background: THEME.bg2, borderColor: "#30343c", zIndex: 60 }}
+        className="sticky bottom-3 z-30 mx-4 mb-4 mt-4 rounded-2xl border overflow-hidden"
+        style={{ background: THEME.bg2, borderColor: "#30343c" }}
       >
         <button
           type="button"
