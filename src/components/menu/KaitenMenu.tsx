@@ -126,7 +126,7 @@ function PorcelainPlate({ rimColor, children, className = "", imageUrl, alt }: {
       <span className="plate-face" style={{ "--rim": rimColor } as React.CSSProperties}>
         {imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img className="food-img" src={imageUrl} alt={alt} loading="lazy" decoding="async" />
+          <img className="food-img" src={imageUrl} alt={alt} loading="lazy" decoding="async" draggable={false} fetchPriority="low" />
         ) : (
           children
         )}
@@ -1265,7 +1265,7 @@ export function KaitenMenu() {
               style={{ background: "radial-gradient(circle at 34% 26%, #fff, #efe6d2 58%, #cfc3a4 100%)", border: "7px solid " + tierFor(modalProduct.precio).border, boxShadow: "inset 0 -10px 16px rgba(0,0,0,.15), 0 18px 35px rgba(0,0,0,.4)" }}>
               {modalProduct.imagen ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={modalProduct.imagen} alt={modalProduct.nombre} className="w-full h-full object-cover" decoding="async" />
+                <img src={modalProduct.imagen} alt={modalProduct.nombre} className="w-full h-full object-cover" decoding="async" draggable={false} />
               ) : (
                 <span style={{ filter: "drop-shadow(0 2px 2px rgba(0,0,0,.3))" }} aria-hidden="true">{modalCategory?.emoji}</span>
               )}

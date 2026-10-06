@@ -3,12 +3,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Imágenes: permitir picsum.photos (placeholder) + dominios futuros
+  // Imágenes: solo remote explícito (placeholder) + locales; formatos modernos
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "picsum.photos",
       },
     ],
   },
